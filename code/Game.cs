@@ -1,12 +1,11 @@
 ﻿using Core.StateMachine;
 using Sandbox;
 
-
 namespace Garryware;
 
 public partial class GarrywareGame : Sandbox.Game
 {
-    public new static GarrywareGame Current = Game.Current as GarrywareGame;
+    public new static GarrywareGame Current => Game.Current as GarrywareGame;
     
     private const int MaxGamesToPlay = 30;
     private const int PointsToWin = 15;
@@ -14,12 +13,12 @@ public partial class GarrywareGame : Sandbox.Game
 
     private const float EveryoneConnectedStartGameDelay = 10.0f;
     
-    private int clientsJoined;
     private int microgamesPlayed;
-    private ShuffledDeck<Microgame> microgamesDeck = new();
-
-    private StateMachine<GameState> GameStateMachine { get; set; }
-    [Net] private GameState ReplicatedGameState { get; set; }
+    private readonly ShuffledDeck<Microgame> microgamesDeck = new();
+    
+    [Net] private int NumConnectedClients { get; set; }
+    
+    [Net] private TimeSince TimeSinceEverybodyConnected { get; set; }
     
     public GarrywareGame()
     {
@@ -32,52 +31,56 @@ public partial class GarrywareGame : Sandbox.Game
         
         _ = new MusicController();
         
-        GameStateMachine = new StateMachine<GameState>();
-        GameStateMachine.AddExitStateController(GameState.WaitingForPlayers, HasEverybodyConnected);
-        GameStateMachine.AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
-        GameStateMachine.AddEnterStateObserver(GameState.Instructions, OnEnterInstructionsState);
-        GameStateMachine.AddEnterStateObserver(GameState.Playing, OnEnterPlayingState);
+        // Setup state control
+        AddExitStateController(GameState.WaitingForPlayers, HasEverybodyConnected);
+        AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
+        AddEnterStateObserver(GameState.Instructions, OnEnterInstructionsState);
+        AddEnterStateObserver(GameState.Playing, OnEnterPlayingState);
         
-        GameStateMachine.AddExitStateController(GameState.Dev, args => TransitionResponse.Block);
+        AddExitStateController(GameState.Dev, args => TransitionResponse.Block);
         
-        GameStateMachine.Enable();
-    }
-    
-    [Event.Tick.Server]
-    private void ServerTick()
-    {
-        GameStateMachine?.Update();
-        ReplicatedGameState = GameStateMachine?.State ?? GameState.NotRunning;
+        Enable();
     }
 
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        
+    }
+
+    public override void PostLevelLoaded()
+    {
+        base.PostLevelLoaded();
+        
+        // Cache all the map entities that microgames may be accessing
+        CommonEntities.PrecacheWorldEntities();
+    }
+    
     // Only start the game once we've got everybody in the game and able to run around
     private TransitionResponse HasEverybodyConnected(TransitionArgs<GameState> args)
     {
-        return clientsJoined >= Client.All.Count ? TransitionResponse.Allow : TransitionResponse.Block;
+        return NumConnectedClients >= Client.All.Count ? TransitionResponse.Allow : TransitionResponse.Block;
     }
     
     // When we enter the starting soon state then wait a short time for everyone to be actually in the game and running around
     private async void OnEnterStartingSoonState(TransitionArgs<GameState> args)
     {
-        // Cache all the map entities that microgames may be accessing
-        Microgame.FirstTimeSetup();
-        
         await GameTask.DelayRealtimeSeconds(EveryoneConnectedStartGameDelay);
-        GameStateMachine.RequestTransition(GameState.Instructions);
+        RequestTransition(GameState.Instructions);
     }
 
     private void OnEnterInstructionsState(TransitionArgs<GameState> args)
     {
         // @todo: tutorial microgame
         // For now we'll just skip straight to playing
-        GameStateMachine.RequestTransition(GameState.Playing);
+        RequestTransition(GameState.Playing);
     }
     
     private async void OnEnterPlayingState(TransitionArgs<GameState> args)
     {
         // Determine which games we'll be able to play
         RefreshAvailableMicrogames();
-        
+
         // Pick a random microgame from the deck
         // Play the game
         // Check if we can continue playing and repeat
@@ -91,9 +94,9 @@ public partial class GarrywareGame : Sandbox.Game
         }
         while (CanContinuePlaying());
 
-        GameStateMachine.RequestTransition(GameState.GameOver);
+        RequestTransition(GameState.GameOver);
     }
-
+    
     private bool CanContinuePlaying()
     {
         // Have we reached the round limit?
@@ -133,7 +136,7 @@ public partial class GarrywareGame : Sandbox.Game
     public override void ClientDisconnect(Client cl, NetworkDisconnectionReason reason)
     {
         base.ClientDisconnect(cl, reason);
-        clientsJoined--;
+        NumConnectedClients--;
     }
 
     public override void DoPlayerSuicide(Client cl)
@@ -145,17 +148,17 @@ public partial class GarrywareGame : Sandbox.Game
     public override void OnClientActive(Client client)
     {
         base.OnClientActive(client);
-        clientsJoined++;
+        NumConnectedClients++;
         
         // Attempt to advance the game state
-        GameStateMachine.RequestTransition(GameState.StartingSoon);
+        RequestTransition(GameState.StartingSoon);
     }
 
 
     [ConCmd.Server("gw_dev")]
     public static void EnableDevMode()
     {
-        Current.GameStateMachine?.RequestTransition(GameState.Dev);
+        Current?.RequestTransition(GameState.Dev);
         
         foreach (var client in To.Everyone)
         {

@@ -5,6 +5,8 @@ namespace Garryware.Microgames;
 
 public class BreakCrates : Microgame
 {
+    private int cratesSpawned;
+    
     public BreakCrates()
     {
         Rules = MicrogameRules.LoseOnTimeout;
@@ -19,10 +21,10 @@ public class BreakCrates : Microgame
     public override void Start()
     {
         // @todo
-        var numCratesToSpawn = Client.All.Count; // Math.Clamp(Client.All.Count - Random.Shared.Next(0, 3), 2, Client.All.Count);
-        for (int i = 0; i < numCratesToSpawn; ++i)
+        cratesSpawned = Client.All.Count; // Math.Clamp(Client.All.Count - Random.Shared.Next(0, 3), 2, Client.All.Count);
+        for (int i = 0; i < cratesSpawned; ++i)
         {
-            var spawn = OnBoxSpawnsDeck.Next();
+            var spawn = CommonEntities.OnBoxSpawnsDeck.Next();
             var ent = new BreakableProp
             {
                 Position = spawn.Position,
@@ -36,6 +38,12 @@ public class BreakCrates : Microgame
         }
     }
 
+    // Finish the game early if all crates get destroyed
+    protected override bool IsGameFinished()
+    {
+        return base.IsGameFinished() || cratesSpawned == 0;
+    }
+    
     private void OnCrateDestroyed(Entity attacker)
     {
         if (attacker is GarrywarePlayer player)
@@ -43,6 +51,7 @@ public class BreakCrates : Microgame
             player.FlagAsRoundWinner();
             RemoveWeapons(To.Single(player));
         }
+        cratesSpawned--;
     }
 
     public override void Finish()

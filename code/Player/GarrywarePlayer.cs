@@ -377,4 +377,20 @@ partial class GarrywarePlayer : Player
         Sound.FromEntity(soundEvent, this);
     }
 
+    /// <summary>
+    /// Is the player standing on one of the boxes in the garryware map?
+    /// </summary>
+    public bool IsOnABox()
+    {
+        return Tags.Has(Garryware.Tags.OnBox);
+    }
+
+    /// <summary>
+    /// Is the player standing on the floor and not one of the boxes in the garryware map? 
+    /// </summary>
+    public bool IsOnTheFloor()
+    {
+        return Position.z < 1.0f && GroundEntity != null;
+    }
+
 }

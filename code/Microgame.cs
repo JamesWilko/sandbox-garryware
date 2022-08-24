@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware;
@@ -42,31 +41,8 @@ public abstract class Microgame
     public MicrogameRules Rules { get; protected set; } = MicrogameRules.None;
 
     private static readonly List<Entity> TemporaryEntities = new();
-
-    protected static List<OnBoxSpawn> OnBoxSpawns { get; private set; }
-    protected static ShuffledDeck<OnBoxSpawn> OnBoxSpawnsDeck { get; private set; }
-
-    protected static List<AboveBoxSpawn> AboveBoxSpawns { get; private set; } 
-    protected static ShuffledDeck<AboveBoxSpawn> AboveBoxSpawnsDeck { get; private set; } 
-
-    public static void FirstTimeSetup()
-    {
-        OnBoxSpawns = Entity.All.OfType<OnBoxSpawn>().ToList();
-        Assert.True(OnBoxSpawns.Count > 0);
-        
-        OnBoxSpawnsDeck = new ShuffledDeck<OnBoxSpawn>();
-        OnBoxSpawnsDeck.AddRange(OnBoxSpawns);
-        OnBoxSpawnsDeck.Shuffle();
-        Assert.True(OnBoxSpawnsDeck.Count > 0);
-        
-        AboveBoxSpawns = Entity.All.OfType<AboveBoxSpawn>().ToList();
-        Assert.True(AboveBoxSpawns.Count > 0);
-        
-        AboveBoxSpawnsDeck = new ShuffledDeck<AboveBoxSpawn>();
-        AboveBoxSpawnsDeck.AddRange(AboveBoxSpawns);
-        AboveBoxSpawnsDeck.Shuffle();
-        Assert.True(AboveBoxSpawnsDeck.Count > 0);
-    }
+    
+    private TimeSince timeSinceGameStarted;
     
     public virtual bool CanBePlayed()
     {
@@ -95,7 +71,12 @@ public abstract class Microgame
         
         Log.Info($"[{microgameName}] Starting");
         Start();
-        await GameTask.DelayRealtimeSeconds(GameLength);
+        
+        timeSinceGameStarted = 0;
+        while (!IsGameFinished())
+        {
+            await GameTask.Yield();
+        }
         
         Log.Info($"[{microgameName}] Finished");
         Finish();
@@ -110,8 +91,17 @@ public abstract class Microgame
         CleanupTemporaryEntities();
         
         // Reset the decks after the game so we don't have to do it manually per game
-        OnBoxSpawnsDeck.Shuffle();
-        AboveBoxSpawnsDeck.Shuffle();
+        CommonEntities.ShuffleWorldEntityDecks();
+    }
+    
+    protected virtual bool IsGameFinished()
+    {
+        return HasGameTimedOut();
+    }
+
+    protected bool HasGameTimedOut()
+    {
+        return timeSinceGameStarted > GameLength;
     }
 
     /// <summary>
