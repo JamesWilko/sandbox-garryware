@@ -49,14 +49,14 @@ public class BreakCrates : Microgame
         if (attacker is GarrywarePlayer player)
         {
             player.FlagAsRoundWinner();
-            RemoveWeapons(To.Single(player));
+            player.RemoveWeapons();
         }
         cratesSpawned--;
     }
 
     public override void Finish()
     {
-        RemoveWeapons(To.Everyone);
+        RemoveAllWeapons();
     }
 
     public override void Cleanup()

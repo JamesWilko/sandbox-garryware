@@ -392,5 +392,13 @@ partial class GarrywarePlayer : Player
     {
         return Position.z < 1.0f && GroundEntity != null;
     }
+    
+    /// <summary>
+    /// Remove all weapons from this player.
+    /// </summary>
+    public void RemoveWeapons()
+    {
+        Inventory.DeleteContents();
+    }
 
 }

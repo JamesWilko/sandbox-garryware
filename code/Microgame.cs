@@ -87,7 +87,7 @@ public abstract class Microgame
         Cleanup();
         
         // Automatically clean up as well in case we forget to in the cleanup function
-        RemoveWeapons(To.Everyone);
+        RemoveAllWeapons();
         CleanupTemporaryEntities();
         
         // Reset the decks after the game so we don't have to do it manually per game
@@ -107,13 +107,20 @@ public abstract class Microgame
     /// <summary>
     /// Remove all weapons from all players, and from the world.
     /// </summary>
-    protected void RemoveWeapons(To fromWho)
+    protected void RemoveAllWeapons()
     {
-        foreach (var client in fromWho)
+        // Find any weapons that were dropped into the world and delete them
+        foreach (var weapon in Entity.All.OfType<Weapon>())
+        {
+            weapon.Delete();
+        }
+        
+        // Remove weapons from all players
+        foreach (var client in Client.All)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.Inventory.DeleteContents();
+                player.RemoveWeapons();
             }
         }
     }

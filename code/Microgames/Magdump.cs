@@ -14,11 +14,12 @@ public class Magdump : Microgame
     public override void Start()
     {
         GiveWeapon<Pistol>(To.Everyone);
+        // @todo: listen to weapon run out of ammo event and cause player to win
     }
 
     public override void Finish()
     {
-        RemoveWeapons(To.Everyone);
+        RemoveAllWeapons();
     }
 
     public override void Cleanup()

@@ -65,6 +65,8 @@ public partial class GarrywareGame : Sandbox.Game
     // When we enter the starting soon state then wait a short time for everyone to be actually in the game and running around
     private async void OnEnterStartingSoonState(TransitionArgs<GameState> args)
     {
+        TimeSinceEverybodyConnected = 0;
+        
         await GameTask.DelayRealtimeSeconds(EveryoneConnectedStartGameDelay);
         RequestTransition(GameState.Instructions);
     }
