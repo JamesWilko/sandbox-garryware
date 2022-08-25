@@ -9,6 +9,8 @@ public static class MicrogamesList
     {
         new BreakCrates(),
         new BreakAllCrates(),
-        new DontStopSprinting()
+        new DontStopSprinting(),
+        new CrateColorMemory(),
+        new CrateColorRoulette(),
     };
 }
