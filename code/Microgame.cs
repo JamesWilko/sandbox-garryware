@@ -37,8 +37,6 @@ public abstract class Microgame
     private TimeSince timeSinceGameStarted;
     private bool hasGameFinishedEarly;
     private TimeSince timeSinceEarlyFinish;
-
-    private const float defaultInstructionsDisplayTime = 6.0f;
     
     public virtual bool CanBePlayed()
     {

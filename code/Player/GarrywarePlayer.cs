@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Garryware.UI;
+using Sandbox;
 
 namespace Garryware;
 
@@ -368,10 +369,12 @@ partial class GarrywarePlayer : Player
             case RoundResult.Won:
                 SoundUtility.PlayPlayerLockedInWin(this);
                 GarrywareGame.Current.ShowRoundResult(RoundResult.Won);
+                KillFeed.Current.AddEntry(Client.PlayerId, Client.Name, RoundResult.Won);
                 break;
             case RoundResult.Lost:
                 SoundUtility.PlayPlayerLockedInLose(this);
                 GarrywareGame.Current.ShowRoundResult(RoundResult.Lost);
+                KillFeed.Current.AddEntry(Client.PlayerId, Client.Name, RoundResult.Lost);
                 break;
             case RoundResult.Undecided:
                 break;

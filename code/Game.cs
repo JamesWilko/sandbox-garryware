@@ -5,8 +5,8 @@ namespace Garryware;
 
 public partial class GarrywareGame : Sandbox.Game
 {
-    public new static GarrywareGame Current => Game.Current as GarrywareGame;
-        
+    public new static GarrywareGame Current { get; private set; }
+
     private const int MaxGamesToPlay = 30;
     private const int PointsToWin = 15;
     private const int MaxRepeatsPerMicrogame = 2;
@@ -35,6 +35,7 @@ public partial class GarrywareGame : Sandbox.Game
     
     public GarrywareGame()
     {
+        Current = this;
         CommonEntities.Precache();
         
         if (IsServer)
@@ -211,7 +212,6 @@ public partial class GarrywareGame : Sandbox.Game
             }
         }
     }
-    
-    
+
 }
 
