@@ -46,7 +46,7 @@ public class BreakAllCrates : Microgame
         }
     }
     
-    private void OnCrateDestroyed(Entity attacker)
+    private void OnCrateDestroyed(BreakableProp crate, Entity attacker)
     {
         if(IsGameFinished())
             return;

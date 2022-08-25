@@ -15,6 +15,8 @@ public static class CommonEntities
     
     public static List<OnBoxTrigger> OnBoxTriggers { get; private set; }
     
+    public static ShuffledDeck<GameColor> ColorsDeck { get; private set; }
+
     public static Model Crate;
     public static Model Balloon;
     public static Model Ball;
@@ -47,12 +49,23 @@ public static class CommonEntities
         
         OnBoxTriggers = Entity.All.OfType<OnBoxTrigger>().ToList();
         Assert.True(OnBoxTriggers.Count > 0);
+
+        ColorsDeck = new ShuffledDeck<GameColor>();
+        ColorsDeck.Add(GameColor.Red);
+        ColorsDeck.Add(GameColor.Blue);
+        ColorsDeck.Add(GameColor.Green);
+        ColorsDeck.Add(GameColor.Black);
+        ColorsDeck.Add(GameColor.Magenta);
+        ColorsDeck.Add(GameColor.Yellow);
+        ColorsDeck.Add(GameColor.Cyan);
+        ColorsDeck.Shuffle();
     }
 
-    public static void ShuffleWorldEntityDecks()
+    public static void ShuffleDecks()
     {
         OnBoxSpawnsDeck.Shuffle();
         AboveBoxSpawnsDeck.Shuffle();
+        ColorsDeck.Shuffle();
     }
     
 }

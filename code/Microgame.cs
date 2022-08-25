@@ -90,7 +90,8 @@ public abstract class Microgame
         // Automatically clean up as well in case we forget to in the cleanup function
         RemoveAllWeapons();
         CleanupTemporaryEntities();
-        CommonEntities.ShuffleWorldEntityDecks(); // Reset the decks after the game so we don't have to do it manually per game
+        ResetColorsInUse();
+        CommonEntities.ShuffleDecks(); // Reset the decks after the game so we don't have to do it manually per game
         hasGameFinishedEarly = false;
     }
     
@@ -204,6 +205,41 @@ public abstract class Microgame
         TemporaryEntities.Clear();
     }
 
+    private readonly List<GameColor> colorsInUse = new();
+    
+    /// <summary>
+    /// Get a random color from the colors deck and add it to the list of in-use colors
+    /// </summary>
+    protected GameColor GetRandomColor()
+    {
+        return UseColor(CommonEntities.ColorsDeck.Next());
+    }
+
+    /// <summary>
+    /// Specify a specific color to be used, and add it to the randomization list in case we want to access it later
+    /// </summary>
+    protected GameColor UseColor(GameColor gameColor)
+    {
+        colorsInUse.Add(gameColor);
+        return gameColor;
+    }
+
+    /// <summary>
+    /// Get a random color that's already been used this
+    /// </summary>
+    protected GameColor GetRandomColorAlreadyInUse()
+    {
+        return Random.Shared.FromList(colorsInUse);
+    }
+
+    /// <summary>
+    /// Reset the list of colors in use.
+    /// </summary>
+    protected void ResetColorsInUse()
+    {
+        colorsInUse.Clear();
+    }
+    
     private void ApplyEndOfRoundRules()
     {
         // Automatically cause all remaining players who haven't been locked in already to win

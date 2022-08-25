@@ -47,8 +47,53 @@ public partial class BreakableProp : BasePhysics
     [Property("angulardamping", Title = "Angular Damping"), Category("Physics Properties")]
     private float AngularDamping { get; set; } = 0.0f;
 
-    public delegate void OnBrokenDelegate(Entity attacker);
-    public event OnBrokenDelegate OnBroken;
+    /// <summary>
+    /// Makes this entity indestructible but it still raises damage events.
+    /// </summary>
+    [Net] public bool Indestructible { get; set; } = false;
+    
+    /// <summary>
+    /// Backing property for the GameColor property which also sets the render color automatically.
+    /// </summary>
+    [Net] private GameColor InternalColor { get; set; } = GameColor.White;
+    
+    /// <summary>
+    /// Set the color of the prop used for gameplay purposes.
+    /// </summary>
+    public GameColor GameColor
+    {
+        get => InternalColor;
+        set
+        {
+            InternalColor = value;
+            RenderColor = value.AsColor();
+        }
+    }
+
+    /// <summary>
+    /// Backing property for the HideGameColor property.
+    /// </summary>
+    [Net, Change(nameof(OnHideGameColorChanged))] public bool InternalHideGameColor { get; set; }
+
+    /// <summary>
+    /// Should game color be hidden. The game color will still be active, but players won't see the prop as that color.
+    /// </summary>
+    public bool HideGameColor
+    {
+        get => InternalHideGameColor;
+        set => InternalHideGameColor = value;
+    }
+
+    private void OnHideGameColorChanged(bool oldValue, bool newValue)
+    {
+        RenderColor = newValue ? Color.White : GameColor.AsColor();
+    }
+        
+    public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
+
+    public event AttackerDelegate Damaged;
+    
+    public event AttackerDelegate OnBroken;
     
     public override void Spawn()
     {
@@ -149,27 +194,30 @@ public partial class BreakableProp : BasePhysics
     /// </summary>
     protected Output OnDamaged { get; set; }
 
-    /// <summary>
-    /// This prop won't be able to be damaged for this amount of time
-    /// </summary>
-    public RealTimeUntil Invulnerable { get; set; }
-
     public override void TakeDamage(DamageInfo info)
     {
-        if (Invulnerable > 0)
-        {
-            // We still want to apply forces
-            ApplyDamageForces(info);
-
-            return;
-        }
-
         LastDamage = info;
 
-        base.TakeDamage(info);
+        ApplyDamageForces(info);
+        
+        LastAttacker = info.Attacker;
+        LastAttackerWeapon = info.Weapon;
+        if (!IsServer || Health <= 0.0 || LifeState != LifeState.Alive)
+            return;
+
+        if (!Indestructible)
+        {
+            Health -= info.Damage;
+            if (Health <= 0.0)
+            {
+                Health = 0.0f;
+                OnKilled();
+            }
+        }
 
         // TODO: Add damage type as argument? Or should it be the new health value?
         OnDamaged.Fire(this);
+        Damaged?.Invoke(this, LastDamage.Attacker);
     }
 
     public override void OnKilled()
@@ -210,7 +258,7 @@ public partial class BreakableProp : BasePhysics
         }
 
         // Call an event
-        OnBroken?.Invoke(LastDamage.Attacker);
+        OnBroken?.Invoke(this, LastDamage.Attacker);
         
         base.OnKilled();
     }
