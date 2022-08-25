@@ -5,6 +5,21 @@ rootpanel
 	transition: background-color 0.2s ease-in;
 }
 
+Crosshair
+{
+	position: absolute;
+	z-index: -1;
+	align-items: flex-end;
+	background-color: #fff4;
+	mix-blend-mode: lighten;
+	width: 5px;
+	height: 5px;
+	top: 50%;
+	left: 50%;
+	border-radius: 100px;
+	transform: translate( -50% -50% );
+}
+
 WaitingForPlayers
 {
 	position: absolute;
@@ -43,4 +58,41 @@ CountdownTimer
 	font-size: 96px;
 	color: #fff;
 	text-shadow: 2px 2px #000;
+}
+
+InstructionsPopup
+{
+	align-items: center;
+	justify-content: center;
+	font-family: Poppins;
+	font-weight: bold;
+	font-size: 32px;
+	color: #fff;
+	text-shadow: 2px 2px #000;
+
+	background-color: rgba(#111, 0.6);
+	backdrop-filter: blur(20px);
+	
+	position: absolute;
+	z-index: -1;
+	align-items: flex-end;
+	top: 25%;
+	left: 50%;
+	border-radius: 20px;
+	padding: 10px 20px 10px 20px;
+	transform: translate( -50% -50% );
+
+	transition: all 0.3s ease-out;
+	&:intro
+	{
+		transform: translate( -50% +100% );
+		opacity: 0;
+	}
+
+	&:outro
+	{
+		transition: all 0.3s ease-in;
+		transform: translate( -50% -100% );
+		opacity: 0;
+	}
 }

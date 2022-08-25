@@ -43,6 +43,8 @@ public abstract class Microgame
     private static readonly List<Entity> TemporaryEntities = new();
     
     private TimeSince timeSinceGameStarted;
+
+    private const float defaultInstructionsDisplayTime = 3.0f;
     
     public virtual bool CanBePlayed()
     {
@@ -105,6 +107,14 @@ public abstract class Microgame
     protected bool HasGameTimedOut()
     {
         return timeSinceGameStarted > GameLength;
+    }
+
+    /// <summary>
+    /// Show an instruction popup to all players that goes away after a short time.
+    /// </summary>
+    protected void ShowInstructions(string text, float displayTime = defaultInstructionsDisplayTime)
+    {
+        GarrywareGame.Current.ShowInstructions(text, displayTime);
     }
 
     /// <summary>

@@ -6,7 +6,7 @@ namespace Garryware;
 public partial class GarrywareGame : Sandbox.Game
 {
     public new static GarrywareGame Current => Game.Current as GarrywareGame;
-    
+        
     private const int MaxGamesToPlay = 30;
     private const int PointsToWin = 15;
     private const int MaxRepeatsPerMicrogame = 2;
@@ -22,6 +22,9 @@ public partial class GarrywareGame : Sandbox.Game
     
     [Net] public bool IsCountdownTimerEnabled { get; private set; }
     [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
+    
+    public delegate void ShowInstructionsDelegate(string text, float displayTime);
+    public event ShowInstructionsDelegate OnNewInstructions;
 
     public GarrywareGame()
     {
@@ -172,7 +175,12 @@ public partial class GarrywareGame : Sandbox.Game
         // Attempt to advance the game state
         RequestTransition(GameState.StartingSoon);
     }
-
+    
+    [ClientRpc]
+    public void ShowInstructions(string text, float displayTime = 3.0f)
+    {
+        OnNewInstructions?.Invoke(text, displayTime);
+    }
 
     [ConCmd.Server("gw_dev")]
     public static void EnableDevMode()

@@ -15,11 +15,13 @@ public class BreakCrates : Microgame
     
     public override void Setup()
     {
-        GiveWeapon<Pistol>(To.Everyone);
+        ShowInstructions("Break a crate!");
     }
 
     public override void Start()
     {
+        GiveWeapon<Pistol>(To.Everyone);
+        
         // @todo
         cratesSpawned = Client.All.Count; // Math.Clamp(Client.All.Count - Random.Shared.Next(0, 3), 2, Client.All.Count);
         for (int i = 0; i < cratesSpawned; ++i)
