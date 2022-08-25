@@ -13,18 +13,6 @@ public enum MicrogameRules
     LoseOnTimeout = 1 << 1, // Everyone who hasn't already won will lose automatically when the game finishes
 }
 
-// Flags to show inputs on the HUD so that people know how to do a specific action
-public enum PlayerAction
-{
-    None,
-    UseWeapon = 1 << 0,
-    DropWeapon = 1 << 1,
-    PlayerUse = 1 << 2,
-    Jump = 1 << 3,
-    Sprint = 1 << 4,
-    Crouch = 1 << 5,
-}
-
 public abstract class Microgame
 {
     public abstract void Setup();
@@ -72,6 +60,7 @@ public abstract class Microgame
         Log.Info($"[{microgameName}] Setting up");
         SoundUtility.PlayNewRound();
         Setup();
+        GarrywareGame.Current.AvailableControls = ActionsUsedInGame;
         await GameTask.DelayRealtimeSeconds(WarmupLength);
         
         Log.Info($"[{microgameName}] Starting");
@@ -87,6 +76,7 @@ public abstract class Microgame
         
         Log.Info($"[{microgameName}] Finished");
         Finish();
+        GarrywareGame.Current.AvailableControls = PlayerAction.None;
         GarrywareGame.Current.ClearCountdownTimer();
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();

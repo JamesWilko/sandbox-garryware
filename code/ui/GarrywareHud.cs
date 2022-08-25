@@ -23,9 +23,10 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<Crosshair>();
         RootPanel.AddChild<WaitingForPlayers>();
         RootPanel.AddChild<CountdownTimer>();
-        
+
         // Listen to game events
         GarrywareGame.Current.OnNewInstructions += OnNewInstructions;
+        GarrywareGame.Current.OnAvailableControlsUpdated += OnAvailableControlsUpdated;
     }
 
     protected override void OnDestroy()
@@ -45,6 +46,11 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         popup.Text = text;
         await GameTask.DelayRealtimeSeconds(displayTime);
         popup.Delete();
+    }
+    
+    private void OnAvailableControlsUpdated(PlayerAction availableActions)
+    {
+        // @todo: update on screen controls list
     }
 
 }

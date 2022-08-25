@@ -26,6 +26,10 @@ public partial class GarrywareGame : Sandbox.Game
     public delegate void ShowInstructionsDelegate(string text, float displayTime);
     public event ShowInstructionsDelegate OnNewInstructions;
 
+    [Net, Change(nameof(OnAvailableControlsChanged))] public PlayerAction AvailableControls { get; set; }
+    public delegate void MicrogameControlsDelegate(PlayerAction availableActions);
+    public event MicrogameControlsDelegate OnAvailableControlsUpdated;
+    
     public GarrywareGame()
     {
         CommonEntities.Precache();
@@ -181,7 +185,12 @@ public partial class GarrywareGame : Sandbox.Game
     {
         OnNewInstructions?.Invoke(text, displayTime);
     }
-
+    
+    private void OnAvailableControlsChanged(PlayerAction oldControls, PlayerAction newControls)
+    {
+        OnAvailableControlsUpdated?.Invoke(newControls);
+    }
+    
     [ConCmd.Server("gw_dev")]
     public static void EnableDevMode()
     {
