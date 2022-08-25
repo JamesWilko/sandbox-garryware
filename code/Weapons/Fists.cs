@@ -85,7 +85,7 @@ partial class Fists : Weapon
 
             using (Prediction.Off())
             {
-                var damageInfo = DamageInfo.FromBullet(tr.EndPosition, forward * 100, 25)
+                var damageInfo = DamageInfo.FromBullet(tr.EndPosition, forward * 50, 25)
                     .UsingTraceResult(tr)
                     .WithAttacker(Owner)
                     .WithWeapon(this);

@@ -180,7 +180,8 @@ public partial class GarrywareGame : Sandbox.Game
         NumConnectedClients++;
         
         // Attempt to advance the game state
-        RequestTransition(GameState.StartingSoon);
+        if(CurrentState == GameState.WaitingForPlayers)
+            RequestTransition(GameState.StartingSoon);
     }
     
     [ClientRpc]
