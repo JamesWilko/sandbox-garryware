@@ -6,7 +6,10 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": [],
+  "ResourcePaths": [
+    "/fonts/*",
+    "/ui/*"
+  ],
   "HasCode": true,
   "CodePath": "/code/",
   "RootNamespace": null,

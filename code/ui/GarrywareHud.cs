@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Garryware.UI;
+using Sandbox;
 using Sandbox.UI;
 
 [Library]
@@ -15,5 +16,8 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<VoiceList>();
         RootPanel.AddChild<VoiceSpeaker>();
         RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+        
+        RootPanel.AddChild<WaitingForPlayers>();
+        RootPanel.AddChild<CountdownTimer>();
     }
 }

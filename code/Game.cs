@@ -16,10 +16,13 @@ public partial class GarrywareGame : Sandbox.Game
     private int microgamesPlayed;
     private readonly ShuffledDeck<Microgame> microgamesDeck = new();
     
-    [Net] private int NumConnectedClients { get; set; }
+    [Net] public int NumConnectedClients { get; set; }
     
     [Net] private TimeSince TimeSinceEverybodyConnected { get; set; }
     
+    [Net] public bool IsCountdownTimerEnabled { get; private set; }
+    [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
+
     public GarrywareGame()
     {
         CommonEntities.Precache();
@@ -42,12 +45,20 @@ public partial class GarrywareGame : Sandbox.Game
         Enable();
     }
 
-    public override void Shutdown()
+    public void SetCountdownTimer(float seconds)
     {
-        base.Shutdown();
-        
+        using (LagCompensation())
+        {
+            TimeUntilCountdownExpires = seconds;
+            IsCountdownTimerEnabled = true;
+        }
     }
 
+    public void ClearCountdownTimer()
+    {
+        IsCountdownTimerEnabled = false;
+    }
+    
     public override void PostLevelLoaded()
     {
         base.PostLevelLoaded();
@@ -65,14 +76,20 @@ public partial class GarrywareGame : Sandbox.Game
     // When we enter the starting soon state then wait a short time for everyone to be actually in the game and running around
     private async void OnEnterStartingSoonState(TransitionArgs<GameState> args)
     {
-        TimeSinceEverybodyConnected = 0;
-        
+        using (LagCompensation())
+        {
+            TimeSinceEverybodyConnected = 0;
+        }
+        SetCountdownTimer(EveryoneConnectedStartGameDelay);
+
         await GameTask.DelayRealtimeSeconds(EveryoneConnectedStartGameDelay);
         RequestTransition(GameState.Instructions);
     }
 
     private void OnEnterInstructionsState(TransitionArgs<GameState> args)
     {
+        ClearCountdownTimer();
+        
         // @todo: tutorial microgame
         // For now we'll just skip straight to playing
         RequestTransition(GameState.Playing);

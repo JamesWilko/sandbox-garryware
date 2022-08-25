@@ -73,6 +73,8 @@ public abstract class Microgame
         Start();
         
         timeSinceGameStarted = 0;
+        GarrywareGame.Current.SetCountdownTimer(GameLength);
+
         while (!IsGameFinished())
         {
             await GameTask.Yield();
@@ -80,6 +82,7 @@ public abstract class Microgame
         
         Log.Info($"[{microgameName}] Finished");
         Finish();
+        GarrywareGame.Current.ClearCountdownTimer();
         ApplyEndOfRoundRules();
         await GameTask.DelayRealtimeSeconds(CooldownLength);
         
