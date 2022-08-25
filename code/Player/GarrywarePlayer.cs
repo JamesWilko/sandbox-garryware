@@ -363,18 +363,17 @@ partial class GarrywarePlayer : Player
     
     public void OnRoundStateChanged(RoundState oldState, RoundState newState)
     {
-        // @todo: dunno why this isn't playing sounds
-        var soundEvent = "";
         switch (newState)
         {
             case RoundState.Won:
-                soundEvent = IsLocalPawn ? "microgame.lock-in-win.local.sound" : "microgame.lock-in-win.other.sound";
+                SoundUtility.PlayPlayerLockedInWin(this);
                 break;
             case RoundState.Lost:
-                soundEvent = IsLocalPawn ? "microgame.lock-in-lose.local.sound" : "microgame.lock-in-lose.other.sound";
+                SoundUtility.PlayPlayerLockedInLose(this);
+                break;
+            case RoundState.Undecided:
                 break;
         }
-        Sound.FromEntity(soundEvent, this);
     }
 
     /// <summary>

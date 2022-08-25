@@ -39,12 +39,6 @@ public class BreakCrates : Microgame
             ent.OnBroken += OnCrateDestroyed;
         }
     }
-
-    // Finish the game early if all crates get destroyed
-    protected override bool IsGameFinished()
-    {
-        return base.IsGameFinished() || cratesSpawned == 0;
-    }
     
     private void OnCrateDestroyed(Entity attacker)
     {
@@ -53,7 +47,10 @@ public class BreakCrates : Microgame
             player.FlagAsRoundWinner();
             player.RemoveWeapons();
         }
+        
         cratesSpawned--;
+        if (cratesSpawned == 0)
+            EarlyFinish();
     }
 
     public override void Finish()

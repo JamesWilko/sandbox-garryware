@@ -8,6 +8,8 @@ public class CountdownTimer : Panel
 {
     private Label CountdownLabel { get; set; }
 
+    private int lastSeconds = 0;
+
     private const string clockFormat = "{0,2:00.##}:{1,2:00.##}";
     
     public CountdownTimer()
@@ -28,8 +30,15 @@ public class CountdownTimer : Panel
             CountdownLabel.Style.FontColor = GetColor();
 
             var minutes = Math.Max(0, Math.Floor(GarrywareGame.Current.TimeUntilCountdownExpires / 60));
-            var seconds = Math.Max(0, Math.Ceiling(GarrywareGame.Current.TimeUntilCountdownExpires - minutes * 60));
+            var seconds = (int) Math.Max(0, Math.Ceiling(GarrywareGame.Current.TimeUntilCountdownExpires - minutes * 60));
             CountdownLabel.SetText(string.Format(clockFormat, minutes, seconds));
+
+            if (seconds != lastSeconds)
+            {
+                SoundUtility.PlayCountdown(seconds);
+                SoundUtility.PlayClockTick(seconds);
+            }
+            lastSeconds = seconds;
         }
         else
         {

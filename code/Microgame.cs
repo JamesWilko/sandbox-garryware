@@ -43,6 +43,8 @@ public abstract class Microgame
     private static readonly List<Entity> TemporaryEntities = new();
     
     private TimeSince timeSinceGameStarted;
+    private bool hasGameFinishedEarly;
+    private TimeSince timeSinceEarlyFinish;
 
     private const float defaultInstructionsDisplayTime = 3.0f;
     
@@ -68,6 +70,7 @@ public abstract class Microgame
         var microgameName = GetType().Name;
         
         Log.Info($"[{microgameName}] Setting up");
+        SoundUtility.PlayNewRound();
         Setup();
         await GameTask.DelayRealtimeSeconds(WarmupLength);
         
@@ -86,6 +89,7 @@ public abstract class Microgame
         Finish();
         GarrywareGame.Current.ClearCountdownTimer();
         ApplyEndOfRoundRules();
+        PlayEndOfGameSoundEvents();
         await GameTask.DelayRealtimeSeconds(CooldownLength);
         
         Log.Info($"[{microgameName}] Cleaning up");
@@ -94,19 +98,25 @@ public abstract class Microgame
         // Automatically clean up as well in case we forget to in the cleanup function
         RemoveAllWeapons();
         CleanupTemporaryEntities();
-        
-        // Reset the decks after the game so we don't have to do it manually per game
-        CommonEntities.ShuffleWorldEntityDecks();
+        CommonEntities.ShuffleWorldEntityDecks(); // Reset the decks after the game so we don't have to do it manually per game
+        hasGameFinishedEarly = false;
     }
     
     protected virtual bool IsGameFinished()
     {
-        return HasGameTimedOut();
+        return HasGameTimedOut()
+               || (hasGameFinishedEarly && timeSinceEarlyFinish > 0.5f);
     }
 
     protected bool HasGameTimedOut()
     {
         return timeSinceGameStarted > GameLength;
+    }
+
+    protected void EarlyFinish()
+    {
+        hasGameFinishedEarly = true;
+        timeSinceEarlyFinish = 0;
     }
 
     /// <summary>
@@ -190,6 +200,29 @@ public abstract class Microgame
             {
                 player.FlagAsRoundLoser();
             }
+        }
+    }
+
+    private void PlayEndOfGameSoundEvents()
+    {
+        var winners = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
+        var losers = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
+
+        bool everyoneWon = GarrywareGame.Current.NumConnectedClients > 2 && winners.Length == GarrywareGame.Current.NumConnectedClients;
+        bool everyoneLost = losers.Length == GarrywareGame.Current.NumConnectedClients;
+
+        if (everyoneWon)
+        {
+            SoundUtility.PlayEveryoneWon();
+        }
+        else if (everyoneLost)
+        {
+            SoundUtility.PlayEveryoneLost();
+        }
+        else
+        {
+            SoundUtility.PlayWinRound(To.Multiple(winners));
+            SoundUtility.PlayLoseRound(To.Multiple(losers));
         }
     }
 
