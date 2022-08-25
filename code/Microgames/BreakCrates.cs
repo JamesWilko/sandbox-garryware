@@ -1,4 +1,5 @@
-﻿using Garryware.Entities;
+﻿using System;
+using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware.Microgames;
@@ -21,10 +22,9 @@ public class BreakCrates : Microgame
 
     public override void Start()
     {
-        GiveWeapon<Pistol>(To.Everyone);
+        GiveWeapon<Fists>(To.Everyone);
         
-        // @todo
-        cratesSpawned = Client.All.Count; // Math.Clamp(Client.All.Count - Random.Shared.Next(0, 3), 2, Client.All.Count);
+        cratesSpawned = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
         for (int i = 0; i < cratesSpawned; ++i)
         {
             var spawn = CommonEntities.OnBoxSpawnsDeck.Next();
