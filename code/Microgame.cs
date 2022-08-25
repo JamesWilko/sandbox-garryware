@@ -17,6 +17,7 @@ public abstract class Microgame
 {
     public abstract void Setup();
     public abstract void Start();
+    public virtual void Tick(){}
     public abstract void Finish();
     public abstract void Cleanup();
 
@@ -71,6 +72,7 @@ public abstract class Microgame
 
         while (!IsGameFinished())
         {
+            Tick();
             await GameTask.Yield();
         }
         
@@ -94,8 +96,7 @@ public abstract class Microgame
     
     protected virtual bool IsGameFinished()
     {
-        return HasGameTimedOut()
-               || (hasGameFinishedEarly && timeSinceEarlyFinish > 0.5f);
+        return HasGameTimedOut() || HasGameFinishedEarly() || HasEverybodyLockedInAResult();
     }
 
     protected bool HasGameTimedOut()
@@ -107,6 +108,23 @@ public abstract class Microgame
     {
         hasGameFinishedEarly = true;
         timeSinceEarlyFinish = 0;
+    }
+
+    protected bool HasGameFinishedEarly()
+    {
+        return hasGameFinishedEarly && timeSinceEarlyFinish > 0.5f;
+    }
+
+    protected bool HasEverybodyLockedInAResult()
+    {
+        foreach (var client in Client.All)
+        {
+            if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
