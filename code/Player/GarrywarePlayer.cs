@@ -399,5 +399,13 @@ partial class GarrywarePlayer : Player
     {
         Inventory.DeleteContents();
     }
-
+    
+    public bool IsMovingAtSprintSpeed
+    {
+        get
+        {
+            var walkController = Controller as WalkController;
+            return walkController.Velocity.Length > (walkController.SprintSpeed * 0.9f);
+        }
+    }
 }

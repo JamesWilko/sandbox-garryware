@@ -8,5 +8,6 @@ public static class MicrogamesList
     public static readonly Microgame[] Microgames =
     {
         new BreakCrates(),
+        new DontStopSprinting()
     };
 }
