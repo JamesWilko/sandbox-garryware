@@ -2,7 +2,7 @@
 
 namespace Garryware;
 
-public enum RoundState
+public enum RoundResult
 {
     Undecided,
     Lost,
@@ -16,11 +16,11 @@ partial class GarrywarePlayer : Player
     private DamageInfo lastDamage;
 
     [Net, Change(nameof(OnRoundStateChanged))]
-    protected RoundState roundState { get; set; }
+    protected RoundResult RoundResult { get; set; }
 
-    public bool HasLockedInResult => roundState != RoundState.Undecided;
-    public bool HasWonRound => roundState == RoundState.Won;
-    public bool HasLostRound => roundState == RoundState.Lost;
+    public bool HasLockedInResult => RoundResult != RoundResult.Undecided;
+    public bool HasWonRound => RoundResult == RoundResult.Won;
+    public bool HasLostRound => RoundResult == RoundResult.Lost;
 
     /// <summary>
     /// The clothing container is what dresses the citizen
@@ -348,30 +348,32 @@ partial class GarrywarePlayer : Player
     public void ResetRound()
     {
         // @todo: turn this into an event?
-        roundState = RoundState.Undecided;
+        RoundResult = RoundResult.Undecided;
     }
     
     public void FlagAsRoundWinner()
     {
-        roundState = RoundState.Won;
+        RoundResult = RoundResult.Won;
     }
 
     public void FlagAsRoundLoser()
     {
-        roundState = RoundState.Lost;
+        RoundResult = RoundResult.Lost;
     }
     
-    public void OnRoundStateChanged(RoundState oldState, RoundState newState)
+    public void OnRoundStateChanged(RoundResult oldResult, RoundResult newResult)
     {
-        switch (newState)
+        switch (newResult)
         {
-            case RoundState.Won:
+            case RoundResult.Won:
                 SoundUtility.PlayPlayerLockedInWin(this);
+                GarrywareGame.Current.ShowRoundResult(RoundResult.Won);
                 break;
-            case RoundState.Lost:
+            case RoundResult.Lost:
                 SoundUtility.PlayPlayerLockedInLose(this);
+                GarrywareGame.Current.ShowRoundResult(RoundResult.Lost);
                 break;
-            case RoundState.Undecided:
+            case RoundResult.Undecided:
                 break;
         }
     }

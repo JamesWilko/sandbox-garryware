@@ -26,6 +26,9 @@ public partial class GarrywareGame : Sandbox.Game
     public delegate void ShowInstructionsDelegate(string text, float displayTime);
     public event ShowInstructionsDelegate OnNewInstructions;
 
+    public delegate void RoundResultDelegate(RoundResult result);
+    public event RoundResultDelegate OnRoundResult;
+    
     [Net, Change(nameof(OnAvailableControlsChanged))] public PlayerAction AvailableControls { get; set; }
     public delegate void MicrogameControlsDelegate(PlayerAction availableActions);
     public event MicrogameControlsDelegate OnAvailableControlsUpdated;
@@ -38,7 +41,6 @@ public partial class GarrywareGame : Sandbox.Game
         {
             _ = new GarrywareHud();
         }
-        
         _ = new MusicController();
         
         // Setup state control
@@ -184,6 +186,11 @@ public partial class GarrywareGame : Sandbox.Game
     public void ShowInstructions(string text, float displayTime = 3.0f)
     {
         OnNewInstructions?.Invoke(text, displayTime);
+    }
+    
+    public void ShowRoundResult(RoundResult result)
+    {
+        OnRoundResult?.Invoke(result);
     }
     
     private void OnAvailableControlsChanged(PlayerAction oldControls, PlayerAction newControls)

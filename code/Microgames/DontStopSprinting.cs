@@ -8,6 +8,7 @@ public class DontStopSprinting : Microgame
     {
         Rules = MicrogameRules.WinOnTimeout;
         ActionsUsedInGame = PlayerAction.Sprint;
+        GameLength = 5;
     }
     
     public override void Setup()

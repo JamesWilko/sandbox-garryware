@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sandbox;
@@ -6,11 +7,13 @@ using Sandbox;
 namespace Garryware;
 
 // Basic rules to help make games quicker so that we don't have to continuously write logic for basic things like winning or losing on timeout 
+[Flags]
 public enum MicrogameRules
 {
     None = 0,
     WinOnTimeout = 1 << 0, // Everyone who hasn't already lost will win automatically when the game finishes
     LoseOnTimeout = 1 << 1, // Everyone who hasn't already won will lose automatically when the game finishes
+    EndEarlyIfEverybodyLockedIn = 1 << 2, // End the game early if everybody locks in a result
 }
 
 public abstract class Microgame
@@ -78,8 +81,7 @@ public abstract class Microgame
         
         Log.Info($"[{microgameName}] Finished");
         Finish();
-        GarrywareGame.Current.AvailableControls = PlayerAction.None;
-        GarrywareGame.Current.ClearCountdownTimer();
+        ClearHud();
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();
         await GameTask.DelayRealtimeSeconds(CooldownLength);
@@ -117,6 +119,9 @@ public abstract class Microgame
 
     protected bool HasEverybodyLockedInAResult()
     {
+        if (!Rules.HasFlag(MicrogameRules.EndEarlyIfEverybodyLockedIn))
+            return false;
+        
         foreach (var client in Client.All)
         {
             if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
@@ -130,9 +135,20 @@ public abstract class Microgame
     /// <summary>
     /// Show an instruction popup to all players that goes away after a short time.
     /// </summary>
-    protected void ShowInstructions(string text, float displayTime = defaultInstructionsDisplayTime)
+    protected void ShowInstructions(string text, float? displayTime = null)
     {
-        GarrywareGame.Current.ShowInstructions(text, displayTime);
+        float duration = displayTime ?? (GameLength + WarmupLength);
+        GarrywareGame.Current.ShowInstructions(text, duration);
+    }
+
+    /// <summary>
+    /// Clear all microgame related things off the hud except for the result
+    /// </summary>
+    protected void ClearHud()
+    {
+        GarrywareGame.Current.ShowInstructions(string.Empty, -1);
+        GarrywareGame.Current.ClearCountdownTimer();
+        GarrywareGame.Current.AvailableControls = PlayerAction.None;
     }
 
     /// <summary>
@@ -226,6 +242,7 @@ public abstract class Microgame
         else if (everyoneLost)
         {
             SoundUtility.PlayEveryoneLost();
+            GarrywareGame.Current.ShowRoundResult(RoundResult.Lost);
         }
         else
         {

@@ -9,8 +9,9 @@ public class BreakCrates : Microgame
     
     public BreakCrates()
     {
-        Rules = MicrogameRules.LoseOnTimeout;
+        Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.UseWeapon;
+        GameLength = 5;
     }
     
     public override void Setup()
