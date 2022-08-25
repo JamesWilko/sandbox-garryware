@@ -2,6 +2,9 @@
 
 namespace Garryware.Microgames;
 
+/// <summary>
+/// Players have to keep sprinting, if they slow down from their sprinting speed they lose.
+/// </summary>
 public class DontStopSprinting : Microgame
 {
     public DontStopSprinting()

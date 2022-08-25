@@ -2,6 +2,9 @@
 
 namespace Garryware.Microgames;
 
+/// <summary>
+/// Players have to shoot all of their ammo before time runs out or they lose.
+/// </summary>
 public class Magdump : Microgame
 {
     public override void Setup()

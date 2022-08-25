@@ -1,33 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware.Microgames;
 
 /// <summary>
-/// Players must break a crate to win. They can only break one and there aren't enough crates for all players.
+/// Players must break all the crates in the map to win. Everybody who broke a crate will win, but only if all the crates are broken.
 /// </summary>
-public class BreakCrates : Microgame
+public class BreakAllCrates : Microgame
 {
     private int cratesSpawned;
+    private List<GarrywarePlayer> potentialWinners = new();
     
-    public BreakCrates()
+    public BreakAllCrates()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.UseWeapon;
-        GameLength = 5;
+        GameLength = 7;
     }
     
     public override void Setup()
     {
-        ShowInstructions("Break a crate!");
+        ShowInstructions("Break all crates!");
     }
 
     public override void Start()
     {
         GiveWeapon<Fists>(To.Everyone);
         
-        cratesSpawned = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
+        cratesSpawned = (int) Math.Min(Math.Ceiling(Client.All.Count * Random.Shared.Float(1.25f, 2.0f)), CommonEntities.OnBoxSpawns.Count);
         for (int i = 0; i < cratesSpawned; ++i)
         {
             var spawn = CommonEntities.OnBoxSpawnsDeck.Next();
@@ -49,15 +51,19 @@ public class BreakCrates : Microgame
         if(IsGameFinished())
             return;
         
-        if (attacker is GarrywarePlayer player)
+        if (attacker is GarrywarePlayer player && !potentialWinners.Contains(player))
         {
-            player.FlagAsRoundWinner();
-            player.RemoveWeapons();
+            potentialWinners.Add(player);
         }
         
         cratesSpawned--;
         if (cratesSpawned == 0)
-            EarlyFinish();
+        {
+            foreach (var winnerPlayer in potentialWinners)
+            {
+                winnerPlayer.FlagAsRoundWinner();
+            }
+        }
     }
 
     public override void Finish()
@@ -67,5 +73,6 @@ public class BreakCrates : Microgame
 
     public override void Cleanup()
     {
+        potentialWinners.Clear();
     }
 }
