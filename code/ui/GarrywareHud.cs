@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Garryware;
+﻿using Garryware;
 using Garryware.UI;
 using Sandbox;
 using Sandbox.UI;
@@ -7,6 +6,8 @@ using Sandbox.UI;
 [Library]
 public partial class GarrywareHud : HudEntity<RootPanel>
 {
+    private InstructionsPopup CurrentInstructions { get; set; }
+    
     public GarrywareHud()
     {
         if ( !IsClient )
@@ -23,7 +24,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<Crosshair>();
         RootPanel.AddChild<WaitingForPlayers>();
         RootPanel.AddChild<CountdownTimer>();
-
+        
         // Listen to game events
         GarrywareGame.Current.OnNewInstructions += OnNewInstructions;
         GarrywareGame.Current.OnAvailableControlsUpdated += OnAvailableControlsUpdated;
@@ -39,13 +40,19 @@ public partial class GarrywareHud : HudEntity<RootPanel>
             GarrywareGame.Current.OnNewInstructions -= OnNewInstructions;
         }
     }
-
+    
     private async void OnNewInstructions(string text, float displayTime)
     {
-        var popup = RootPanel.AddChild<InstructionsPopup>();
-        popup.Text = text;
-        await GameTask.DelayRealtimeSeconds(displayTime);
-        popup.Delete();
+        // Remove the old instructions
+        if (CurrentInstructions?.IsValid ?? false)
+        {
+            CurrentInstructions.Delete();
+        }
+        
+        // Show the new popup
+        CurrentInstructions = RootPanel.AddChild<InstructionsPopup>();
+        CurrentInstructions.Text = text;
+        CurrentInstructions.Lifetime = displayTime;
     }
     
     private void OnAvailableControlsUpdated(PlayerAction availableActions)

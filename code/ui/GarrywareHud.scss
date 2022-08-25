@@ -25,18 +25,16 @@ WaitingForPlayers
 	position: absolute;
 	width: 100%;
 	height: 64px;
-	bottom: 5%;
+	bottom: 0;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-
-	align-items: center;
-	justify-content: center;
+	
 	font-family: Poppins;
 	font-weight: bold;
 	font-size: 32px;
 	color: #fff;
-	text-shadow: 2px 2px #000;
+	text-stroke: 5px #000;
 	
 	background-color: rgba(#111, 0.6);
 	backdrop-filter: blur(20px);
@@ -51,19 +49,24 @@ CountdownTimer
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-
-	align-items: center;
-	justify-content: center;
+	
 	font-family: Open24;
 	font-size: 96px;
 	color: #fff;
-	text-shadow: 2px 2px #000;
+	text-stroke: 10px #000;
 }
 
 InstructionsPopup
 {
-	align-items: center;
+	position: absolute;
+	bottom: 200px;
+	left: 50%;
+	transform: translate( -50% -50% );
+	
+	align-items: flex-end;
 	justify-content: center;
+	z-index: -1;
+	
 	font-family: Poppins;
 	font-weight: bold;
 	font-size: 32px;
@@ -72,16 +75,9 @@ InstructionsPopup
 
 	background-color: rgba(#111, 0.6);
 	backdrop-filter: blur(20px);
-	
-	position: absolute;
-	z-index: -1;
-	align-items: flex-end;
-	top: 25%;
-	left: 50%;
 	border-radius: 20px;
 	padding: 10px 20px 10px 20px;
-	transform: translate( -50% -50% );
-
+	
 	transition: all 0.3s ease-out;
 	&:intro
 	{
@@ -95,4 +91,23 @@ InstructionsPopup
 		transform: translate( -50% -100% );
 		opacity: 0;
 	}
+}
+
+MicrogameControls
+{
+	position: absolute;
+	right: 100px;
+	bottom: 48px;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	height: 80px;
+	padding: 0 20px;
+	align-items: center;
+	
+	font-family: Poppins;
+	background-color: rgba(#111, 0.6);
+	backdrop-filter: blur(20px);
+	border-radius: 10px;
+	text-stroke: 7px #000;
 }
