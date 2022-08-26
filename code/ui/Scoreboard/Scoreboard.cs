@@ -11,13 +11,15 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
     public Panel Canvas { get; protected set; }
     Dictionary<Client, T> Rows = new();
 
-    public Panel Header { get; protected set; }
+    private Panel Header { get; set; }
+    private Label RoundCount { get; set; }
 
     public Scoreboard()
     {
         StyleSheet.Load("/ui/Scoreboard/Scoreboard.scss");
         AddClass("scoreboard");
 
+        AddHeader();
         Canvas = Add.Panel("canvas");
     }
 
@@ -47,7 +49,18 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
         {
             pair.Value.Style.Order = pair.Key.GetInt(Tags.Place, 99);
         }
+        
+        // Update the round count
+        RoundCount.Text = GarrywareGame.Current.CurrentRound.ToString("N0");
     }
+    
+    protected virtual void AddHeader() 
+    {
+        Header = Add.Panel( "header" );
+        Header.Add.Label( "Round ", "round" );
+        RoundCount = Header.Add.Label( "0", "roundcount" );
+    }
+
     
     protected virtual T AddClient(Client entry)
     {
