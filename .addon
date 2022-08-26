@@ -24,6 +24,18 @@
     "RankType": "None",
     "PerMapRanking": false,
     "LeaderboardType": "None",
-    "ProjectTemplate": null
+    "ProjectTemplate": null,
+    "GameCategory": "Social",
+    "GameSettings": {
+      "gw_max_rounds": {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "gw_max_rounds",
+        "DisplayName": "Rounds",
+        "DefaultValue": "30",
+        "Minimum": 10,
+        "Maximum": 60
+      }
+    }
   }
 }

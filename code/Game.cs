@@ -7,14 +7,12 @@ namespace Garryware;
 public partial class GarrywareGame : Sandbox.Game
 {
     public new static GarrywareGame Current { get; private set; }
-
-    private const int MaxGamesToPlay = 30;
+    
     private const int PointsToWin = 15;
     private const int MaxRepeatsPerMicrogame = 2;
 
     private const float EveryoneConnectedStartGameDelay = 10.0f;
     
-    private int microgamesPlayed;
     private readonly ShuffledDeck<Microgame> microgamesDeck = new();
     
     [Net] public int NumConnectedClients { get; set; }
@@ -25,6 +23,9 @@ public partial class GarrywareGame : Sandbox.Game
     [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
     
     [Net] public int CurrentRound { get; private set; }
+
+    [ConVar.Replicated("gw_max_rounds")]
+    public static int MaxRounds { get; set; } = 30;
     
     public delegate void ShowInstructionsDelegate(string text, float displayTime);
     public event ShowInstructionsDelegate OnNewInstructions;
@@ -124,7 +125,6 @@ public partial class GarrywareGame : Sandbox.Game
 
             CurrentRound++;
             await microgame.Play();
-            microgamesPlayed++;
         }
         while (CanContinuePlaying());
 
@@ -137,7 +137,7 @@ public partial class GarrywareGame : Sandbox.Game
         // Has somebody won?
         // Has everybody left?
         // @todo
-        return microgamesPlayed < MaxGamesToPlay;
+        return CurrentRound < MaxRounds;
     }
 
     private void RefreshAvailableMicrogames()
@@ -147,7 +147,7 @@ public partial class GarrywareGame : Sandbox.Game
         {
             if (microgame.CanBePlayed())
             {
-                microgamesDeck.Add(microgame);
+                microgamesDeck.Add(microgame, MaxRepeatsPerMicrogame);
                 Log.Info($"    Including microgame: {microgame}");
             }
             else
