@@ -82,6 +82,7 @@ public abstract class Microgame
         ClearHud();
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();
+        UpdateScores();
         await GameTask.DelayRealtimeSeconds(CooldownLength);
         
         Log.Info($"[{microgameName}] Cleaning up");
@@ -283,6 +284,50 @@ public abstract class Microgame
             SoundUtility.PlayWinRound(To.Multiple(winners));
             SoundUtility.PlayLoseRound(To.Multiple(losers));
         }
+    }
+
+    // @todo: update this later on to immediately give points when the player wins or loses
+    // @todo: fix lots of ugly get and set ints on a magic variable name
+    private void UpdateScores()
+    {
+        var winners = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
+        var losers = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
+        var pointsPlacing = new List<int>();
+        
+        // Give all winners a point and update their streak
+        foreach (var client in winners)
+        {
+            var newPoints = client.GetInt("points") + 1;
+            var oldStreak = client.GetInt("streak");
+            var newStreak = oldStreak + 1;
+
+            client.SetInt("points", newPoints);
+            client.SetInt("streak", newStreak);
+            if (newStreak > oldStreak)
+            {
+                client.SetInt("max-streak", newStreak);
+            }
+            
+            pointsPlacing.AddUnique(newPoints);
+        }
+        
+        // Reset the streak on all losers
+        foreach (var client in losers)
+        {
+            client.SetInt("streak", 0);
+            
+            pointsPlacing.AddUnique(client.GetInt("points"));
+        }
+        
+        // Sort points out into their points order and assign a place to each player based on their points 
+        pointsPlacing.Sort();
+        pointsPlacing.Reverse();
+        foreach (var client in Client.All)
+        {
+            int place = pointsPlacing.IndexOf(client.GetInt("points")) + 1;
+            client.SetInt("place", place);
+        }
+
     }
 
 }

@@ -1,0 +1,90 @@
+﻿.scoreboard
+{
+	position: absolute;
+	flex-direction: column;
+	font-family: Poppins;
+	font-size: 24px;
+	font-weight: 500;
+	color: white;
+	left: 2%;
+	top: 2%;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: all 0.1s ease-out;
+	transform-origin: 50% 50%;
+
+	&.open
+	{
+		opacity: 1;
+		transform: scale( 1 );
+	}
+
+	.name
+	{
+		flex-grow: 1;
+
+		&.me
+		{
+			color: #b6ff00;
+		}
+	}
+	
+	.place
+	{
+		width: 40px;
+		text-align: left;
+	}
+
+	.points
+	{
+		width: 100px;
+		text-align: right;
+	}
+
+	.fire
+	{
+		z-index: 99;
+		position: absolute;
+		right: 48px;
+		bottom: 0;
+		
+		font-size: 48px;
+	}
+	
+	.streak
+	{
+		z-index: 100;
+		position: absolute;
+		width: 100%;
+		bottom: 4px;
+
+		font-size: 24px;
+		text-stroke: 5px #000;
+		text-align: center;
+	}
+	
+	.canvas
+	{
+		flex-direction: column;
+		min-height: 50%;
+		min-width: 30%;
+
+		.entry
+		{
+			margin-bottom: 2px;
+			padding: 4px;
+			background-color: rgba(#111, 0.6);
+		}
+
+		.win
+		{
+			background-color: rgba(#040, 0.6);
+		}
+
+		.lost
+		{
+			background-color: rgba(#400, 0.6);
+		}
+	}	
+}

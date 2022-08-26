@@ -131,6 +131,7 @@ public partial class GarrywareGame : Sandbox.Game
         // Have we reached the round limit?
         // Has somebody won?
         // Has everybody left?
+        // @todo
         return microgamesPlayed < MaxGamesToPlay;
     }
 
@@ -213,6 +214,17 @@ public partial class GarrywareGame : Sandbox.Game
             }
         }
     }
+    
+    [ConCmd.Server("gw_points")]
+    public static void RandomizePoints()
+    {
+        foreach (var client in Client.All)
+        {
+            client.SetInt("points", Rand.Int(2, 50));
+        }
+    }
+    
+    
 
 }
 

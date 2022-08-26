@@ -19,7 +19,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<ChatBox>();
         RootPanel.AddChild<VoiceList>();
         RootPanel.AddChild<VoiceSpeaker>();
-        RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+        RootPanel.AddChild<Garryware.UI.Scoreboard<Garryware.UI.ScoreboardEntry>>();
 
         RootPanel.AddChild<KillFeed>();
         RootPanel.AddChild<Crosshair>();
