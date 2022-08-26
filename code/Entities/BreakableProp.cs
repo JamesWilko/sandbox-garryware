@@ -55,7 +55,7 @@ public partial class BreakableProp : BasePhysics
     /// <summary>
     /// Backing property for the GameColor property which also sets the render color automatically.
     /// </summary>
-    [Net] private GameColor InternalColor { get; set; } = GameColor.White;
+    [Net, Change(nameof(OnInternalGameColorChanged))] private GameColor InternalColor { get; set; } = GameColor.White;
     
     /// <summary>
     /// Set the color of the prop used for gameplay purposes.
@@ -83,11 +83,6 @@ public partial class BreakableProp : BasePhysics
         get => InternalHideGameColor;
         set => InternalHideGameColor = value;
     }
-
-    private void OnHideGameColorChanged(bool oldValue, bool newValue)
-    {
-        RenderColor = newValue ? Color.White : GameColor.AsColor();
-    }
         
     public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
 
@@ -114,9 +109,11 @@ public partial class BreakableProp : BasePhysics
             SetupPhysics();
         }
         
+        UpdateGameColorMaterialOverride();
+
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup
     }
-
+    
     private void SetupPhysics()
     {
         var physics = SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
@@ -169,6 +166,7 @@ public partial class BreakableProp : BasePhysics
         {
             UpdatePropData(model);
         }
+        UpdateGameColorMaterialOverride();
     }
 
     protected new virtual void UpdatePropData(Model model)
@@ -350,6 +348,31 @@ public partial class BreakableProp : BasePhysics
                 SoundOverride = explosionBehavior.Sound
             }.Explode(this);
         }
+    }
+    
+    private void OnInternalGameColorChanged(GameColor oldColor, GameColor newColor)
+    {
+        UpdateGameColorMaterialOverride();
+    }
+
+    private void UpdateGameColorMaterialOverride()
+    {
+        if (IsServer) return;
+        
+        if (!HideGameColor && GameColor != GameColor.White)
+        {
+            SetMaterialOverride("materials/tools/toolswhite.vmat");
+        }
+        else
+        {
+            ClearMaterialOverride();
+        }
+    }
+    
+    private void OnHideGameColorChanged(bool oldValue, bool newValue)
+    {
+        RenderColor = newValue ? Color.White : GameColor.AsColor();
+        UpdateGameColorMaterialOverride();
     }
 
 }

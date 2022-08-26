@@ -34,7 +34,7 @@ public static class ColorsExtension
     {
         GameColor.White => Color.White,
         GameColor.Red => Color.Red,
-        GameColor.Blue => new Color(0.2f, 0.2f, 1.0f),
+        GameColor.Blue => Color.Blue,
         GameColor.Green => Color.Green,
         GameColor.Magenta => Color.Magenta,
         GameColor.Yellow => Color.Yellow,
