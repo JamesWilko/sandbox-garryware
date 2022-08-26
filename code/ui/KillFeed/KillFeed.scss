@@ -10,6 +10,16 @@
 	font-size: 20px;
 	font-weight: 500;
 	align-items: flex-end;
+
+	.Won
+	{
+		background-color: rgba(#040, 0.6);
+	}
+
+	.Lost
+	{
+		background-color: rgba(#400, 0.6);
+	}
 }
 
 KillFeedEntry
@@ -87,14 +97,4 @@ KillFeedEntry
 	{
 		display: none;
 	}
-}
-
-.Won
-{
-	background-color: rgba(#040, 0.6);
-}
-
-.Lost
-{
-	background-color: rgba(#400, 0.6);
 }
