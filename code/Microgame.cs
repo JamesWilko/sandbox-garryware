@@ -297,15 +297,15 @@ public abstract class Microgame
         // Give all winners a point and update their streak
         foreach (var client in winners)
         {
-            var newPoints = client.GetInt("points") + 1;
-            var oldStreak = client.GetInt("streak");
+            var newPoints = client.GetInt(Tags.Points) + 1;
+            var oldStreak = client.GetInt(Tags.Streak);
             var newStreak = oldStreak + 1;
 
-            client.SetInt("points", newPoints);
-            client.SetInt("streak", newStreak);
+            client.SetInt(Tags.Points, newPoints);
+            client.SetInt(Tags.Streak, newStreak);
             if (newStreak > oldStreak)
             {
-                client.SetInt("max-streak", newStreak);
+                client.SetInt(Tags.MaxStreak, newStreak);
             }
             
             pointsPlacing.AddUnique(newPoints);
@@ -314,9 +314,9 @@ public abstract class Microgame
         // Reset the streak on all losers
         foreach (var client in losers)
         {
-            client.SetInt("streak", 0);
+            client.SetInt(Tags.Streak, 0);
             
-            pointsPlacing.AddUnique(client.GetInt("points"));
+            pointsPlacing.AddUnique(client.GetInt(Tags.Points));
         }
         
         // Sort points out into their points order and assign a place to each player based on their points 
@@ -324,8 +324,8 @@ public abstract class Microgame
         pointsPlacing.Reverse();
         foreach (var client in Client.All)
         {
-            int place = pointsPlacing.IndexOf(client.GetInt("points")) + 1;
-            client.SetInt("place", place);
+            int place = pointsPlacing.IndexOf(client.GetInt(Tags.Points)) + 1;
+            client.SetInt(Tags.Place, place);
         }
 
     }

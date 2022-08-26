@@ -220,7 +220,7 @@ public partial class GarrywareGame : Sandbox.Game
     {
         foreach (var client in Client.All)
         {
-            client.SetInt("points", Rand.Int(2, 50));
+            client.SetInt(Garryware.Tags.Points, Rand.Int(2, 50));
         }
     }
     

@@ -57,9 +57,9 @@ public partial class ScoreboardEntry : Panel
             clientPlayer = Client.Pawn as GarrywarePlayer;
         }
         
-        var points = Client.GetInt("points");
-        var streak = Client.GetInt("streak");
-        var place = Client.GetInt("place");
+        var points = Client.GetInt(Tags.Points);
+        var streak = Client.GetInt(Tags.Streak);
+        var place = Client.GetInt(Tags.Place);
         
         Place.Text = place > 0 && place < PlaceEmojis.Length ? PlaceEmojis[place - 1] : string.Empty;
         

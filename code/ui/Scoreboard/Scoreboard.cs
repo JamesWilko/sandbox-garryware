@@ -45,7 +45,7 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
         // Order by place, if place hasn't been determined yet then stick them at the end
         foreach (var pair in Rows)
         {
-            pair.Value.Style.Order = pair.Key.GetInt("place", 99);
+            pair.Value.Style.Order = pair.Key.GetInt(Tags.Place, 99);
         }
     }
     
