@@ -23,6 +23,8 @@ public partial class GarrywareGame : Sandbox.Game
     [Net] public bool IsCountdownTimerEnabled { get; private set; }
     [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
     
+    [Net] public int CurrentRound { get; private set; }
+    
     public delegate void ShowInstructionsDelegate(string text, float displayTime);
     public event ShowInstructionsDelegate OnNewInstructions;
 
@@ -117,7 +119,8 @@ public partial class GarrywareGame : Sandbox.Game
         {
             var microgame = microgamesDeck.Next();
             Assert.NotNull(microgame);
-            
+
+            CurrentRound++;
             await microgame.Play();
             microgamesPlayed++;
         }
