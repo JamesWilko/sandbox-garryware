@@ -1,4 +1,5 @@
-﻿using Core.StateMachine;
+﻿using System.Linq;
+using Core.StateMachine;
 using Sandbox;
 
 namespace Garryware;
@@ -51,6 +52,7 @@ public partial class GarrywareGame : Sandbox.Game
         AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
         AddEnterStateObserver(GameState.Instructions, OnEnterInstructionsState);
         AddEnterStateObserver(GameState.Playing, OnEnterPlayingState);
+        AddEnterStateObserver(GameState.GameOver, OnEnterGameOverState);
         
         AddExitStateController(GameState.Dev, args => TransitionResponse.Block);
         
@@ -154,6 +156,19 @@ public partial class GarrywareGame : Sandbox.Game
             }
         }
         Assert.True(microgamesDeck.Count > 0);
+    }
+
+    private async void OnEnterGameOverState(TransitionArgs<GameState> args)
+    {
+        const float returnToLobbySeconds = 10.0f;
+        
+        await GameServices.EndGameAsync();
+        
+        SetCountdownTimer(returnToLobbySeconds);
+        await GameTask.DelayRealtimeSeconds(returnToLobbySeconds);
+        
+        // Kick everybody out of the game
+        Client.All.ToList().ForEach( cl => cl.Kick() );
     }
     
     public override void ClientJoined(Client client)
