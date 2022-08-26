@@ -138,7 +138,7 @@ public abstract class Microgame
     protected void ShowInstructions(string text, float? displayTime = null)
     {
         float duration = displayTime ?? (GameLength + WarmupLength);
-        GarrywareGame.Current.ShowInstructions(text, duration);
+        GameEvents.NewInstructions(text, duration);
     }
 
     /// <summary>
@@ -146,7 +146,7 @@ public abstract class Microgame
     /// </summary>
     protected void ClearHud()
     {
-        GarrywareGame.Current.ShowInstructions(string.Empty, -1);
+        GameEvents.ClearInstructions();
         GarrywareGame.Current.ClearCountdownTimer();
         GarrywareGame.Current.AvailableControls = PlayerAction.None;
     }
@@ -277,7 +277,6 @@ public abstract class Microgame
         else if (everyoneLost)
         {
             SoundUtility.PlayEveryoneLost();
-            GarrywareGame.Current.ShowRoundResult(RoundResult.Lost);
         }
         else
         {

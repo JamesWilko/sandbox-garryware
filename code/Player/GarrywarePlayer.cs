@@ -364,29 +364,7 @@ partial class GarrywarePlayer : Player
     
     public void OnRoundStateChanged(RoundResult oldResult, RoundResult newResult)
     {
-        switch (newResult)
-        {
-            case RoundResult.Won:
-                // @todo: clean up
-                SoundUtility.PlayPlayerLockedInWin(this);
-                KillFeed.Current.AddEntry(Client.PlayerId, Client.Name, RoundResult.Won);
-                if (IsLocalPawn)
-                {
-                    GarrywareGame.Current.ShowRoundResult(RoundResult.Won);
-                }
-                break;
-            case RoundResult.Lost:
-                // @todo: clean up
-                SoundUtility.PlayPlayerLockedInLose(this);
-                KillFeed.Current.AddEntry(Client.PlayerId, Client.Name, RoundResult.Lost);
-                if (IsLocalPawn)
-                {
-                    GarrywareGame.Current.ShowRoundResult(RoundResult.Lost);
-                }
-                break;
-            case RoundResult.Undecided:
-                break;
-        }
+        GameEvents.PlayerLockedInResult(Client, newResult);
     }
 
     /// <summary>

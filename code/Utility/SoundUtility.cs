@@ -21,6 +21,12 @@ public static partial class SoundUtility
 
     private const int maxCountdownSeconds = 5;
 
+    static SoundUtility()
+    {
+        GameEvents.OnPlayerWon += OnPlayerWon;
+        GameEvents.OnPlayerLost += OnPlayerLost;
+    }
+    
     public static void PlayCountdown(int seconds)
     {
         if(seconds > maxCountdownSeconds) return;
@@ -64,12 +70,22 @@ public static partial class SoundUtility
 
     public static void PlayPlayerLockedInWin(Entity playerEntity)
     {
-        Sound.FromEntity($"microgame.lock-in-win.{(playerEntity.IsLocalPawn ? "local" : "other")}", playerEntity);
+        
     }
     
     public static void PlayPlayerLockedInLose(Entity playerEntity)
     {
-        Sound.FromEntity($"microgame.lock-in-lose.{(playerEntity.IsLocalPawn ? "local" : "other")}", playerEntity);
+        
+    }
+    
+    private static void OnPlayerWon(Client player, RoundResult result)
+    {
+        Sound.FromEntity($"microgame.lock-in-win.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn);
+    }
+    
+    private static void OnPlayerLost(Client player, RoundResult result)
+    {
+        Sound.FromEntity($"microgame.lock-in-lose.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn);
     }
     
 }

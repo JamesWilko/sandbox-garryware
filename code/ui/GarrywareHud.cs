@@ -28,22 +28,19 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<CountdownTimer>();
         
         // Listen to game events
-        GarrywareGame.Current.OnNewInstructions += OnNewInstructions;
-        GarrywareGame.Current.OnAvailableControlsUpdated += OnAvailableControlsUpdated;
-        GarrywareGame.Current.OnRoundResult += OnRoundResult;
+        GameEvents.OnNewInstructions += OnNewInstructions;
+        GameEvents.OnClearInstructions += OnClearInstructions;
+        GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
     }
-
+    
     protected override void OnDestroy()
     {
         base.OnDestroy();
 
         // Unbind game events
-        if (GarrywareGame.Current != null)
-        {
-            GarrywareGame.Current.OnNewInstructions -= OnNewInstructions;
-            GarrywareGame.Current.OnAvailableControlsUpdated -= OnAvailableControlsUpdated;
-            GarrywareGame.Current.OnRoundResult -= OnRoundResult;
-        }
+        GameEvents.OnNewInstructions -= OnNewInstructions;
+        GameEvents.OnClearInstructions -= OnClearInstructions;
+        GameEvents.OnPlayerLockedInResult -= OnPlayerLockedInResult;
     }
     
     private void OnNewInstructions(string text, float displayTime)
@@ -63,16 +60,27 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         CurrentInstructions.Text = text;
         CurrentInstructions.Lifetime = displayTime;
     }
-    
+
+    private void OnClearInstructions(string text, float displayTime)
+    {
+        if (CurrentInstructions?.IsValid ?? false)
+        {
+            CurrentInstructions.Delete();
+        }
+    }
+
     private void OnAvailableControlsUpdated(PlayerAction availableActions)
     {
         // @todo: update on screen controls list
     }
     
-    private void OnRoundResult(RoundResult result)
+    private void OnPlayerLockedInResult(Client player, RoundResult result)
     {
-        var resultPopup = RootPanel.AddChild<WinLoseRoundPopup>();
-        resultPopup.SetResult(result);
+        if (player.IsOwnedByLocalClient)
+        {
+            var resultPopup = RootPanel.AddChild<WinLoseRoundPopup>();
+            resultPopup.SetResult(result);
+        }
     }
 
 }

@@ -12,8 +12,22 @@ public partial class KillFeed : Panel
         Current = this;
 
         StyleSheet.Load("/ui/KillFeed/KillFeed.scss");
+        
+        GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
     }
 
+    public override void OnDeleted()
+    {
+        base.OnDeleted();
+        
+        GameEvents.OnPlayerLockedInResult -= OnPlayerLockedInResult;
+    }
+
+    private void OnPlayerLockedInResult(Client player, RoundResult result)
+    {
+        AddEntry(player.PlayerId, player.Name, result);
+    }
+    
     public Panel AddEntry(long lsteamid, string left, RoundResult result)
     {
         var e = Current.AddChild<KillFeedEntry>();

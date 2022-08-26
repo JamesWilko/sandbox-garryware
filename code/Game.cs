@@ -25,13 +25,7 @@ public partial class GarrywareGame : Sandbox.Game
     [Net] public int CurrentRound { get; private set; }
 
     [ConVar.Replicated("gw_max_rounds")]
-    public static int MaxRounds { get; set; } = 30;
-    
-    public delegate void ShowInstructionsDelegate(string text, float displayTime);
-    public event ShowInstructionsDelegate OnNewInstructions;
-
-    public delegate void RoundResultDelegate(RoundResult result);
-    public event RoundResultDelegate OnRoundResult;
+    public static int MaxRounds { get; set; } = 40;
     
     [Net, Change(nameof(OnAvailableControlsChanged))] public PlayerAction AvailableControls { get; set; }
     public delegate void MicrogameControlsDelegate(PlayerAction availableActions);
@@ -44,6 +38,7 @@ public partial class GarrywareGame : Sandbox.Game
         
         if (IsServer)
         {
+            _ = new GameEvents();
             _ = new GarrywareHud();
         }
         _ = new MusicController();
@@ -201,17 +196,6 @@ public partial class GarrywareGame : Sandbox.Game
         // Attempt to advance the game state
         if(CurrentState == GameState.WaitingForPlayers)
             RequestTransition(GameState.StartingSoon);
-    }
-    
-    [ClientRpc]
-    public void ShowInstructions(string text, float displayTime = 3.0f)
-    {
-        OnNewInstructions?.Invoke(text, displayTime);
-    }
-    
-    public void ShowRoundResult(RoundResult result)
-    {
-        OnRoundResult?.Invoke(result);
     }
     
     private void OnAvailableControlsChanged(PlayerAction oldControls, PlayerAction newControls)
