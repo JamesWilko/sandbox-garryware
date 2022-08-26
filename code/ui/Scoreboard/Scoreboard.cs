@@ -24,19 +24,15 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
     public override void Tick()
     {
         base.Tick();
-
-        // @todo: remove
-        SetClass("open", true);
-        if (!IsVisible)
-            return;
         
-        // Clients that were added
+        // Add rows for clients that joined
         foreach (var client in Client.All.Except(Rows.Keys))
         {
             var entry = AddClient(client);
             Rows[client] = entry;
         }
 
+        // Remove rows for clients that left
         foreach (var client in Rows.Keys.Except(Client.All))
         {
             if (Rows.TryGetValue(client, out var row))
@@ -46,15 +42,11 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
             }
         }
         
-        // Order by points
-        // @todo
-        SortChildren((a, b) =>
+        // Order by place, if place hasn't been determined yet then stick them at the end
+        foreach (var pair in Rows)
         {
-            var aEntry = a as ScoreboardEntry;
-            var bEntry = a as ScoreboardEntry;
-            return aEntry.PlaceValue.CompareTo(bEntry.PlaceValue);
-        });
-        
+            pair.Value.Style.Order = pair.Key.GetInt("place", 99);
+        }
     }
     
     protected virtual T AddClient(Client entry)

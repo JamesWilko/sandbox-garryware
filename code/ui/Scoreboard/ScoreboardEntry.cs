@@ -7,8 +7,7 @@ namespace Garryware.UI;
 public partial class ScoreboardEntry : Panel
 {
     public Client Client;
-
-    public int PlaceValue;
+    private GarrywarePlayer clientPlayer;
     
     public Label Place;
     public Label PlayerName;
@@ -53,17 +52,21 @@ public partial class ScoreboardEntry : Panel
 
     public virtual void UpdateData()
     {
+        if (clientPlayer == null || !clientPlayer.IsValid)
+        {
+            clientPlayer = Client.Pawn as GarrywarePlayer;
+        }
+        
         var points = Client.GetInt("points");
         var streak = Client.GetInt("streak");
         var place = Client.GetInt("place");
-
-        // @todo
-        PlaceValue = place;
+        
         Place.Text = place > 0 && place < PlaceEmojis.Length ? PlaceEmojis[place - 1] : string.Empty;
         
         PlayerName.Text = Client.Name;
         SetClass("me", Client == Local.Client);
-        // @todo: highlight based on round result
+        SetClass("won", clientPlayer?.HasWonRound ?? false);
+        SetClass("lost", clientPlayer?.HasLostRound ?? false);
         
         Points.Text = points.ToString();
         

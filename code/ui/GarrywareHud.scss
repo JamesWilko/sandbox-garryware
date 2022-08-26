@@ -114,7 +114,7 @@ WinLoseRoundPopup
 	backdrop-filter: blur(20px);
 	border-radius: 20px;
 	padding: 10px 20px 10px 20px;
-
+		
 	transition: all 0.3s ease-out;
 	&:intro
 	{
@@ -130,13 +130,13 @@ WinLoseRoundPopup
 	}
 }
 
-.Won
+WinLoseRoundPopup.Won
 {
 	color: #CFC;
 	background-color: rgba(#080, 0.6);
 }
 
-.Lost
+WinLoseRoundPopup.Lost
 {
 	color: #FCC;
 	background-color: rgba(#800, 0.6);
