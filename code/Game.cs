@@ -138,6 +138,7 @@ public partial class GarrywareGame : Sandbox.Game
     private void RefreshAvailableMicrogames()
     {
         Log.Info("Refreshing available microgames...");
+        microgamesDeck.Clear();
         foreach (var microgame in MicrogamesList.Microgames)
         {
             if (microgame.CanBePlayed())
