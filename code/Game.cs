@@ -9,7 +9,6 @@ public partial class GarrywareGame : Sandbox.Game
     public new static GarrywareGame Current { get; private set; }
     
     private const int PointsToWin = 15;
-    private const int MaxRepeatsPerMicrogame = 2;
 
     private const float EveryoneConnectedStartGameDelay = 10.0f;
     
@@ -143,7 +142,7 @@ public partial class GarrywareGame : Sandbox.Game
         {
             if (microgame.CanBePlayed())
             {
-                microgamesDeck.Add(microgame, MaxRepeatsPerMicrogame);
+                microgamesDeck.Add(microgame);
                 Log.Info($"    Including microgame: {microgame}");
             }
             else
