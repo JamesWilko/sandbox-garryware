@@ -40,8 +40,7 @@ public partial class GarrywareGame : Sandbox.Game
             _ = new GameEvents();
             _ = new GarrywareHud();
         }
-        _ = new MusicController();
-        
+
         // Setup state control
         AddExitStateController(GameState.WaitingForPlayers, HasEverybodyConnected);
         AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
