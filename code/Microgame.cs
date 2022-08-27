@@ -27,7 +27,7 @@ public abstract class Microgame
     public int MinimumPlayers { get; protected set; } = 2;
     public float GameLength { get; protected set; } = 10.0f;
     public float WarmupLength { get; protected set; } = 1.5f;
-    public float CooldownLength { get; protected set; } = 3.0f;
+    public float CooldownLength { get; protected set; } = 2.5f;
     
     public PlayerAction ActionsUsedInGame { get; protected set; } = PlayerAction.None;
     public MicrogameRules Rules { get; protected set; } = MicrogameRules.None;
@@ -60,7 +60,7 @@ public abstract class Microgame
         var microgameName = GetType().Name;
         
         Log.Info($"[{microgameName}] Setting up");
-        SoundUtility.PlayNewRound();
+        SoundUtility.PlayNewRound(WarmupLength + GameLength);
         Setup();
         GarrywareGame.Current.AvailableControls = ActionsUsedInGame;
         await GameTask.DelayRealtimeSeconds(WarmupLength);

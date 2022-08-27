@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sandbox;
 
 namespace Garryware;
@@ -20,6 +21,9 @@ public static partial class SoundUtility
     };
 
     private const int maxCountdownSeconds = 5;
+	private const float newRoundTime = 2.5f;
+
+	private static Sound? bgmLoopSound;
 
     static SoundUtility()
     {
@@ -39,33 +43,50 @@ public static partial class SoundUtility
     }
     
     [ClientRpc]
-    public static void PlayNewRound()
+    public static void PlayNewRound(float roundTime)
     {
         Sound.FromScreen("microgame.new");
-    }
-    
-    [ClientRpc]
+		bgmLoopSound?.Stop();
+		if (roundTime >= 10.0f)
+		{
+			bgmLoopSound = Sound.FromScreen("garryware.bgm.loop.long");
+		}
+		else
+		{
+			bgmLoopSound = Sound.FromScreen("garryware.bgm.loop.short");
+		}
+		
+		// TODO: Setting volume on sounds doesn't work at the moment (https://github.com/Facepunch/sbox-issues/issues/1997).
+		// We should have the sound start with very low volume, then increase its volume after newRoundTime (because
+		// microgame.new already includes the beat)
+	}
+
+	[ClientRpc]
     public static void PlayWinRound()
     {
         Sound.FromScreen("microgame.win");
+        StopBGM();
     }
     
     [ClientRpc]
     public static void PlayLoseRound()
     {
         Sound.FromScreen("microgame.lose");
+        StopBGM();
     }
 
     [ClientRpc]
     public static void PlayEveryoneWon()
     {
         Sound.FromScreen("microgame.win.everyone");
+        StopBGM();
     }
 
     [ClientRpc]
     public static void PlayEveryoneLost()
     {
         Sound.FromScreen("microgame.lose.everyone");
+        StopBGM();
     }
 
     public static void PlayPlayerLockedInWin(Entity playerEntity)
@@ -87,5 +108,10 @@ public static partial class SoundUtility
     {
         Sound.FromEntity($"microgame.lock-in-lose.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn);
     }
-    
+
+    private static void StopBGM()
+    {
+        bgmLoopSound?.Stop();
+        bgmLoopSound = null;
+    }
 }
