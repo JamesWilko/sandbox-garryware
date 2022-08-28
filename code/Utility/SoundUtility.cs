@@ -43,22 +43,26 @@ public static partial class SoundUtility
     }
     
     [ClientRpc]
-    public static void PlayNewRound(float roundTime)
+    public static async void PlayNewRound(float roundTime)
     {
         Sound.FromScreen("microgame.new");
-		bgmLoopSound?.Stop();
+        StopBGM();
+
+        Sound localBgmLoopSound;
 		if (roundTime >= 10.0f)
 		{
-			bgmLoopSound = Sound.FromScreen("garryware.bgm.loop.long");
+            localBgmLoopSound = Sound.FromScreen("garryware.bgm.loop.long");
 		}
 		else
 		{
-			bgmLoopSound = Sound.FromScreen("garryware.bgm.loop.short");
+            localBgmLoopSound = Sound.FromScreen("garryware.bgm.loop.short");
 		}
-		
-		// TODO: Setting volume on sounds doesn't work at the moment (https://github.com/Facepunch/sbox-issues/issues/1997).
-		// We should have the sound start with very low volume, then increase its volume after newRoundTime (because
-		// microgame.new already includes the beat)
+        bgmLoopSound = localBgmLoopSound;
+
+        // Operate on a local copy in case this function is called again before the delay finishes
+        localBgmLoopSound.SetVolume(0.01f);
+        await GameTask.DelayRealtimeSeconds(newRoundTime * 0.8f);
+        localBgmLoopSound.SetVolume(1.0f);
 	}
 
 	[ClientRpc]
