@@ -110,7 +110,7 @@ public partial class BreakableProp : BasePhysics
         }
         
         UpdateGameColorMaterialOverride();
-
+        
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup
     }
     
@@ -361,7 +361,7 @@ public partial class BreakableProp : BasePhysics
         
         if (!HideGameColor && GameColor != GameColor.White)
         {
-            SetMaterialOverride("materials/tools/toolswhite.vmat");
+            SetMaterialOverride(CommonEntities.WhiteMaterial, "");
         }
         else
         {

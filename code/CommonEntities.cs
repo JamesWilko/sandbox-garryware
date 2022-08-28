@@ -21,12 +21,16 @@ public static class CommonEntities
     public static Model Balloon;
     public static Model Ball;
     public static Model Target;
+
+    public static Material WhiteMaterial;
     
     public static void Precache()
     {
         Crate = Model.Load("models/citizen_props/crate01.vmdl");
         Balloon = Model.Load("models/citizen_props/balloonregular01.vmdl");
         Ball = Model.Load("models/citizen_props/beachball.vmdl");
+        
+        WhiteMaterial = Material.Load("materials/white.vmat");
     }
 
     public static void PrecacheWorldEntities()
