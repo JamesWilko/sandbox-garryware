@@ -22,7 +22,7 @@ partial class GarrywarePlayer : Player
     public bool HasLockedInResult => RoundResult != RoundResult.Undecided;
     public bool HasWonRound => RoundResult == RoundResult.Won;
     public bool HasLostRound => RoundResult == RoundResult.Lost;
-
+    
     /// <summary>
     /// The clothing container is what dresses the citizen
     /// </summary>
@@ -372,7 +372,14 @@ partial class GarrywarePlayer : Player
     /// </summary>
     public bool IsOnABox()
     {
-        return Tags.Has(Garryware.Tags.OnBox);
+        foreach (var trigger in CommonEntities.OnBoxTriggers)
+        {
+            if (trigger.Contains(this))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
@@ -399,4 +406,5 @@ partial class GarrywarePlayer : Player
             return walkController.Velocity.Length > (walkController.SprintSpeed * 0.9f);
         }
     }
+    
 }

@@ -8,12 +8,9 @@ namespace Garryware.Entities;
 public class OnBoxTrigger : BaseTrigger
 {
     
-    public bool Contains(Vector3 position)
+    public bool Contains(Entity entity)
     {
-        bool withinX = WorldSpaceBounds.Mins.x <= position.x && WorldSpaceBounds.Maxs.x >= position.x;
-        bool withinY = WorldSpaceBounds.Mins.y <= position.y && WorldSpaceBounds.Maxs.y >= position.y;
-        bool withinZ = WorldSpaceBounds.Mins.z <= position.z && WorldSpaceBounds.Maxs.z >= position.z;
-        return withinX && withinY && withinZ;
+        return WorldSpaceBounds.Overlaps(entity.WorldSpaceBounds);
     }
 
     public override void OnTouchStart(Entity toucher)

@@ -13,5 +13,6 @@ public static class MicrogamesList
         new CrateColorMemory(),
         new CrateColorRoulette(),
         new AlarmingCrates(),
+        new InvertedClimb(),
     };
 }
