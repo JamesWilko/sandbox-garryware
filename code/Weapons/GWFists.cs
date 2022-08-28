@@ -1,20 +1,12 @@
-﻿namespace Garryware;
+﻿using Sandbox;
 
-using Sandbox;
+namespace Garryware;
 
-[Spawnable]
-[Library("weapon_fists", Title = "Fists")]
-partial class Fists : Weapon
+partial class GWFists : Fists
 {
-    public override string ViewModelPath => "models/first_person/first_person_arms.vmdl";
-    public override float RateOfFire => 3.0f;
+    public override float PrimaryRate => 3.0f;
 
-    private bool wasRightPunch = false;
-
-    public override bool CanReload()
-    {
-        return false;
-    }
+    private bool WasRightPunch = false;
 
     private void Attack(bool leftHand)
     {
@@ -32,38 +24,13 @@ partial class Fists : Weapon
 
     public override void AttackPrimary()
     {
-        Attack(wasRightPunch);
-        wasRightPunch = !wasRightPunch;
+        Attack(WasRightPunch);
+        WasRightPunch = !WasRightPunch;
     }
 
-    public override void OnCarryDrop(Entity dropper)
+    public override void AttackSecondary()
     {
-    }
-
-    public override void SimulateAnimator(CitizenAnimationHelper anim)
-    {
-        anim.HoldType = CitizenAnimationHelper.HoldTypes.Punch;
-        anim.Handedness = CitizenAnimationHelper.Hand.Both;
-        anim.AimBodyWeight = 1.0f;
-    }
-
-    public override void CreateViewModel()
-    {
-        Host.AssertClient();
-
-        if (string.IsNullOrEmpty(ViewModelPath))
-            return;
-
-        ViewModelEntity = new ViewModel
-        {
-            Position = Position,
-            Owner = Owner,
-            EnableViewmodelRendering = true,
-            EnableSwingAndBob = false,
-        };
-
-        ViewModelEntity.SetModel(ViewModelPath);
-        ViewModelEntity.SetAnimGraph("models/first_person/first_person_arms_punching.vanmgrph");
+        return;
     }
 
     private bool MeleeAttack()

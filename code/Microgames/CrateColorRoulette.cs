@@ -57,7 +57,7 @@ public class CrateColorRoulette : Microgame
         targetColor = GetRandomColor();
         CommonEntities.ColorsDeck.Shuffle();
         
-        GiveWeapon<Pistol>(To.Everyone);
+        GiveWeapon<GWPistol>(To.Everyone);
         ShowInstructions($"Shoot {targetColor.AsName()}!");
     }
 

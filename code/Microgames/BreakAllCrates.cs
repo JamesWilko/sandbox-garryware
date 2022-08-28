@@ -27,7 +27,7 @@ public class BreakAllCrates : Microgame
 
     public override void Start()
     {
-        GiveWeapon<Fists>(To.Everyone);
+        GiveWeapon<GWFists>(To.Everyone);
         
         cratesSpawned = (int) Math.Min(Math.Ceiling(Client.All.Count * Random.Shared.Float(1.25f, 2.0f)), CommonEntities.OnBoxSpawns.Count);
         for (int i = 0; i < cratesSpawned; ++i)

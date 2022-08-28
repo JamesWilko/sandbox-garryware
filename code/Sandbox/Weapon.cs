@@ -1,37 +1,25 @@
-﻿using System;
 using Sandbox;
 using System.Collections.Generic;
 
-namespace Garryware;
-
-public partial class Weapon : BaseCarriable, IUse
+public partial class Weapon : BaseWeapon, IUse
 {
-	public virtual float RateOfFire => 5.0f;
-	
 	public virtual float ReloadTime => 3.0f;
-	
-	public virtual int MagazineCapacity => 30;
-	public virtual int DefaultAmmoInReserve => 120;
 
 	public PickupTrigger PickupTrigger { get; protected set; }
 
-	[Net, Predicted] public TimeSince TimeSincePrimaryAttack { get; set; }
-	
-	[Net, Predicted] public int AmmoInMagazine { get; set; }
-	[Net, Predicted] public int AmmoInReserve { get; set; }
-	
-	[Net, Predicted] public TimeSince TimeSinceReload { get; set; }
+	[Net, Predicted]
+	public TimeSince TimeSinceReload { get; set; }
 
-	[Net, Predicted] public bool IsReloading { get; set; }
+	[Net, Predicted]
+	public bool IsReloading { get; set; }
 
-	[Net, Predicted] public TimeSince TimeSinceDeployed { get; set; }
-	
+	[Net, Predicted]
+	public TimeSince TimeSinceDeployed { get; set; }
+
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		Tags.Add("item");
-		
 		PickupTrigger = new PickupTrigger
 		{
 			Parent = this,
@@ -39,9 +27,6 @@ public partial class Weapon : BaseCarriable, IUse
 			EnableTouch = true,
 			EnableSelfCollisions = false
 		};
-
-		AmmoInMagazine = MagazineCapacity;
-		AmmoInReserve = DefaultAmmoInReserve;
 
 		PickupTrigger.PhysicsBody.AutoSleep = false;
 	}
@@ -53,20 +38,9 @@ public partial class Weapon : BaseCarriable, IUse
 		TimeSinceDeployed = 0;
 	}
 
-	public virtual bool CanReload()
+	public override void Reload()
 	{
-		if (!Owner.IsValid()
-		    || !Input.Down(InputButton.Reload)
-		    || AmmoInReserve <= 0
-		    || AmmoInMagazine >= MagazineCapacity)
-			return false;
-
-		return true;
-	}
-	
-	public virtual void Reload()
-	{
-		if (IsReloading)
+		if ( IsReloading )
 			return;
 
 		TimeSinceReload = 0;
@@ -76,70 +50,26 @@ public partial class Weapon : BaseCarriable, IUse
 
 		StartReloadEffects();
 	}
-	
-	public virtual bool CanPrimaryAttack()
-	{
-		if (!Owner.IsValid()
-		    || !Input.Down(InputButton.PrimaryAttack)
-		    || !Input.Pressed(InputButton.PrimaryAttack))
-		return false;
 
-		if(IsReloading || AmmoInMagazine <= 0)
-		 	return false;
-		
-		var rate = RateOfFire;
-		if (rate <= 0)
-			return true;
-
-		return TimeSincePrimaryAttack > (1 / rate);
-	}
-	
-	public virtual void AttackPrimary()
+	public override void Simulate( Client owner )
 	{
-		AmmoInMagazine--;
-		TimeSincePrimaryAttack = 0;
-	}
-	
-	public override void Simulate(Client player)
-	{
-		if (TimeSinceDeployed < 0.6f)
+		if ( TimeSinceDeployed < 0.6f )
 			return;
-		
-		if (CanReload())
+
+		if ( !IsReloading )
 		{
-			Reload();
+			base.Simulate( owner );
 		}
-		
-		// Reload could have changed our owner
-		if (!Owner.IsValid())
-			return;
 
-		if (CanPrimaryAttack())
-		{
-			using (LagCompensation())
-			{
-				TimeSincePrimaryAttack = 0;
-				AttackPrimary();
-			}
-		}
-		
-		// AttackPrimary could have changed our owner
-		if (!Owner.IsValid())
-			return;
-		
 		if ( IsReloading && TimeSinceReload > ReloadTime )
 		{
 			OnReloadFinish();
 		}
 	}
-	
+
 	public virtual void OnReloadFinish()
 	{
 		IsReloading = false;
-
-		int ammoAvailable = Math.Min(MagazineCapacity, AmmoInReserve);
-		AmmoInMagazine = ammoAvailable;
-		AmmoInReserve -= ammoAvailable;
 	}
 
 	[ClientRpc]
@@ -208,29 +138,25 @@ public partial class Weapon : BaseCarriable, IUse
 		ViewModelEntity?.SetAnimParameter( "fire", true );
 	}
 
-	/// <summary>
-	/// Does a trace from start to end, does bullet impact effects. Coded as an IEnumerable so you can return multiple
-	/// hits, like if you're going through layers or ricocet'ing or something.
-	/// </summary>
-	public virtual IEnumerable<TraceResult> TraceBullet(Vector3 start, Vector3 end, float radius = 2.0f)
+	public override IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2.0f )
 	{
-		bool underWater = Trace.TestPoint(start, "water");
+		bool underWater = Trace.TestPoint( start, "water" );
 
-		var trace = Trace.Ray(start, end)
-			.UseHitboxes()
-			.WithAnyTags("solid", "player", "npc")
-			.Ignore(this)
-			.Size(radius);
+		var trace = Trace.Ray( start, end )
+				.UseHitboxes()
+				.WithAnyTags( "solid", "player", "npc", "glass" )
+				.Ignore( this )
+				.Size( radius );
 
 		//
 		// If we're not underwater then we can hit water
 		//
-		if (!underWater)
-			trace = trace.WithAnyTags("water");
+		if ( !underWater )
+			trace = trace.WithAnyTags( "water" );
 
 		var tr = trace.Run();
 
-		if (tr.Hit)
+		if ( tr.Hit )
 			yield return tr;
 
 		//
@@ -321,13 +247,4 @@ public partial class Weapon : BaseCarriable, IUse
 			ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );
 		}
 	}
-	
-	public override Sound PlaySound(string soundName, string attachment)
-	{
-		if (Owner.IsValid())
-			return Owner.PlaySound(soundName, attachment);
-
-		return base.PlaySound(soundName, attachment);
-	}
-	
 }

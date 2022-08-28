@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Core.StateMachine;
+using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware;
@@ -203,7 +204,7 @@ public partial class GarrywareGame : Sandbox.Game
     }
     
     [ConCmd.Server("gw_dev")]
-    public static void EnableDevMode()
+    public static void EnableDevMode(string param)
     {
         Current?.RequestTransition(GameState.Dev);
         
@@ -211,7 +212,27 @@ public partial class GarrywareGame : Sandbox.Game
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.Inventory.Add(new Pistol(), true);
+                BaseCarriable weapon;
+                if (param == "pistol")
+                {
+                    weapon = new GWPistol();
+                }
+                else if (param == "gravgun")
+                {
+                    weapon = new GravGun();
+                    var ent = new BreakableProp
+                    {
+                        Position = player.EyePosition,
+                        Model = CommonEntities.Crate,
+                        CanGib = false
+                    };
+                }
+                else
+                {
+                    Log.Error($"Invalid weapon type {param}");
+                    return;
+                }
+                player.Inventory.Add(weapon, true);
             }
         }
     }
