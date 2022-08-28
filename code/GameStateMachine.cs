@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.StateMachine;
-using Core.StateMachine.Extensions;
 using Sandbox;
 
 namespace Garryware;
@@ -27,8 +26,8 @@ public partial class GarrywareGame : IObservableStateMachine<GameState>
     [Net] private GameState CurrentState { get; set; }
     private TransitionArgs<GameState> currentTransitionArgs;
 
-    private static readonly GameState InitialState = StateAttributeUtils.GetInitialState<GameState>();
-    private static readonly GameState DisabledState = StateAttributeUtils.GetDisabledState<GameState>();
+    private static readonly GameState InitialState = GameState.WaitingForPlayers;
+    private static readonly GameState DisabledState = GameState.NotRunning;
 
     private TransitionRequest? delayedTransitionRequest;
     private bool forceDelayRequests;
@@ -384,21 +383,16 @@ public partial class GarrywareGame : IObservableStateMachine<GameState>
 
     private void InternalRequestTransition(GameState requestedState, TransitionSuccess success, TransitionError error, TransitionArgs<GameState> transitionArgs)
     {
-        if (requestedState.IsInitialState())
+        if (requestedState == InitialState)
         {
             throw new ArgumentException($"Not allowed to transition back to the initial state {requestedState}");
         }
 
-        if (requestedState.IsDisabledState())
+        if (requestedState == DisabledState)
         {
             throw new ArgumentException($"Not allowed to explicitly transition to the disable state {requestedState}");
         }
-
-        if (requestedState.IsCompositeState())
-        {
-            throw new ArgumentException($"Not allowed to make explicit transition to a composite state {requestedState}");
-        }
-
+        
         if (requestedState.Equals(CurrentState))
         {
             Log.Info($"StateMachine<{typeof(GameState)}> transition ignored: {CurrentState} -> {requestedState}");
