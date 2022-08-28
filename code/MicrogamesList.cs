@@ -12,5 +12,6 @@ public static class MicrogamesList
         new DontStopSprinting(),
         new CrateColorMemory(),
         new CrateColorRoulette(),
+        new AlarmingCrates(),
     };
 }
