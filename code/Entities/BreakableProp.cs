@@ -200,13 +200,14 @@ public partial class BreakableProp : BasePhysics
         
         LastAttacker = info.Attacker;
         LastAttackerWeapon = info.Weapon;
-        if (!IsServer || Health <= 0.0 || LifeState != LifeState.Alive)
+        
+        if (!IsServer || LifeState != LifeState.Alive)
             return;
 
         if (!Indestructible)
         {
             Health -= info.Damage;
-            if (Health <= 0.0)
+            if (Health <= 0.0 && LifeState == LifeState.Alive)
             {
                 Health = 0.0f;
                 OnKilled();
