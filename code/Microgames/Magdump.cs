@@ -22,7 +22,7 @@ public class Magdump : Microgame
     public override void Start()
     {
         ShowInstructions("Empty your clip!");
-        var weapons = GiveWeapon<GWPistol>(To.Everyone);
+        var weapons = GiveWeapon<Pistol>(To.Everyone);
         foreach (var weapon in weapons)
         {
             weapon.MagazineEmpty += OnMagazineEmpty;

@@ -67,7 +67,7 @@ public class AlarmingCrates : Microgame
         }
         
         ShowInstructions("Shut it off!");
-        GiveWeapon<GWFists>(To.Everyone);
+        GiveWeapon<Fists>(To.Everyone);
     }
     
     private void OnCrateBroken(BreakableProp crate, Entity attacker)

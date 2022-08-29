@@ -48,7 +48,7 @@ public class CrateColorMemory : Microgame
     public override void Start()
     {
         targetColor = GetRandomColorAlreadyInUse();
-        GiveWeapon<GWPistol>(To.Everyone);
+        GiveWeapon<Pistol>(To.Everyone);
         
         foreach (var crate in crates)
         {

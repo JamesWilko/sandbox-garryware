@@ -2,7 +2,7 @@
 
 namespace Garryware;
 
-partial class GWPistol : AmmoWeapon
+partial class Pistol : AmmoWeapon
 {
     public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 

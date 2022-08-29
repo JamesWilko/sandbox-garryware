@@ -215,7 +215,7 @@ public partial class GarrywareGame : Sandbox.Game
                 BaseCarriable weapon;
                 if (param == "pistol")
                 {
-                    weapon = new GWPistol();
+                    weapon = new Pistol();
                 }
                 else if (param == "gravgun")
                 {

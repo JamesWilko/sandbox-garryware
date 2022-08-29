@@ -2,7 +2,7 @@
 
 namespace Garryware;
 
-partial class GWFists : Weapon
+partial class Fists : Weapon
 {
     public override string ViewModelPath => "models/first_person/first_person_arms.vmdl";
     public override float PrimaryRate => 3.0f;
