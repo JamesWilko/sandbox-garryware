@@ -62,5 +62,31 @@ partial class AmmoWeapon : Weapon
         AmmoInMagazine = ammoAvailable;
         AmmoInReserve -= ammoAvailable;
     }
-}
 
+    public override void ShootBullet(Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize)
+    {
+        var forward = dir;
+        forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
+        forward = forward.Normal;
+
+        // ShootBullet is coded in a way where we can have bullets pass through shit
+        // or bounce off shit, in which case it'll return multiple results
+        foreach (var tr in TraceBullet(pos, pos + forward * 5000, bulletSize))
+        {
+            tr.Surface.DoBulletImpact(tr);
+            
+            if (!tr.Entity.IsValid()) continue;
+
+            var damageInfo = DamageInfo.FromBullet(tr.EndPosition, forward * 100 * force, damage)
+                .UsingTraceResult(tr)
+                .WithAttacker(Owner)
+                .WithWeapon(this);
+            
+            // We turn prediction off for this, so any exploding effects don't get culled etc
+            using (Prediction.Off())
+            {
+                tr.Entity.TakeDamage(damageInfo);
+            }
+        }
+    }
+}

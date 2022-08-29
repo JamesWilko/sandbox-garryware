@@ -83,6 +83,12 @@ public partial class BreakableProp : BasePhysics
         get => InternalHideGameColor;
         set => InternalHideGameColor = value;
     }
+    
+    /// <summary>
+    /// Should this prop raise our client authoritative damage event when it is damaged.
+    /// This is so that high latency players can still get accurate results when a microgame constantly and quickly changes the properties of this prop. 
+    /// </summary>
+    [Net] public bool RaisesClientAuthDamageEvent { get; set; }
         
     public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
 
@@ -98,8 +104,9 @@ public partial class BreakableProp : BasePhysics
         UsePhysicsCollision = true;
         EnableHideInFirstPerson = true;
         EnableShadowInFirstPerson = true;
+        EnableLagCompensation = true;
         Tags.Add("prop", "solid");
-
+        
         if (Static)
         {
             PhysicsEnabled = false;
@@ -200,6 +207,11 @@ public partial class BreakableProp : BasePhysics
         
         LastAttacker = info.Attacker;
         LastAttackerWeapon = info.Weapon;
+
+        if (IsClient && RaisesClientAuthDamageEvent)
+        {
+            TakeClientDamage(info);
+        }
         
         if (!IsServer || LifeState != LifeState.Alive)
             return;
@@ -219,6 +231,10 @@ public partial class BreakableProp : BasePhysics
         Damaged?.Invoke(this, LastDamage.Attacker);
     }
 
+    protected virtual void TakeClientDamage(DamageInfo info)
+    {
+    }
+    
     public override void OnKilled()
     {
         if (LifeState != LifeState.Alive)
@@ -362,7 +378,7 @@ public partial class BreakableProp : BasePhysics
         
         if (!HideGameColor && GameColor != GameColor.White)
         {
-            SetMaterialOverride(CommonEntities.WhiteMaterial, "");
+            SetMaterialOverride(CommonEntities.WhiteMaterial);
         }
         else
         {
@@ -375,5 +391,5 @@ public partial class BreakableProp : BasePhysics
         RenderColor = newValue ? Color.White : GameColor.AsColor();
         UpdateGameColorMaterialOverride();
     }
-
+    
 }
