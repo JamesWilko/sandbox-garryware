@@ -12,7 +12,7 @@ public class Dodgeball : Microgame
     public Dodgeball()
     {
         Rules = MicrogameRules.WinOnTimeout;
-        ActionsUsedInGame = PlayerAction.None;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
         GameLength = 8.0f;
     }
 

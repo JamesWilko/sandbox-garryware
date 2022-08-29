@@ -7,7 +7,7 @@ public class DontGetHit : Microgame
     public DontGetHit()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Sprint;
         GameLength = 5;
         MinimumPlayers = 2;
     }
