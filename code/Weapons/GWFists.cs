@@ -2,11 +2,17 @@
 
 namespace Garryware;
 
-partial class GWFists : Fists
+partial class GWFists : Weapon
 {
+    public override string ViewModelPath => "models/first_person/first_person_arms.vmdl";
     public override float PrimaryRate => 3.0f;
 
     private bool WasRightPunch = false;
+
+    public override bool CanReload()
+    {
+        return false;
+    }
 
     private void Attack(bool leftHand)
     {
@@ -28,9 +34,27 @@ partial class GWFists : Fists
         WasRightPunch = !WasRightPunch;
     }
 
-    public override void AttackSecondary()
+    public override void OnCarryDrop(Entity dropper)
     {
-        return;
+    }
+
+    public override void CreateViewModel()
+    {
+        Host.AssertClient();
+
+        if (string.IsNullOrEmpty(ViewModelPath))
+            return;
+
+        ViewModelEntity = new ViewModel
+        {
+            Position = Position,
+            Owner = Owner,
+            EnableViewmodelRendering = true,
+            EnableSwingAndBob = false,
+        };
+
+        ViewModelEntity.SetModel(ViewModelPath);
+        ViewModelEntity.SetAnimGraph("models/first_person/first_person_arms_punching.vanmgrph");
     }
 
     private bool MeleeAttack()

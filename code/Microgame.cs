@@ -55,7 +55,10 @@ public abstract class Microgame
                 player.ResetRound();
             }
         }
-        
+
+        // Clear decals
+        Decal.Clear(true, true);
+
         // Run the microgame logic
         var microgameName = GetType().Name;
         
@@ -175,15 +178,19 @@ public abstract class Microgame
     /// <summary>
     /// Give a specific weapon to the specified players.
     /// </summary>
-    protected void GiveWeapon<T>(To giveToWho) where T : Weapon, new()
+    protected List<T> GiveWeapon<T>(To giveToWho) where T : Weapon, new()
     {
+        var weapons = new List<T>();
         foreach (var client in giveToWho)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.Inventory.Add(new T(), true);
+                var weapon = new T();
+                weapons.Add(weapon);
+                player.Inventory.Add(weapon, true);
             }
         }
+        return weapons;
     }
     
     /// <summary>

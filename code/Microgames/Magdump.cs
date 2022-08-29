@@ -7,17 +7,38 @@ namespace Garryware.Microgames;
 /// </summary>
 public class Magdump : Microgame
 {
-    public override void Setup()
+    public Magdump()
     {
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.UseWeapon;
         GameLength = 3.0f;
     }
 
+    public override void Setup()
+    {
+        ShowInstructions("Get ready...");
+    }
+
     public override void Start()
     {
-        GiveWeapon<GWPistol>(To.Everyone);
-        // @todo: listen to weapon run out of ammo event and cause player to win
+        ShowInstructions("Empty your clip!");
+        var weapons = GiveWeapon<GWPistol>(To.Everyone);
+        foreach (var weapon in weapons)
+        {
+            weapon.MagazineEmpty += OnMagazineEmpty;
+        }
+    }
+
+    private void OnMagazineEmpty(AmmoWeapon weapon)
+    {
+        if (IsGameFinished())
+            return;
+
+        if (weapon.Owner is GarrywarePlayer player)
+        {
+            player.FlagAsRoundWinner();
+            player.RemoveWeapons();
+        }
     }
 
     public override void Finish()

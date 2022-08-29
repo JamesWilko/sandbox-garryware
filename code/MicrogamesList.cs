@@ -14,5 +14,6 @@ public static class MicrogamesList
         new CrateColorRoulette(),
         new AlarmingCrates(),
         new InvertedClimb(),
+        new Magdump(),
     };
 }
