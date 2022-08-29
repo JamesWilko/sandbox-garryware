@@ -9,18 +9,13 @@ public partial class GarrywareGame : Sandbox.Game
 {
     public new static GarrywareGame Current { get; private set; }
     
-    private const int PointsToWin = 15;
-
-    private const float EveryoneConnectedStartGameDelay = 10.0f;
-    
     private readonly ShuffledDeck<Microgame> microgamesDeck = new();
     
     [Net] public int NumConnectedClients { get; set; }
     
-    [Net] private TimeSince TimeSinceEverybodyConnected { get; set; }
-    
     [Net] public bool IsCountdownTimerEnabled { get; private set; }
     [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
+    private TimeUntil TimeUntilGameStarts { get; set; }
     
     [Net] public int CurrentRound { get; private set; }
 
@@ -43,7 +38,7 @@ public partial class GarrywareGame : Sandbox.Game
         }
 
         // Setup state control
-        AddExitStateController(GameState.WaitingForPlayers, HasEverybodyConnected);
+        AddExitStateController(GameState.WaitingForPlayers, HaveEnoughPlayersReadiedUp);
         AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
         AddEnterStateObserver(GameState.Instructions, OnEnterInstructionsState);
         AddEnterStateObserver(GameState.Playing, OnEnterPlayingState);
@@ -76,25 +71,40 @@ public partial class GarrywareGame : Sandbox.Game
         CommonEntities.PrecacheWorldEntities();
     }
     
-    // Only start the game once we've got everybody in the game and able to run around
-    private TransitionResponse HasEverybodyConnected(TransitionArgs<GameState> args)
+    // Only start the game once we've got enough players readied up to start
+    private TransitionResponse HaveEnoughPlayersReadiedUp(TransitionArgs<GameState> args)
     {
-        return NumConnectedClients >= Client.All.Count ? TransitionResponse.Allow : TransitionResponse.Block;
+        return HaveEnoughPlayersReadiedUpToStart() ? TransitionResponse.Allow : TransitionResponse.Block;
     }
     
-    // When we enter the starting soon state then wait a short time for everyone to be actually in the game and running around
-    private async void OnEnterStartingSoonState(TransitionArgs<GameState> args)
+    // Once enough people have readied up then start a countdown until the game starts and everybody is forced to play
+    private void OnEnterStartingSoonState(TransitionArgs<GameState> args)
     {
-        using (LagCompensation())
-        {
-            TimeSinceEverybodyConnected = 0;
-        }
-        SetCountdownTimer(EveryoneConnectedStartGameDelay);
-
-        await GameTask.DelayRealtimeSeconds(EveryoneConnectedStartGameDelay);
-        RequestTransition(GameState.Instructions);
+        var startDelay = HasEveryPlayerReadiedUp() ? everyoneReadiedUpStartGameDelay : startGameDelay;
+        SetCountdownTimer(startDelay);
+        TimeUntilGameStarts = startDelay;
     }
 
+    [Event.Tick.Server]
+    private void StartGameTick()
+    {
+        if (!IsInState(GameState.StartingSoon))
+            return;
+
+        // If every connected player readies up then cut the countdown down
+        if (TimeUntilGameStarts > everyoneReadiedUpStartGameDelay && HasEveryPlayerReadiedUp())
+        {
+            SetCountdownTimer(everyoneReadiedUpStartGameDelay);
+            TimeUntilGameStarts = everyoneReadiedUpStartGameDelay;
+        }
+        
+        // Start the game!
+        if (TimeUntilGameStarts < 0)
+        {
+            RequestTransition(GameState.Instructions);
+        }
+    }
+    
     private void OnEnterInstructionsState(TransitionArgs<GameState> args)
     {
         ClearCountdownTimer();
@@ -192,10 +202,6 @@ public partial class GarrywareGame : Sandbox.Game
     {
         base.OnClientActive(client);
         NumConnectedClients++;
-        
-        // Attempt to advance the game state
-        if(CurrentState == GameState.WaitingForPlayers)
-            RequestTransition(GameState.StartingSoon);
     }
     
     private void OnAvailableControlsChanged(PlayerAction oldControls, PlayerAction newControls)
@@ -203,50 +209,5 @@ public partial class GarrywareGame : Sandbox.Game
         OnAvailableControlsUpdated?.Invoke(newControls);
     }
     
-    [ConCmd.Server("gw_dev")]
-    public static void EnableDevMode(string param)
-    {
-        Current?.RequestTransition(GameState.Dev);
-        
-        foreach (var client in To.Everyone)
-        {
-            if (client.Pawn is GarrywarePlayer player)
-            {
-                BaseCarriable weapon;
-                if (param == "pistol")
-                {
-                    weapon = new Pistol();
-                }
-                else if (param == "gravgun")
-                {
-                    weapon = new GravGun();
-                    var ent = new BreakableProp
-                    {
-                        Position = player.EyePosition,
-                        Model = CommonEntities.Crate,
-                        CanGib = false
-                    };
-                }
-                else
-                {
-                    Log.Error($"Invalid weapon type {param}");
-                    return;
-                }
-                player.Inventory.Add(weapon, true);
-            }
-        }
-    }
-    
-    [ConCmd.Server("gw_points")]
-    public static void RandomizePoints()
-    {
-        foreach (var client in Client.All)
-        {
-            client.SetInt(Garryware.Tags.Points, Rand.Int(2, 50));
-        }
-    }
-    
-    
-
 }
 

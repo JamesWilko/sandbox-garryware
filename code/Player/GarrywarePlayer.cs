@@ -52,7 +52,7 @@ public partial class GarrywarePlayer : Player
     {
         SetModel("models/citizen/citizen.vmdl");
 
-        Controller = new WalkController();
+        Controller = new GarrywareWalkController();
         DevController = null;
 
         EnableAllCollisions = true;

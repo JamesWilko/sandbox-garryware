@@ -61,8 +61,20 @@ public partial class ScoreboardEntry : Panel
         var streak = Client.GetInt(Tags.Streak);
         var place = Client.GetInt(Tags.Place);
         
-        Place.Text = place > 0 && place < PlaceEmojis.Length ? PlaceEmojis[place - 1] : string.Empty;
-        
+        switch (GarrywareGame.Current.State)
+        {
+            // Show how well the player is doing
+            default:
+                Place.Text = place > 0 && place < PlaceEmojis.Length ? PlaceEmojis[place - 1] : string.Empty;
+                break;
+            
+            // Show the players ready-up state next to their name in the scoreboard if they're ready to play
+            case GameState.WaitingForPlayers:
+            case GameState.StartingSoon:
+                Place.Text = Client.GetInt(Tags.IsReady) == 1 ? "👍" : string.Empty;
+                break;
+        }
+
         PlayerName.Text = Client.Name;
         SetClass("me", Client == Local.Client);
         SetClass("won", clientPlayer?.HasWonRound ?? false);
