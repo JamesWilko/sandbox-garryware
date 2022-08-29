@@ -1,18 +1,15 @@
-﻿using System;
-using Garryware.Entities;
+﻿using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware.Microgames;
 
 public class CrateColorRoulette : Microgame
 {
-    private BreakableProp crate;
-    private TimeSince timeSinceColorChanged;
+    private ColorRouletteProp rouletteCrate;
     private GameColor targetColor;
-    private float changeColorTime = 1.0f;
 
     private readonly ShuffledDeck<float> rotationSpeedsDeck;
-    
+
     public CrateColorRoulette()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
@@ -28,12 +25,9 @@ public class CrateColorRoulette : Microgame
     
     public override void Setup()
     {
-        // Choose a random rotation speed from the speeds deck to randomize the difficulty a bit
-        changeColorTime = rotationSpeedsDeck.Next();
-        
         // Spawn the roulette crate
         var spawn = CommonEntities.AboveBoxSpawnsDeck.Next();
-        crate = new BreakableProp
+        rouletteCrate = new ColorRouletteProp()
         {
             Position = spawn.Position,
             Rotation = spawn.Rotation,
@@ -41,43 +35,31 @@ public class CrateColorRoulette : Microgame
             CanGib = false,
             PhysicsEnabled = false,
             Indestructible = true,
-            GameColor = GetRandomColor()
+            RaisesClientAuthDamageEvent = true,
+            RotationTime = rotationSpeedsDeck.Next() // Choose a random rotation speed from the speeds deck to randomize the difficulty a bit
         };
-        AutoCleanup(crate);
-        crate.Damaged += OnCrateDamaged;
-
-        timeSinceColorChanged = 0;
+        AutoCleanup(rouletteCrate);
+        rouletteCrate.PlayerSentRouletteResult += OnPlayerRouletteResult;
         
         ShowInstructions("Get ready...");
     }
     
     public override void Start()
     {
-        // Pick a random target color to aim for and shuffle the deck
-        targetColor = GetRandomColor();
-        CommonEntities.ColorsDeck.Shuffle();
-        
+        // Set the roulette crate off and get a random target color it will cycle through
+        rouletteCrate.GenerateNewRotation();
+        rouletteCrate.StartRoulette();
+        targetColor = rouletteCrate.GetRandomColorInRotation();
+
         GiveWeapon<Pistol>(To.Everyone);
         ShowInstructions($"Shoot {targetColor.AsName()}!");
     }
 
-    public override void Tick()
+    private void OnPlayerRouletteResult(GarrywarePlayer player, ColorRouletteProp prop, GameColor color)
     {
-        base.Tick();
-
-        // Change color every so often
-        if (timeSinceColorChanged > changeColorTime)
+        if (!player.HasLockedInResult)
         {
-            crate.GameColor = GetRandomColor();
-            timeSinceColorChanged = 0.0f;
-        }
-    }
-    
-    private void OnCrateDamaged(BreakableProp prop, Entity attacker)
-    {
-        if (attacker is GarrywarePlayer player && !player.HasLockedInResult)
-        {
-            if (prop.GameColor == targetColor)
+            if (color == targetColor)
             {
                 player.FlagAsRoundWinner();
                 player.RemoveWeapons();
@@ -89,14 +71,15 @@ public class CrateColorRoulette : Microgame
             }
         }
     }
-
+    
     public override void Finish()
     {
+        rouletteCrate.StopRoulette();
         RemoveAllWeapons();
     }
 
     public override void Cleanup()
     {
-        crate = null;
+        rouletteCrate = null;
     }
 }

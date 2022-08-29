@@ -10,7 +10,7 @@ public enum RoundResult
     Won
 }
 
-partial class GarrywarePlayer : Player
+public partial class GarrywarePlayer : Player
 {
     private TimeSince timeSinceDropped;
 
