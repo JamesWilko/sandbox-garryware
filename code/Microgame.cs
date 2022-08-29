@@ -24,7 +24,7 @@ public abstract class Microgame
     public abstract void Finish();
     public abstract void Cleanup();
 
-    public int MinimumPlayers { get; protected set; } = 2;
+    public int MinimumPlayers { get; protected set; } = 1;
     public float GameLength { get; protected set; } = 10.0f;
     public float WarmupLength { get; protected set; } = 1.5f;
     public float CooldownLength { get; protected set; } = 2.5f;
@@ -40,9 +40,7 @@ public abstract class Microgame
     
     public virtual bool CanBePlayed()
     {
-        // @todo: put this back in after testing
-        // return Client.All.Count >= MinimumPlayers;
-        return true;
+        return Client.All.Count >= MinimumPlayers;
     }
 
     public async Task Play()

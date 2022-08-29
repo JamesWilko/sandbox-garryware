@@ -9,6 +9,7 @@ public class DontGetHit : Microgame
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.UseWeapon;
         GameLength = 5;
+        MinimumPlayers = 2;
     }
     
     public override void Setup()
