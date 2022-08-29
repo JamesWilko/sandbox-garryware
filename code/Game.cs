@@ -22,7 +22,7 @@ public partial class GarrywareGame : Sandbox.Game
     [ConVar.Replicated("gw_max_rounds")]
     public static int MaxRounds { get; set; } = 40;
 
-    [Net, Change(nameof(OnAvailableActionsChanged))] public PlayerAction AvailableActions { get; set; }
+    [Net] public PlayerAction AvailableActions { get; set; }
     
     public GarrywareGame()
     {
@@ -38,15 +38,17 @@ public partial class GarrywareGame : Sandbox.Game
         // Setup state control
         AddExitStateController(GameState.WaitingForPlayers, HaveEnoughPlayersReadiedUp);
         AddEnterStateObserver(GameState.StartingSoon, OnEnterStartingSoonState);
+        AddExitStateObserver(GameState.StartingSoon, OnExitStartingSoonState);
         AddEnterStateObserver(GameState.Instructions, OnEnterInstructionsState);
         AddEnterStateObserver(GameState.Playing, OnEnterPlayingState);
         AddEnterStateObserver(GameState.GameOver, OnEnterGameOverState);
         
         AddExitStateController(GameState.Dev, args => TransitionResponse.Block);
         
+        AvailableActions = PlayerAction.ReadyUp;
         Enable();
     }
-
+    
     public void SetCountdownTimer(float seconds)
     {
         using (LagCompensation())
@@ -81,6 +83,11 @@ public partial class GarrywareGame : Sandbox.Game
         var startDelay = HasEveryPlayerReadiedUp() ? everyoneReadiedUpStartGameDelay : startGameDelay;
         SetCountdownTimer(startDelay);
         TimeUntilGameStarts = startDelay;
+    }
+    
+    private void OnExitStartingSoonState(TransitionArgs<GameState> args)
+    {
+        AvailableActions = PlayerAction.None;
     }
 
     [Event.Tick.Server]
@@ -201,11 +208,6 @@ public partial class GarrywareGame : Sandbox.Game
         base.OnClientActive(client);
         NumConnectedClients++;
     }
-    
-    private void OnAvailableActionsChanged(PlayerAction oldActions, PlayerAction newActions)
-    {
-        GameEvents.UpdatePlayerActions(newActions);
-    }
-    
+
 }
 

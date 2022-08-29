@@ -13,9 +13,6 @@ public partial class GameEvents : BaseNetworkable
     public static event RoundResultDelegate OnPlayerLockedInResult;
     public static event RoundResultDelegate OnPlayerWon;
     public static event RoundResultDelegate OnPlayerLost;
-
-    public delegate void PlayerActionsDelegate(PlayerAction actions);
-    public static event PlayerActionsDelegate AvailableActionsUpdated;
     
     [ClientRpc]
     public static void NewInstructions(string text, float displayTime)
@@ -45,10 +42,4 @@ public partial class GameEvents : BaseNetworkable
         }
     }
 
-    [ClientRpc]
-    public static void UpdatePlayerActions(PlayerAction actions)
-    {
-        AvailableActionsUpdated?.Invoke(actions);
-    }
-    
 }

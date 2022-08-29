@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sandbox.UI;
 
 namespace Garryware.UI;
@@ -7,48 +8,58 @@ namespace Garryware.UI;
 public class OnScreenControls : Panel
 {
     private Panel canvas;
-    private readonly List<Panel> controls = new();
-
-    public OnScreenControls()
+    private List<PlayerAction> activeActions = new();
+    private Dictionary<PlayerAction, OnScreenControlEntry> onScreenControls = new();
+    
+    public override void Tick()
     {
-        GameEvents.AvailableActionsUpdated += OnAvailableActionsUpdated;
-    }
-
-    public override void OnDeleted()
-    {
-        GameEvents.AvailableActionsUpdated -= OnAvailableActionsUpdated;
+        base.Tick();
         
-        base.OnDeleted();
-    }
-
-    private void OnAvailableActionsUpdated(PlayerAction actions)
-    {
-        if (actions == PlayerAction.None)
+        // Update which actions are currently active
+        activeActions.Clear();
+        foreach (var action in Enum.GetValues<PlayerAction>())
         {
-            if (canvas == null)
-                return;
-            
+            if (action != PlayerAction.None && GarrywareGame.Current.AvailableActions.HasFlag(action))
+            {
+                activeActions.Add(action);
+            }
+        }
+
+        if (activeActions.Count > 0)
+        {
+            canvas ??= Add.Panel("canvas");
+        }
+        else if (canvas != null)
+        {
+            onScreenControls.Clear();
             canvas.Delete();
             canvas = null;
         }
-        else
+        
+        // Ensure canvas exists before adding actions to it
+        if(canvas == null)
+            return;
+        
+        // Add rows for new actions
+        foreach (var action in activeActions.Except(onScreenControls.Keys))
         {
-            // Create canvas if it doesn't exist
-            canvas ??= Add.Panel("canvas");
-            
-            // Refresh the controls list
-            controls.ForEach(c => c.Delete());
-            controls.Clear();
-            foreach (var control in Enum.GetValues<PlayerAction>())
+            if (action != PlayerAction.None)
             {
-                if (control != PlayerAction.None && GarrywareGame.Current.AvailableActions.HasFlag(control))
-                {
-                    var osc = canvas.AddChild<OnScreenControlEntry>();
-                    osc.Action = control;
-                    controls.Add(osc);
-                }
+                var osc = canvas.AddChild<OnScreenControlEntry>();
+                osc.Action = action;
+                onScreenControls.Add(action, osc);
+            }
+        }
+
+        // Remove rows for clients that left
+        foreach (var action in onScreenControls.Keys.Except(activeActions))
+        {
+            if (onScreenControls.TryGetValue(action, out var control))
+            {
+                control?.Delete();
+                onScreenControls.Remove(action);
             }
         }
     }
-
+    
 }
