@@ -160,7 +160,7 @@ public abstract class Microgame
     protected void RemoveAllWeapons()
     {
         // Find any weapons that were dropped into the world and delete them
-        foreach (var weapon in Entity.All.OfType<Weapon>())
+        foreach (var weapon in Entity.All.OfType<BaseCarriable>())
         {
             weapon.Delete();
         }
@@ -178,7 +178,7 @@ public abstract class Microgame
     /// <summary>
     /// Give a specific weapon to the specified players.
     /// </summary>
-    protected List<T> GiveWeapon<T>(To giveToWho) where T : Weapon, new()
+    protected List<T> GiveWeapon<T>(To giveToWho) where T : BaseCarriable, new()
     {
         var weapons = new List<T>();
         foreach (var client in giveToWho)

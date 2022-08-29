@@ -16,5 +16,6 @@ public static class MicrogamesList
         new InvertedClimb(),
         new Magdump(),
         new DontGetHit(),
+        new Dodgeball(),
     };
 }
