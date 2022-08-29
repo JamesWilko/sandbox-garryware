@@ -15,5 +15,6 @@ public static class MicrogamesList
         new AlarmingCrates(),
         new InvertedClimb(),
         new Magdump(),
+        new DontGetHit(),
     };
 }
