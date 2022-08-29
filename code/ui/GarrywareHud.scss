@@ -180,3 +180,44 @@ GameOver
 	background-color: rgba(#111, 0.6);
 	backdrop-filter: blur(20px);
 }
+
+OnScreenControls
+{
+	position: absolute;
+	bottom: 5%;
+	right: 5%;
+	
+	font-family: Poppins;
+	font-weight: bold;
+	font-size: 24px;
+	color: white;
+	text-shadow: 2px 2px #000;
+		
+	.canvas
+	{
+		background-color: rgba(black, 0.6);
+		backdrop-filter: blur(20px);
+		border-radius: 20px;
+		padding: 10px 20px 10px 20px;
+		
+		flex-direction: column;
+
+		&:outro
+		{
+			transition: all 0.5s ease-in;
+			opacity: 0;
+		}
+	}	
+}
+
+OnScreenControlEntry
+{
+	flex-direction: row;
+	padding: 4px;
+
+	Image
+	{
+		height: 32px;
+		margin-right: 10px;
+	}
+}

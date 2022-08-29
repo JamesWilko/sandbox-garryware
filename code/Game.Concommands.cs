@@ -1,4 +1,5 @@
-﻿using Garryware.Entities;
+﻿using System;
+using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware;
@@ -62,6 +63,23 @@ public partial class GarrywareGame
         }
 
         AttemptToStartGame();
+    }
+    
+    [ConCmd.Server("gw_random_controls")]
+    public static void RandomizeControls()
+    {
+        Current.AvailableActions = PlayerAction.None;
+        foreach (var control in Enum.GetValues<PlayerAction>())
+        {
+            if(Rand.Float() > 0.5f)
+                Current.AvailableActions |= control;
+        }
+    }
+    
+    [ConCmd.Server("gw_hide_controls")]
+    public static void HideControls()
+    {
+        Current.AvailableActions = PlayerAction.None;
     }
     
 }

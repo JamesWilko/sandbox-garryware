@@ -13,7 +13,7 @@ public class CrateColorRoulette : Microgame
     public CrateColorRoulette()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.UseWeapon;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack;
         GameLength = 10;
         
         rotationSpeedsDeck = new ShuffledDeck<float>();

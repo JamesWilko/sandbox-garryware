@@ -7,39 +7,45 @@ namespace Garryware;
 public enum PlayerAction
 {
     None,
-    UseWeapon = 1 << 0,
-    DropWeapon = 1 << 1,
-    PlayerUse = 1 << 2,
-    Jump = 1 << 3,
-    Sprint = 1 << 4,
-    Crouch = 1 << 5,
+    PrimaryAttack = 1 << 0,
+    SecondaryAttack = 1 << 1,
+    DropWeapon = 1 << 2,
+    PlayerUse = 1 << 3,
+    Jump = 1 << 4,
+    Sprint = 1 << 5,
+    Crouch = 1 << 6,
+    ReadyUp = 1 << 7,
 }
 
 public static class PlayerActionsExtension
 {
     
-    public static string GetFriendlyName(this PlayerAction action) => action switch
+    public static string AsFriendlyName(this PlayerAction action) => action switch
     {
         PlayerAction.None => "None",
-        PlayerAction.UseWeapon => "Shoot",
+        PlayerAction.PrimaryAttack => "Fire",
+        PlayerAction.SecondaryAttack => "Secondary Fire",
         PlayerAction.DropWeapon => "Drop",
         PlayerAction.PlayerUse => "Use",
         PlayerAction.Jump => "Jump",
         PlayerAction.Sprint => "Run",
         PlayerAction.Crouch => "Crouch",
+        PlayerAction.ReadyUp => "Ready Up",
         _ => "Unknown Action"
     };
-    
-    public static Texture GetInputGlyph(this PlayerAction action) => action switch
-    {
-        PlayerAction.None => null,
-        PlayerAction.UseWeapon => Input.GetGlyph(InputButton.PrimaryAttack),
-        PlayerAction.DropWeapon => Input.GetGlyph(InputButton.Drop),
-        PlayerAction.PlayerUse => Input.GetGlyph(InputButton.Use),
-        PlayerAction.Jump => Input.GetGlyph(InputButton.Jump),
-        PlayerAction.Sprint => Input.GetGlyph(InputButton.Run),
-        PlayerAction.Crouch => Input.GetGlyph(InputButton.Duck),
-        _ => null
-    };
 
+    public static InputButton AsInputButton(this PlayerAction action) => action switch
+    {
+        PlayerAction.None => 0,
+        PlayerAction.PrimaryAttack => InputButton.PrimaryAttack,
+        PlayerAction.SecondaryAttack => InputButton.SecondaryAttack,
+        PlayerAction.DropWeapon => InputButton.Drop,
+        PlayerAction.PlayerUse => InputButton.Use,
+        PlayerAction.Jump => InputButton.Jump,
+        PlayerAction.Sprint => InputButton.Run,
+        PlayerAction.Crouch => InputButton.Duck,
+        PlayerAction.ReadyUp => InputButton.Flashlight,
+        _ => 0
+    };
+    
 }

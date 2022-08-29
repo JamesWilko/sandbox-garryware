@@ -10,7 +10,7 @@ public class Magdump : Microgame
     public Magdump()
     {
         Rules = MicrogameRules.LoseOnTimeout;
-        ActionsUsedInGame = PlayerAction.UseWeapon;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack;
         GameLength = 3.0f;
     }
 

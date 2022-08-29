@@ -14,7 +14,7 @@ public class AlarmingCrates : Microgame
     public AlarmingCrates()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.UseWeapon;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack;
         GameLength = 7;
     }
     

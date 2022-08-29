@@ -63,7 +63,7 @@ public abstract class Microgame
         Log.Info($"[{microgameName}] Setting up");
         SoundUtility.PlayNewRound(WarmupLength + GameLength);
         Setup();
-        GarrywareGame.Current.AvailableControls = ActionsUsedInGame;
+        GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
         await GameTask.DelayRealtimeSeconds(WarmupLength);
         
         Log.Info($"[{microgameName}] Starting");
@@ -84,6 +84,7 @@ public abstract class Microgame
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();
         UpdateScores();
+        GarrywareGame.Current.AvailableActions = PlayerAction.None;
         await GameTask.DelayRealtimeSeconds(CooldownLength);
         
         Log.Info($"[{microgameName}] Cleaning up");
@@ -149,7 +150,7 @@ public abstract class Microgame
     {
         GameEvents.ClearInstructions();
         GarrywareGame.Current.ClearCountdownTimer();
-        GarrywareGame.Current.AvailableControls = PlayerAction.None;
+        GarrywareGame.Current.AvailableActions = PlayerAction.None;
     }
 
     /// <summary>

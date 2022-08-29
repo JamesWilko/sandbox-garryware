@@ -21,10 +21,8 @@ public partial class GarrywareGame : Sandbox.Game
 
     [ConVar.Replicated("gw_max_rounds")]
     public static int MaxRounds { get; set; } = 40;
-    
-    [Net, Change(nameof(OnAvailableControlsChanged))] public PlayerAction AvailableControls { get; set; }
-    public delegate void MicrogameControlsDelegate(PlayerAction availableActions);
-    public event MicrogameControlsDelegate OnAvailableControlsUpdated;
+
+    [Net, Change(nameof(OnAvailableActionsChanged))] public PlayerAction AvailableActions { get; set; }
     
     public GarrywareGame()
     {
@@ -204,9 +202,9 @@ public partial class GarrywareGame : Sandbox.Game
         NumConnectedClients++;
     }
     
-    private void OnAvailableControlsChanged(PlayerAction oldControls, PlayerAction newControls)
+    private void OnAvailableActionsChanged(PlayerAction oldActions, PlayerAction newActions)
     {
-        OnAvailableControlsUpdated?.Invoke(newControls);
+        GameEvents.UpdatePlayerActions(newActions);
     }
     
 }

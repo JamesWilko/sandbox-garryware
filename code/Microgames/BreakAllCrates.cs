@@ -16,7 +16,7 @@ public class BreakAllCrates : Microgame
     public BreakAllCrates()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.UseWeapon;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack;
         GameLength = 7;
     }
     
