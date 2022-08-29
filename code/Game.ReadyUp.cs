@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Sandbox;
 
 namespace Garryware;
@@ -9,11 +10,11 @@ public partial class GarrywareGame
     private const float startGameDelay = 40.0f;
     private const float everyoneReadiedUpStartGameDelay = 5.0f;
     
-    public int NumberOfReadyPlayers => Client.All.Count(cl => cl.GetInt(Garryware.Tags.IsReady) > 0);
-    private float PercentageOfReadyPlayers => NumberOfReadyPlayers / (float)Client.All.Count;
+    public int NumberOfReadyPlayers => Client.All.Count(cl => cl.GetInt(Garryware.Tags.IsReady) == 1);
+    public int NumberOfReadiesNeededToStart => (int)Math.Ceiling(Client.All.Count * requiredPercentToStartCountdown);
     
     public bool HasEveryPlayerReadiedUp() => NumberOfReadyPlayers >= Client.All.Count;
-    public bool HaveEnoughPlayersReadiedUpToStart() => PercentageOfReadyPlayers > requiredPercentToStartCountdown;
+    public bool HaveEnoughPlayersReadiedUpToStart() => NumberOfReadyPlayers >= NumberOfReadiesNeededToStart;
     
     [ConCmd.Server]
     public static void TogglePlayerReadyState()
