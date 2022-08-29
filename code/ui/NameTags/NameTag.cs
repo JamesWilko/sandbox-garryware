@@ -54,7 +54,7 @@ public class NameTag : WorldPanel
             PanelBounds = new Rect(-(w / 2), -(h / 2), w, h);
 
             Position = Client.Pawn.EyePosition + Vector3.Up * 24;
-            Rotation = Rotation.LookAt(Local.Client.Pawn.Position); // @todo: proper billboarding
+            Rotation = Rotation.LookAt(Local.Client.Pawn.EyePosition - Transform.Position);
         }
     }
 }
