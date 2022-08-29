@@ -23,6 +23,9 @@ public partial class GarrywarePlayer : Player
     public bool HasWonRound => RoundResult == RoundResult.Won;
     public bool HasLostRound => RoundResult == RoundResult.Lost;
     
+    public delegate void DamageDelegate(GarrywarePlayer victim, DamageInfo info);
+    public event DamageDelegate Hurt;
+    
     /// <summary>
     /// The clothing container is what dresses the citizen
     /// </summary>
@@ -102,6 +105,7 @@ public partial class GarrywarePlayer : Player
         
         lastDamage = info;
         TookDamage(lastDamage.Flags, lastDamage.Position, lastDamage.Force);
+        Hurt?.Invoke(this, info);
     }
 
     [ClientRpc]
