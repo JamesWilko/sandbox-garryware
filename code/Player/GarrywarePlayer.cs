@@ -410,5 +410,12 @@ public partial class GarrywarePlayer : Player
             return walkController.Velocity.Length > (walkController.SprintSpeed * 0.9f);
         }
     }
+
+    public void TeleportTo(Transform transform)
+    {
+        Transform = transform;
+        Sound.FromEntity("garryware.player.teleport", this);
+        Particles.Create("particles/player/player_teleport.vpcf", this);
+    }
     
 }

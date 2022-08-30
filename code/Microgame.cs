@@ -74,7 +74,11 @@ public abstract class Microgame
         Decal.Clear(true, true);
 
         // Change to the correct room if we're not in it
-        GarrywareGame.Current.ChangeRoom(AcceptableRooms);
+        // If we change area then wait a second or two extra so that players can get their bearings
+        if (GarrywareGame.Current.ChangeRoom(AcceptableRooms))
+        {
+            await GameTask.DelayRealtimeSeconds(2.0f);
+        }
         
         // Run the microgame logic
         var microgameName = GetType().Name;

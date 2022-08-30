@@ -249,8 +249,10 @@ public partial class GarrywareGame : Sandbox.Game
         // Teleport all players to the new room
         foreach (var client in Client.All)
         {
-            MoveToSpawnpoint(client.Pawn);
-            // @todo: play a sound and a particle effect
+            if (client.Pawn is GarrywarePlayer player)
+            {
+                player.TeleportTo(CurrentRoom.SpawnPointsDeck.Next().Transform);
+            }
         }
 
         return true;

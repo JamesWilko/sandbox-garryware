@@ -65,6 +65,20 @@ public partial class GarrywareGame
         AttemptToStartGame();
     }
     
+    [ConCmd.Server("gw_force_ready_all")]
+    public static void ForceReadyUpAll()
+    {
+        foreach (var client in Client.All)
+        {
+            if (client.GetInt(Garryware.Tags.IsReady) == 0)
+            {
+                client.SetInt(Garryware.Tags.IsReady, 1);
+            }
+        }
+
+        AttemptToStartGame();
+    }
+    
     [ConCmd.Server("gw_random_controls")]
     public static void RandomizeControls()
     {
