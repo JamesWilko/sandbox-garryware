@@ -28,16 +28,20 @@ public class ShootTargetExactNumber : Microgame
         // Determine how many times we need to hit the target
         targetHits = Rand.Int(5, 20);
         
-        // Spawn the target to shoot at
-        var targetEntity = new FloatingTarget
+        // Spawn the targets to shoot at
+        int targetsToSpawn = Room.Size == RoomSize.Large ? 2 : 1;
+        for (int i = 0; i < targetsToSpawn; ++i)
         {
-            Transform = Room.InAirSpawnsDeck.Next().Transform,
-            GameColor = GameColor.Red
-        };
-        AutoCleanup(targetEntity);
-        targetEntity.Scale = scalesDeck.Next();
-        targetEntity.Damaged += OnTargetDamaged;
-        
+            var targetEntity = new FloatingTarget
+            {
+                Transform = Room.InAirSpawnsDeck.Next().Transform,
+                GameColor = GameColor.Red
+            };
+            AutoCleanup(targetEntity);
+            targetEntity.Scale = scalesDeck.Next();
+            targetEntity.Damaged += OnTargetDamaged;
+        }
+
         // Send instructions to the players
         ShowInstructions(string.Format("Shoot the target exactly {0} times!", targetHits));
     }
