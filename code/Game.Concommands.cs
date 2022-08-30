@@ -17,24 +17,26 @@ public partial class GarrywareGame
             if (client.Pawn is GarrywarePlayer player)
             {
                 BaseCarriable weapon;
-                if (param == "pistol")
+                switch (param)
                 {
-                    weapon = new Pistol();
-                }
-                else if (param == "gravgun")
-                {
-                    weapon = new GravGun();
-                    var ent = new BreakableProp
-                    {
-                        Position = player.EyePosition,
-                        Model = CommonEntities.Crate,
-                        CanGib = false
-                    };
-                }
-                else
-                {
-                    Log.Error($"Invalid weapon type {param}");
-                    return;
+                    case "pistol":
+                        weapon = new Pistol();
+                        break;
+                    case "fists":
+                        weapon = new Fists();
+                        break;
+                    case "gravgun":
+                        weapon = new GravGun();
+                        var ent = new BreakableProp
+                        {
+                            Position = player.EyePosition,
+                            Model = CommonEntities.Crate,
+                            CanGib = false
+                        };
+                        break;
+                    default:
+                        Log.Error($"Invalid weapon type {param}");
+                        return;
                 }
                 player.Inventory.Add(weapon, true);
             }

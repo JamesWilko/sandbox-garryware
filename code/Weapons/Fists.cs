@@ -7,7 +7,7 @@ partial class Fists : Weapon
     public override string ViewModelPath => "models/first_person/first_person_arms.vmdl";
     public override float PrimaryRate => 3.0f;
 
-    private bool WasRightPunch = false;
+    private bool wasRightPunch = false;
 
     public override bool CanReload()
     {
@@ -30,8 +30,8 @@ partial class Fists : Weapon
 
     public override void AttackPrimary()
     {
-        Attack(WasRightPunch);
-        WasRightPunch = !WasRightPunch;
+        Attack(wasRightPunch);
+        wasRightPunch = !wasRightPunch;
     }
 
     public override void OnCarryDrop(Entity dropper)
@@ -86,6 +86,13 @@ partial class Fists : Weapon
         }
 
         return hit;
+    }
+    
+    public override void SimulateAnimator( CitizenAnimationHelper anim )
+    {
+        anim.HoldType = CitizenAnimationHelper.HoldTypes.Punch;
+        anim.Handedness = CitizenAnimationHelper.Hand.Both;
+        anim.AimBodyWeight = 1.0f;
     }
 
     [ClientRpc]
