@@ -14,7 +14,7 @@ public class CrateColorRoulette : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
-        AcceptableRooms = new[] { MicrogameRoom.Empty };
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         GameLength = 10;
         
         rotationSpeedsDeck = new ShuffledDeck<float>();

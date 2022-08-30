@@ -17,7 +17,7 @@ public class CrateColorMemory : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
-        AcceptableRooms = new[] { MicrogameRoom.Empty };
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 3;
     }
     
