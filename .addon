@@ -9,7 +9,8 @@
   "ResourcePaths": [
     "/fonts/*",
     "/ui/*",
-    "/materials/*"
+    "/materials/*",
+    "/postprocess/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",
@@ -18,9 +19,9 @@
     "MaxPlayers": 64,
     "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
-    "MapSelect": "Unrestricted",
+    "MapSelect": "Official",
     "MapList": [
-      "facepunch.flatgrass"
+      "garryware"
     ],
     "RankType": "None",
     "PerMapRanking": false,
