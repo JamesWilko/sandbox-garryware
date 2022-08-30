@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware;
@@ -14,6 +15,13 @@ public enum MicrogameRules
     WinOnTimeout = 1 << 0, // Everyone who hasn't already lost will win automatically when the game finishes
     LoseOnTimeout = 1 << 1, // Everyone who hasn't already won will lose automatically when the game finishes
     EndEarlyIfEverybodyLockedIn = 1 << 2, // End the game early if everybody locks in a result
+}
+
+public enum MicrogameRoom
+{
+    Empty,
+    Boxes,
+    Platform
 }
 
 public abstract class Microgame

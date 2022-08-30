@@ -5,14 +5,9 @@ namespace Garryware.Entities;
 
 [Library("gw_trigger_on_box"), HammerEntity]
 [Title("On Box Trigger")]
-public class OnBoxTrigger : BaseTrigger
+public class OnBoxTrigger : Trigger
 {
     
-    public bool Contains(Entity entity)
-    {
-        return WorldSpaceBounds.Overlaps(entity.WorldSpaceBounds);
-    }
-
     public override void OnTouchStart(Entity toucher)
     {
         base.OnTouchStart(toucher);

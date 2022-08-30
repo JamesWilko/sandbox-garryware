@@ -13,6 +13,16 @@ public class ShuffledDeck<T>
     public int Count => shuffledElements.Count + usedElements.Count;
     public int Remaining => shuffledElements.Count;
 
+    public ShuffledDeck()
+    {
+    }
+    
+    public ShuffledDeck(IEnumerable<T> list)
+    {
+        AddRange(list);
+        Shuffle();
+    }
+    
     public void Add(T element, int count = 1)
     {
         for (int i = 0; i < count; ++i)
