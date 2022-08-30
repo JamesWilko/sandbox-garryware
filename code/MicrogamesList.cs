@@ -17,5 +17,6 @@ public static class MicrogamesList
         new Magdump(),
         new DontGetHit(),
         new Dodgeball(),
+        new ShootTargetExactNumber(),
     };
 }

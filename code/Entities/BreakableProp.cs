@@ -121,7 +121,7 @@ public partial class BreakableProp : BasePhysics
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup
     }
     
-    private void SetupPhysics()
+    protected virtual void SetupPhysics()
     {
         var physics = SetupPhysicsFromModel(PhysicsMotionType.Dynamic);
         if (!physics.IsValid())
