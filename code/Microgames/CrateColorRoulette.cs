@@ -14,6 +14,7 @@ public class CrateColorRoulette : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Empty };
         GameLength = 10;
         
         rotationSpeedsDeck = new ShuffledDeck<float>();
@@ -26,7 +27,7 @@ public class CrateColorRoulette : Microgame
     public override void Setup()
     {
         // Spawn the roulette crate
-        var spawn = CommonEntities.AboveBoxSpawnsDeck.Next();
+        var spawn = Room.AboveBoxSpawnsDeck.Next();
         rouletteCrate = new ColorRouletteProp()
         {
             Position = spawn.Position,

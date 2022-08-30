@@ -11,6 +11,7 @@ public class Magdump : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         GameLength = 3.0f;
     }
 

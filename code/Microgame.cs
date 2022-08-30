@@ -39,7 +39,15 @@ public abstract class Microgame
     
     public PlayerAction ActionsUsedInGame { get; protected set; } = PlayerAction.None;
     public MicrogameRules Rules { get; protected set; } = MicrogameRules.None;
-
+    
+    /// <summary>
+    /// Which rooms can be used for this microgame? If we're not already in one of these rooms when picking this
+    /// game, then players will be teleported to the first room specified. 
+    /// </summary>
+    public MicrogameRoom[] AcceptableRooms { get; protected set; } = { MicrogameRoom.Boxes };
+    
+    protected GarrywareRoom Room => GarrywareGame.Current.CurrentRoom;
+    
     private static readonly List<Entity> TemporaryEntities = new();
     
     private TimeSince timeSinceGameStarted;
@@ -65,6 +73,9 @@ public abstract class Microgame
         // Clear decals
         Decal.Clear(true, true);
 
+        // Change to the correct room if we're not in it
+        GarrywareGame.Current.ChangeRoom(AcceptableRooms);
+        
         // Run the microgame logic
         var microgameName = GetType().Name;
         
@@ -102,8 +113,11 @@ public abstract class Microgame
         RemoveAllWeapons();
         CleanupTemporaryEntities();
         ResetColorsInUse();
-        CommonEntities.ShuffleDecks(); // Reset the decks after the game so we don't have to do it manually per game
         hasGameFinishedEarly = false;
+
+        // Reset the decks after the game so we don't have to do it manually per game
+        Room.ShuffleDecks();
+        CommonEntities.ShuffleDecks();
     }
     
     protected virtual bool IsGameFinished()

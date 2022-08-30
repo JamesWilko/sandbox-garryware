@@ -15,6 +15,7 @@ public class AlarmingCrates : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 7;
     }
     
@@ -25,13 +26,14 @@ public class AlarmingCrates : Microgame
 
     public override void Start()
     {
-        int alarmsToSpawn = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
+        int max = Math.Min(Client.All.Count, Room.AboveBoxSpawns.Count);
+        int alarmsToSpawn = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, max);
         int cratesToSpawn = (int) Math.Ceiling(alarmsToSpawn * Random.Shared.Float(1.5f, 2.5f));
         
         // Spawn a bunch of random crates
         for (int i = 0; i < cratesToSpawn; ++i)
         {
-            var spawn = CommonEntities.AboveBoxSpawnsDeck.Next();
+            var spawn = Room.AboveBoxSpawnsDeck.Next();
             var crate = new BreakableProp
             {
                 Position = spawn.Position,

@@ -13,6 +13,7 @@ public class Dodgeball : Microgame
     {
         Rules = MicrogameRules.WinOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 8.0f;
     }
 
@@ -31,7 +32,7 @@ public class Dodgeball : Microgame
         var ballsToSpawn = Math.Clamp(Math.Ceiling(Client.All.Count * 1.2f), minimumBalls, maximumBalls);
         for (int i = 0; i < ballsToSpawn; ++i)
         {
-            var spawn = CommonEntities.AboveBoxSpawnsDeck.Next();
+            var spawn = Room.InAirSpawnsDeck.Next();
             var ent = new BouncyBall
             {
                 Position = spawn.Position,

@@ -17,6 +17,7 @@ public class BreakAllCrates : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 7;
     }
     
@@ -29,10 +30,10 @@ public class BreakAllCrates : Microgame
     {
         GiveWeapon<Fists>(To.Everyone);
         
-        cratesSpawned = (int) Math.Min(Math.Ceiling(Client.All.Count * Random.Shared.Float(1.25f, 2.0f)), CommonEntities.OnBoxSpawns.Count);
+        cratesSpawned = (int) Math.Min(Math.Ceiling(Client.All.Count * Random.Shared.Float(1.25f, 2.0f)), Room.OnBoxSpawns.Count);
         for (int i = 0; i < cratesSpawned; ++i)
         {
-            var spawn = CommonEntities.OnBoxSpawnsDeck.Next();
+            var spawn = Room.OnBoxSpawnsDeck.Next();
             var ent = new BreakableProp
             {
                 Position = spawn.Position,

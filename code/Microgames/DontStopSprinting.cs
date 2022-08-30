@@ -11,6 +11,7 @@ public class DontStopSprinting : Microgame
     {
         Rules = MicrogameRules.WinOnTimeout;
         ActionsUsedInGame = PlayerAction.Sprint;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         GameLength = 5;
     }
     

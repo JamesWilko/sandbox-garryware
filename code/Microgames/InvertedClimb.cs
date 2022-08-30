@@ -8,6 +8,7 @@ public class InvertedClimb : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.Jump;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 5;
     }
     

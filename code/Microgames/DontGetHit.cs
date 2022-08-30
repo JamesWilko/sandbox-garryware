@@ -8,6 +8,7 @@ public class DontGetHit : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Sprint;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         GameLength = 5;
         MinimumPlayers = 2;
     }

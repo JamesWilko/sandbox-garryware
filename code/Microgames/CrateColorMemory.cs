@@ -17,6 +17,7 @@ public class CrateColorMemory : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Empty };
         GameLength = 3;
     }
     
@@ -25,7 +26,7 @@ public class CrateColorMemory : Microgame
         int cratesSpawned = Random.Shared.Int(4, 6);
         for (int i = 0; i < cratesSpawned; ++i)
         {
-            var spawn = CommonEntities.AboveBoxSpawnsDeck.Next();
+            var spawn = Room.AboveBoxSpawnsDeck.Next();
             var ent = new BreakableProp
             {
                 Position = spawn.Position,

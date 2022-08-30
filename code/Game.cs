@@ -24,6 +24,8 @@ public partial class GarrywareGame : Sandbox.Game
 
     [Net] public PlayerAction AvailableActions { get; set; }
     
+    [Net] public GarrywareRoom CurrentRoom { get; set; }
+    
     public GarrywareGame()
     {
         Current = this;
@@ -67,8 +69,8 @@ public partial class GarrywareGame : Sandbox.Game
     {
         base.PostLevelLoaded();
         
-        // Cache all the map entities that microgames may be accessing
-        CommonEntities.PrecacheWorldEntities();
+        // @todo: put all players in the large room during the waiting state
+        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == MicrogameRoom.Boxes && room.Size == RoomSize.Small);
     }
     
     // Only start the game once we've got enough players readied up to start
@@ -191,6 +193,17 @@ public partial class GarrywareGame : Sandbox.Game
         client.Pawn = player;
     }
 
+    public override void MoveToSpawnpoint(Entity pawn)
+    {
+        var spawnpoint = CurrentRoom.SpawnPointsDeck.Next();
+        if (spawnpoint == null)
+        {
+            Log.Warning($"Couldn't find spawnpoint for {pawn}!");
+            return;
+        }
+        pawn.Transform = spawnpoint.Transform;
+    }
+
     public override void ClientDisconnect(Client cl, NetworkDisconnectionReason reason)
     {
         base.ClientDisconnect(cl, reason);
@@ -207,6 +220,52 @@ public partial class GarrywareGame : Sandbox.Game
     {
         base.OnClientActive(client);
         NumConnectedClients++;
+    }
+    
+    /// <summary>
+    /// Attempt to swap to a room that is acceptable for the microgame to take place in.
+    /// Returns true if a room swap occured, or false if players didn't teleport anywhere.
+    /// </summary>
+    /// <param name="acceptableRooms">A list of rooms the microgame can take place in. If not currently in one of them,
+    /// then the players will be teleported to the first room in the array.</param>
+    public bool ChangeRoom(MicrogameRoom[] acceptableRooms)
+    {
+        // Check if we're already in one of the desired rooms
+        // If we are then don't bother swapping since this room is good enough
+        foreach (var roomContent in acceptableRooms)
+        {
+            if (CurrentRoom.Contents == roomContent)
+            {
+                return false;
+            }
+        }
+        
+        // Change to the first room in the list if we're not already in a room that is acceptable
+        var targetRoom = acceptableRooms.First();
+        var size = GetAppropriateRoomSizeForPlayerCount();
+        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == targetRoom);
+        Assert.True(CurrentRoom != null, $"No room for {targetRoom} and size {size} was found in the map!");
+        
+        // Teleport all players to the new room
+        foreach (var client in Client.All)
+        {
+            MoveToSpawnpoint(client.Pawn);
+            // @todo: play a sound and a particle effect
+        }
+
+        return true;
+    }
+
+    private RoomSize GetAppropriateRoomSizeForPlayerCount()
+    {
+        // @todo: remove once map is done
+        if (true) return RoomSize.Small;
+        
+        var playerCount = Client.All.Count;
+        
+        if (playerCount >= 12) return RoomSize.Large;
+        if (playerCount <= 6) return RoomSize.Small;
+        return RoomSize.Medium;
     }
 
 }

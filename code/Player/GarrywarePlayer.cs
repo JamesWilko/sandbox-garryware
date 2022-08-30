@@ -376,9 +376,9 @@ public partial class GarrywarePlayer : Player
     /// </summary>
     public bool IsOnABox()
     {
-        foreach (var trigger in CommonEntities.OnBoxTriggers)
+        foreach (var trigger in GarrywareGame.Current.CurrentRoom.OnBoxTriggers)
         {
-            if (trigger.Contains(this))
+            if (trigger.ContainsEntity(this))
             {
                 return true;
             }

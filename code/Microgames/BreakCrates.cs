@@ -15,6 +15,7 @@ public class BreakCrates : Microgame
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 5;
     }
     
@@ -30,7 +31,7 @@ public class BreakCrates : Microgame
         cratesSpawned = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
         for (int i = 0; i < cratesSpawned; ++i)
         {
-            var spawn = CommonEntities.OnBoxSpawnsDeck.Next();
+            var spawn = Room.OnBoxSpawnsDeck.Next();
             var ent = new BreakableProp
             {
                 Position = spawn.Position,
