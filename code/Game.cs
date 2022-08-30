@@ -25,7 +25,8 @@ public partial class GarrywareGame : Sandbox.Game
     [Net] public PlayerAction AvailableActions { get; set; }
     
     [Net] public GarrywareRoom CurrentRoom { get; set; }
-    
+    private int playerCountWhenRoomLastChanged;
+
     public GarrywareGame()
     {
         Current = this;
@@ -69,8 +70,7 @@ public partial class GarrywareGame : Sandbox.Game
     {
         base.PostLevelLoaded();
         
-        // @todo: put all players in the large room during the waiting state
-        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == MicrogameRoom.Boxes && room.Size == RoomSize.Small);
+        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == MicrogameRoom.Boxes && room.Size == RoomSize.Large);
     }
     
     // Only start the game once we've got enough players readied up to start
@@ -230,22 +230,32 @@ public partial class GarrywareGame : Sandbox.Game
     /// then the players will be teleported to the first room in the array.</param>
     public bool ChangeRoom(MicrogameRoom[] acceptableRooms)
     {
-        // Check if we're already in one of the desired rooms
-        // If we are then don't bother swapping since this room is good enough
-        foreach (var roomContent in acceptableRooms)
+        // Check if we're already in one of the desired rooms, if we are then don't bother swapping since this room is good enough
+        // Only do this if the player count hasn't changed in case we need to swap to a bigger or smaller room 
+        if (playerCountWhenRoomLastChanged == Client.All.Count)
         {
-            if (CurrentRoom.Contents == roomContent)
+            foreach (var roomContent in acceptableRooms)
             {
-                return false;
+                if (CurrentRoom.Contents == roomContent)
+                {
+                    return false;
+                }
             }
         }
-        
+
         // Change to the first room in the list if we're not already in a room that is acceptable
         var targetRoom = acceptableRooms.First();
         var size = GetAppropriateRoomSizeForPlayerCount();
-        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == targetRoom);
-        Assert.True(CurrentRoom != null, $"No room for {targetRoom} and size {size} was found in the map!");
+        var newRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == targetRoom && room.Size == size);
+        Assert.True(newRoom != null, $"No room for {targetRoom} and size {size} was found in the map!");
         
+        // Don't teleport if the room is the same even after a player count change
+        if (newRoom == CurrentRoom)
+        {
+            return false;
+        }
+        CurrentRoom = newRoom;
+
         // Teleport all players to the new room
         foreach (var client in Client.All)
         {
@@ -255,14 +265,12 @@ public partial class GarrywareGame : Sandbox.Game
             }
         }
 
+        playerCountWhenRoomLastChanged = Client.All.Count;
         return true;
     }
 
     private RoomSize GetAppropriateRoomSizeForPlayerCount()
     {
-        // @todo: remove once map is done
-        if (true) return RoomSize.Small;
-        
         var playerCount = Client.All.Count;
         
         if (playerCount >= 12) return RoomSize.Large;
