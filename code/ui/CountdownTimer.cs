@@ -33,7 +33,7 @@ public class CountdownTimer : Panel
             var seconds = (int) Math.Max(0, Math.Ceiling(GarrywareGame.Current.TimeUntilCountdownExpires - minutes * 60));
             CountdownLabel.SetText(string.Format(clockFormat, minutes, seconds));
 
-            if (seconds != lastSeconds)
+            if (seconds != lastSeconds && minutes == 0)
             {
                 SoundUtility.PlayCountdown(seconds);
                 SoundUtility.PlayClockTick(seconds);
