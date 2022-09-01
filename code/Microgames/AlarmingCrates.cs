@@ -39,7 +39,6 @@ public class AlarmingCrates : Microgame
                 Position = spawn.Position,
                 Rotation = spawn.Rotation,
                 Model = CommonEntities.Crate,
-                CanGib = false,
                 PhysicsEnabled = false
             };
             AutoCleanup(crate);
@@ -58,7 +57,6 @@ public class AlarmingCrates : Microgame
                 Position = spawnCrate.Position + Vector3.Up * 5,
                 Rotation = spawnCrate.Rotation,
                 Model = CommonEntities.Ball,
-                CanGib = false,
                 PhysicsEnabled = false
             };
             AutoCleanup(alarmProp);

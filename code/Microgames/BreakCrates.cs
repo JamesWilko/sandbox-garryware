@@ -37,7 +37,6 @@ public class BreakCrates : Microgame
                 Position = spawn.Position,
                 Rotation = spawn.Rotation,
                 Model = CommonEntities.Crate,
-                CanGib = false
             };
             AutoCleanup(ent);
             
