@@ -24,7 +24,13 @@ public partial class BreakableProp : BasePhysics
     /// If set, the prop will spawn its associated gibs when it is destroyed.
     /// </summary>
     [Property]
-    public bool CanGib { get; set; } = false;
+    public bool CanGib { get; set; } = true;
+    
+    /// <summary>
+    /// If set, the gibs from the prop will burst from their location when spawned.
+    /// </summary>
+    [Property]
+    public bool CanGibsBurst { get; set; } = true;
     
     [Property("boneTransforms"), HideInEditor]
     private string BoneTransforms { get; set; }
@@ -308,21 +314,20 @@ public partial class BreakableProp : BasePhysics
         result.CopyParamsFrom(LastDamage);
         Breakables.Break(this, result);
 
-        // This applies forces from explosive damage to our gibs... But this is already done by DoExplosion, we just need to make sure its called after spawning gibs.
-        /*if ( LastDamage.Flags.HasFlag( DamageFlags.Blast ) )
+        if (CanGibsBurst)
         {
-            foreach ( var prop in result.Props )
+            foreach (var prop in result.Props)
             {
-                if ( !prop.IsValid() )
+                if (!prop.IsValid())
                     continue;
 
                 var body = prop.PhysicsBody;
-                if ( !body.IsValid() )
+                if (!body.IsValid())
                     continue;
 
-                body.ApplyImpulseAt( LastDamage.Position, LastDamage.Force * 25.0f );
+                body.ApplyImpulseAt(WorldSpaceBounds.Center, (prop.Position - WorldSpaceBounds.Center) * Rand.Float(50f, 250f));
             }
-        }*/
+        }
 
         OnBreak.Fire(LastDamage.Attacker);
     }
