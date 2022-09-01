@@ -26,7 +26,7 @@ public partial class GarrywareGame
                         weapon = new Fists();
                         break;
                     case "gravgun":
-                        weapon = new GravGun();
+                        weapon = new GravityGun();
                         var ent = new BreakableProp
                         {
                             Position = player.EyePosition,

@@ -25,7 +25,7 @@ public class Dodgeball : Microgame
     public override void Start()
     {
         ShowInstructions("#microgame.instructions.dodge-balls");
-        GiveWeapon<GravGun>(To.Everyone);
+        GiveWeapon<GravityGun>(To.Everyone);
 
         var minimumBalls = 5;
         var maximumBalls = 32;
