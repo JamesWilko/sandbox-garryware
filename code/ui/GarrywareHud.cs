@@ -27,6 +27,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<WaitingForPlayers>();
         RootPanel.AddChild<CountdownTimer>();
         RootPanel.AddChild<OnScreenControls>();
+        RootPanel.AddChild<AmmoCounter>();
         
         // Listen to game events
         GameEvents.OnNewInstructions += OnNewInstructions;
