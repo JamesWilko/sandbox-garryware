@@ -26,9 +26,8 @@ public class AlarmingCrates : Microgame
 
     public override void Start()
     {
-        int max = Math.Min(Client.All.Count, Room.AboveBoxSpawns.Count);
-        int alarmsToSpawn = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, max);
-        int cratesToSpawn = (int) Math.Ceiling(alarmsToSpawn * Random.Shared.Float(1.5f, 2.5f));
+        int alarmsToSpawn = GetRandomAdjustedClientCount(0.5f, 0.75f);
+        int cratesToSpawn = (int) Math.Min(Math.Ceiling(alarmsToSpawn * Random.Shared.Float(1.5f, 2.5f)), Room.AboveBoxSpawns.Count);
         
         // Spawn a bunch of random crates
         for (int i = 0; i < cratesToSpawn; ++i)

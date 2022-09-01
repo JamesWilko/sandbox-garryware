@@ -9,7 +9,7 @@ namespace Garryware.Microgames;
 /// </summary>
 public class BreakCrates : Microgame
 {
-    private int cratesSpawned;
+    private int cratesRemaining;
     
     public BreakCrates()
     {
@@ -28,8 +28,8 @@ public class BreakCrates : Microgame
     {
         GiveWeapon<Fists>(To.Everyone);
         
-        cratesSpawned = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
-        for (int i = 0; i < cratesSpawned; ++i)
+        cratesRemaining = GetRandomAdjustedClientCount(0.5f, 0.75f);
+        for (int i = 0; i < cratesRemaining; ++i)
         {
             var spawn = Room.OnBoxSpawnsDeck.Next();
             var ent = new BreakableProp
@@ -55,8 +55,8 @@ public class BreakCrates : Microgame
             player.RemoveWeapons();
         }
         
-        cratesSpawned--;
-        if (cratesSpawned == 0)
+        cratesRemaining--;
+        if (cratesRemaining == 0)
             EarlyFinish();
     }
 

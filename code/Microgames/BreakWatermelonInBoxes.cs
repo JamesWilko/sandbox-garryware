@@ -31,7 +31,7 @@ public class BreakWatermelonInBoxes : Microgame
     
     public override void Setup()
     {
-        int melonsToSpawn = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
+        int melonsToSpawn = GetRandomAdjustedClientCount(0.5f, 0.75f);
         int totalSpawns = Math.Clamp((int) Math.Ceiling(melonsToSpawn * Random.Shared.Float(2.0f, 3.0f)), 1, Room.OnBoxSpawns.Count);
         
         // Create the melon spawns

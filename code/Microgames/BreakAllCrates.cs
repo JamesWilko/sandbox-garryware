@@ -10,7 +10,7 @@ namespace Garryware.Microgames;
 /// </summary>
 public class BreakAllCrates : Microgame
 {
-    private int cratesSpawned;
+    private int cratesRemaining;
     private List<GarrywarePlayer> potentialWinners = new();
     
     public BreakAllCrates()
@@ -29,9 +29,9 @@ public class BreakAllCrates : Microgame
     public override void Start()
     {
         GiveWeapon<Fists>(To.Everyone);
-        
-        cratesSpawned = (int) Math.Min(Math.Ceiling(Client.All.Count * Random.Shared.Float(1.25f, 2.0f)), Room.OnBoxSpawns.Count);
-        for (int i = 0; i < cratesSpawned; ++i)
+
+        cratesRemaining = GetRandomAdjustedClientCount(1.25f, 2.0f, Client.All.Count, Room.OnBoxSpawns.Count);
+        for (int i = 0; i < cratesRemaining; ++i)
         {
             var spawn = Room.OnBoxSpawnsDeck.Next();
             var ent = new BreakableProp
@@ -56,8 +56,8 @@ public class BreakAllCrates : Microgame
             potentialWinners.Add(player);
         }
         
-        cratesSpawned--;
-        if (cratesSpawned == 0)
+        cratesRemaining--;
+        if (cratesRemaining == 0)
         {
             foreach (var winnerPlayer in potentialWinners)
             {

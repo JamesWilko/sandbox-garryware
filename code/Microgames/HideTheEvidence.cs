@@ -42,7 +42,7 @@ public class HideTheEvidence : Microgame
         ShowInstructions("#microgame.instructions.hide-evidence");
         weapons = GiveWeapon<Pistol>(To.Everyone);
         
-        int hidingSpotsToSpawn = (int)Math.Clamp(Client.All.Count * Rand.Float(0.25f, 0.5f), 1, Room.OnFloorSpawns.Count);
+        int hidingSpotsToSpawn = GetRandomAdjustedClientCount(0.25f, 0.5f, 1, Room.OnFloorSpawns.Count);
         for (int i = 0; i < hidingSpotsToSpawn; ++i)
         {
             var spawn = Room.OnFloorSpawnsDeck.Next();

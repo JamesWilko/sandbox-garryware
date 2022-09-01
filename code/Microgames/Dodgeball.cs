@@ -27,9 +27,9 @@ public class Dodgeball : Microgame
         ShowInstructions("#microgame.instructions.dodge-balls");
         GiveWeapon<GravityGun>(To.Everyone);
 
-        var minimumBalls = 5;
-        var maximumBalls = 32;
-        var ballsToSpawn = Math.Clamp(Math.Ceiling(Client.All.Count * 1.2f), minimumBalls, maximumBalls);
+        const int minimumBalls = 5;
+        const int maximumBalls = 32;
+        var ballsToSpawn = GetRandomAdjustedClientCount(1.2f, 1.5f, minimumBalls, maximumBalls);
         for (int i = 0; i < ballsToSpawn; ++i)
         {
             var spawn = Room.InAirSpawnsDeck.Next();

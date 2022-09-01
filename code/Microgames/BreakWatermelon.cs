@@ -9,7 +9,7 @@ namespace Garryware.Microgames;
 /// </summary>
 public class BreakWatermelon : Microgame
 {
-    private int breakableMelonsSpawned;
+    private int breakableMelonsRemaining;
     
     public BreakWatermelon()
     {
@@ -27,11 +27,10 @@ public class BreakWatermelon : Microgame
     public override void Start()
     {
         GiveWeapon<Fists>(To.Everyone);
-
         
-        int breakableMelonsToSpawn = Math.Clamp((int) Math.Ceiling(Client.All.Count * Random.Shared.Float(0.5f, 0.75f)), 1, Client.All.Count);
+        int breakableMelonsToSpawn = GetRandomAdjustedClientCount(0.5f, 0.75f);
         int totalMelons = Math.Clamp((int) Math.Ceiling(breakableMelonsToSpawn * Random.Shared.Float(1.5f, 2.5f)), 1, Room.OnBoxSpawns.Count);
-        breakableMelonsSpawned = breakableMelonsToSpawn;
+        breakableMelonsRemaining = breakableMelonsToSpawn;
         
         for (int i = 0; i < totalMelons; ++i)
         {
@@ -60,8 +59,8 @@ public class BreakWatermelon : Microgame
             player.RemoveWeapons();
         }
         
-        breakableMelonsSpawned--;
-        if (breakableMelonsSpawned == 0)
+        breakableMelonsRemaining--;
+        if (breakableMelonsRemaining == 0)
             EarlyFinish();
     }
 
@@ -72,6 +71,6 @@ public class BreakWatermelon : Microgame
 
     public override void Cleanup()
     {
-        breakableMelonsSpawned = 0;
+        breakableMelonsRemaining = 0;
     }
 }
