@@ -26,6 +26,12 @@ public enum MicrogameRoom
     Platform
 }
 
+public enum ShowGameActions
+{
+    AfterSetup,
+    AfterStart
+}
+
 public abstract class Microgame
 {
     public abstract void Setup();
@@ -41,6 +47,7 @@ public abstract class Microgame
     
     public PlayerAction ActionsUsedInGame { get; protected set; } = PlayerAction.None;
     public MicrogameRules Rules { get; protected set; } = MicrogameRules.None;
+    public ShowGameActions ShowActionsToPlayer { get; protected set; } = ShowGameActions.AfterStart;
     
     /// <summary>
     /// Which rooms can be used for this microgame? If we're not already in one of these rooms when picking this
@@ -89,11 +96,18 @@ public abstract class Microgame
         Log.Info($"[{microgameName}] Setting up");
         SoundUtility.PlayNewRound(WarmupLength + GameLength);
         Setup();
-        GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
+        if (ShowActionsToPlayer == ShowGameActions.AfterSetup)
+        {
+            GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
+        }
         await GameTask.DelayRealtimeSeconds(WarmupLength);
         
         Log.Info($"[{microgameName}] Starting");
         Start();
+        if (ShowActionsToPlayer == ShowGameActions.AfterStart)
+        {
+            GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
+        }
         
         timeSinceGameStarted = 0;
         GarrywareGame.Current.SetCountdownTimer(GameLength);
