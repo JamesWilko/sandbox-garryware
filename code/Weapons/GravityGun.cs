@@ -14,13 +14,14 @@ public partial class GravityGun : Carriable
     public Vector3 HoldPos { get; private set; }
     public Rotation HoldRot { get; private set; }
 
-    protected virtual float MaxPullDistance => 2000.0f;
-    protected virtual float MaxPushDistance => 500.0f;
+    protected virtual float MaxPullDistance => 1000.0f;
+    protected virtual float MaxPushDistance => 200.0f;
     protected virtual float LinearFrequency => 10.0f;
     protected virtual float LinearDampingRatio => 1.0f;
     protected virtual float AngularFrequency => 10.0f;
     protected virtual float AngularDampingRatio => 1.0f;
     protected virtual float PullForce => 20.0f;
+    protected virtual float PullRadius => 80.0f;
     protected virtual float PushForce => 1000.0f;
     protected virtual float ThrowForce => 2000.0f;
     protected virtual float HoldDistance => 50.0f;
@@ -29,6 +30,11 @@ public partial class GravityGun : Carriable
     protected virtual float BreakLinearForce => 2000.0f;
 
     private TimeSince timeSinceDrop;
+    
+    private Entity lastTargetedEntity;
+    private TimeSince timeSinceEntityLastTargeted;
+    
+    private CollisionGroup heldEntityInitialCollisionGroup;
 
     private const string grabbedTag = "grabbed";
 
@@ -43,7 +49,7 @@ public partial class GravityGun : Carriable
     public override void Simulate(Client client)
     {
         if (Owner is not Player owner) return;
-
+        
         if (!IsServer)
             return;
 
@@ -131,14 +137,10 @@ public partial class GravityGun : Carriable
             }
         }
     }
-
-    private Entity lastTargetedEntity;
-    private TimeSince timeSinceEntityLastTargeted;
     
     private bool TryGetGravityGunTarget(Vector3 from, Vector3 to, out TraceResult targetResult)
     {
         const float entityTargetPriorityCutoffTime = 0.3f;
-        const float gravityGunPullRadius = 80.0f;
 
         // If we don't have target priority on a particular prop, then see if we're looking
         // directly at a prop that we can affect and use that
@@ -166,7 +168,7 @@ public partial class GravityGun : Carriable
             .WithAnyTags("solid")
             .Ignore(this)
             .EntitiesOnly()
-            .Radius(gravityGunPullRadius)
+            .Radius(PullRadius)
             .RunAll();
 
         // Make sure we got some results at all
@@ -292,11 +294,11 @@ public partial class GravityGun : Carriable
             return;
 
         var velocity = HeldBody.Velocity;
-        Vector3.SmoothDamp(HeldBody.Position, HoldPos, ref velocity, 0.1f, Time.Delta);
+        Vector3.SmoothDamp(HeldBody.Position, HoldPos, ref velocity, 0.05f, Time.Delta);
         HeldBody.Velocity = velocity;
 
         var angularVelocity = HeldBody.AngularVelocity;
-        Rotation.SmoothDamp(HeldBody.Rotation, HoldRot, ref angularVelocity, 0.1f, Time.Delta);
+        Rotation.SmoothDamp(HeldBody.Rotation, HoldRot, ref angularVelocity, 0.05f, Time.Delta);
         HeldBody.AngularVelocity = angularVelocity;
     }
 
@@ -322,6 +324,8 @@ public partial class GravityGun : Carriable
 
         HeldEntity = entity;
         HeldEntity.Tags.Add(grabbedTag);
+        // @todo: we don't want to disable ALL collisions, just the one between the player and the held prop. figure out how to do this?
+        HeldEntity.EnableAllCollisions = false;
 
         Client?.Pvs.Add(HeldEntity);
     }
@@ -345,6 +349,8 @@ public partial class GravityGun : Carriable
 
         if (HeldEntity.IsValid())
         {
+            // @todo: we don't want to disable ALL collisions, just the one between the player and the held prop. figure out how to do this?
+            HeldEntity.EnableAllCollisions = true;
             HeldEntity.Tags.Remove(grabbedTag);
             HeldEntity = null;
         }
