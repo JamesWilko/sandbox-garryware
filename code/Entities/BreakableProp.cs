@@ -97,10 +97,11 @@ public partial class BreakableProp : BasePhysics
     [Net] public bool RaisesClientAuthDamageEvent { get; set; }
         
     public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
-
     public event AttackerDelegate Damaged;
-    
     public event AttackerDelegate OnBroken;
+
+    public delegate void CollisionEventDelegate(CollisionEventData collisionData);
+    public event CollisionEventDelegate PhysicsCollision;
     
     public override void Spawn()
     {
@@ -291,6 +292,8 @@ public partial class BreakableProp : BasePhysics
         lastCollision = eventData;
 
         base.OnPhysicsCollision(eventData);
+        
+        PhysicsCollision?.Invoke(eventData);
     }
 
     private bool HasExplosionBehavior()

@@ -1,0 +1,39 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		BaseSurface = resource:"surfaces/default.surface"
+		AudioMaterial = resource:"surfaces/metal.audiomat"
+		Description = ""
+		Friction = 0.99
+		Elasticity = 0.05
+		Density = 2700
+		Thickness = -1
+		Dampening = 56.399998
+		BounceThreshold = 0
+		ImpactEffects = 
+		{
+			Regular = [  ]
+			BulletDecal = 
+			[
+				resource:"decals/bullethole.decal",
+			]
+		}
+		Sounds = 
+		{
+			FootLeft = "footstep-metal"
+			FootRight = "footstep-metal"
+			FootLaunch = "footstep-metal"
+			FootLand = "footstep-metal"
+			Bullet = "physics.metal.sheet.impact"
+			SmoothScrape = ""
+			RoughScrape = ""
+			ImpactHard = "physics.metal.sheet.impact"
+			ImpactSoft = "physics.metal.sheet.impact"
+		}
+		Breakables = 
+		{
+			BreakSound = ""
+		}
+	}
+}

@@ -164,8 +164,14 @@ public partial class GarrywarePlayer : Player
             var dropped = Inventory.DropActive();
             if (dropped != null)
             {
+                if (dropped is AmmoWeapon weapon)
+                {
+                    weapon.LastOwner = this;
+                }
+                
                 dropped.PhysicsGroup.ApplyImpulse(Velocity + EyeRotation.Forward * 500.0f + Vector3.Up * 100.0f, true);
                 dropped.PhysicsGroup.ApplyAngularImpulse(Vector3.Random * 100.0f, true);
+                dropped.PhysicsGroup.SetSurface("metal.weapon.dropped");
 
                 timeSinceDropped = 0;
             }

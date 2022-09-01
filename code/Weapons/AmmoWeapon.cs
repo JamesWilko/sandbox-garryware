@@ -6,6 +6,8 @@ namespace Garryware;
 
 partial class AmmoWeapon : Weapon
 {
+    [Net, Predicted] public Entity LastOwner { get; set; }
+    
     public virtual int MagazineCapacity => 30;
     public virtual int DefaultAmmoInReserve => 120;
 
