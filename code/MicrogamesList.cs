@@ -20,5 +20,6 @@ public static class MicrogamesList
         new ShootTargetExactNumber(),
         new ShootTargetAtLeastNumber(),
         new BreakWatermelon(),
+        new BreakWatermelonInBoxes(),
     };
 }
