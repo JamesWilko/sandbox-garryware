@@ -87,7 +87,7 @@ public abstract class Microgame
         // If we change area then wait a second or two extra so that players can get their bearings
         if (GarrywareGame.Current.ChangeRoom(AcceptableRooms))
         {
-            await GameTask.DelayRealtimeSeconds(2.0f);
+            await GameTask.DelayRealtimeSeconds(1.0f);
         }
         
         // Run the microgame logic
