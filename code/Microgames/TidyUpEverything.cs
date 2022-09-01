@@ -1,20 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware.Microgames;
 
-public class PickupThatCan : Microgame
+public class TidyUpEverything : Microgame
 {
     private static readonly Model BinModel = Model.Load("models/sbox_props/park_bin/park_bin.vmdl");
-    private static readonly Model CanModel = Model.Load("models/citizen_props/sodacan01.vmdl");
+    private static readonly ShuffledDeck<Model> RubbishModels = new();
 
-    public PickupThatCan()
+    private List<GarrywarePlayer> potentialWinners = new();
+    private int rubbishRemaining;
+    
+    public TidyUpEverything()
     {
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
-        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
-        GameLength = 6;
+        AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
+        GameLength = 8;
+        
+        RubbishModels.Add(Model.Load("models/citizen_props/sodacan01.vmdl"), 1); // @note: can is very small and easy to miss so don't spawn it often
+        RubbishModels.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
+        RubbishModels.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
+        RubbishModels.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
+        RubbishModels.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);
+        RubbishModels.Shuffle();
     }
     
     public override void Setup()
@@ -24,7 +35,7 @@ public class PickupThatCan : Microgame
 
     public override void Start()
     {
-        ShowInstructions("#microgame.instructions.pickup-that-can");
+        ShowInstructions("#microgame.instructions.tidy-up");
         GiveWeapon<GravityGun>(To.Everyone);
 
         // Spawn some bins
@@ -43,19 +54,18 @@ public class PickupThatCan : Microgame
             binProp.PhysicsCollision += OnPhysicsCollisionWithBin;
         }
 
-        // Spawn a load of cans
-        // @note: since the cans are small and hard to lose, we want to spawn a lot of them
-        int numCans = (int) (Client.All.Count * Rand.Float(2.0f, 5.0f));
-        for (int i = 0; i < numCans; ++i)
+        // Spawn a load of crap
+        rubbishRemaining = (int) (Client.All.Count * Rand.Float(2.0f, 3.0f));
+        for (int i = 0; i < rubbishRemaining; ++i)
         {
-            var can = new BreakableProp
+            var rubbish = new BreakableProp
             {
                 Transform = Room.InAirSpawnsDeck.Next().Transform,
-                Model = CanModel,
+                Model = RubbishModels.Next(),
                 Indestructible = true,
             };
-            AutoCleanup(can);
-            can.ApplyLocalImpulse(Vector3.Random * 1024.0f);
+            AutoCleanup(rubbish);
+            rubbish.ApplyLocalImpulse(Vector3.Random * 1024.0f);
         }
     }
 
@@ -69,20 +79,38 @@ public class PickupThatCan : Microgame
             && prop.ClientLastPickedUpBy.IsValid()
             && prop.ClientLastPickedUpBy.Pawn is GarrywarePlayer player) 
         {
-            player.FlagAsRoundWinner();
+            potentialWinners.AddUnique(player);
 
             Particles.Create("particles/impact.smokepuff.vpcf", prop.Position).Destroy();
             Sound.FromEntity("sounds/balloon_pop_cute.sound", collisionData.This.Entity);
             prop.Delete();
+
+            rubbishRemaining--;
+            AttemptLockInWinners();
+        }
+    }
+
+    private void AttemptLockInWinners()
+    {
+        // Can only win if there is no rubbish remaining
+        if (rubbishRemaining > 0)
+            return;
+        
+        foreach (var player in potentialWinners)
+        {
+            if(!player.HasLockedInResult)
+                player.FlagAsRoundWinner();
         }
     }
     
     public override void Finish()
     {
+        AttemptLockInWinners();
         RemoveAllWeapons();
     }
 
     public override void Cleanup()
     {
+        potentialWinners.Clear();
     }
 }

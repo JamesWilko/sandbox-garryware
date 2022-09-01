@@ -37,6 +37,7 @@
   "microgame.instructions.shoot-target-at-least": "Shoot the target at least {0} times!",
   "microgame.instructions.shoot-target-exactly": "Shoot the target exactly {0} times!",
   "microgame.instructions.pickup-that-can": "Pick up a can and put it in the trash can!",
+  "microgame.instructions.tidy-up": "Clean everything up!",
   
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
