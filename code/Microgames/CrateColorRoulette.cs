@@ -42,7 +42,7 @@ public class CrateColorRoulette : Microgame
         AutoCleanup(rouletteCrate);
         rouletteCrate.PlayerSentRouletteResult += OnPlayerRouletteResult;
         
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.get-ready");
     }
     
     public override void Start()
@@ -53,7 +53,7 @@ public class CrateColorRoulette : Microgame
         targetColor = rouletteCrate.GetRandomColorInRotation();
 
         GiveWeapon<Pistol>(To.Everyone);
-        ShowInstructions($"Shoot {targetColor.AsName()}!");
+        ShowInstructions($"Shoot {targetColor.AsName()}!"); // @localization
     }
 
     private void OnPlayerRouletteResult(GarrywarePlayer player, ColorRouletteProp prop, GameColor color)

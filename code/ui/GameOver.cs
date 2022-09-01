@@ -8,7 +8,7 @@ public class GameOver : Panel
 
     public GameOver()
     {
-        Add.Label("Temporary Game Over Screen! Thanks for playing! Returning to lobby soon...");
+        Add.Label("#ui.gameover");
     }
 
     public override void Tick()

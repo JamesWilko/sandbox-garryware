@@ -43,7 +43,7 @@ public class CrateColorMemory : Microgame
             ent.Damaged += OnCrateDamaged;
         }
         
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.look-carefully");
     }
     
     public override void Start()
@@ -56,7 +56,7 @@ public class CrateColorMemory : Microgame
             crate.HideGameColor = true;
         }
         
-        ShowInstructions($"Shoot {targetColor.AsName()}!");
+        ShowInstructions($"Shoot {targetColor.AsName()}!"); // @localization
     }
     
     private void OnCrateDamaged(BreakableProp crate, Entity attacker)

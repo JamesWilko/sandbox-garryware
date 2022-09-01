@@ -23,7 +23,7 @@ public class BreakAllCrates : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Break all crates!");
+        ShowInstructions("#microgame.instructions.break-every-crate");
     }
 
     public override void Start()

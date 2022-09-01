@@ -14,12 +14,12 @@ public class InvertedClimb : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Prepare yourself...");
+        ShowInstructions("#microgame.get-ready");
     }
 
     public override void Start()
     {
-        ShowInstructions("Climb onto a box!");
+        ShowInstructions("#microgame.instructions.inverted-climb");
         
         foreach (var client in Client.All)
         {

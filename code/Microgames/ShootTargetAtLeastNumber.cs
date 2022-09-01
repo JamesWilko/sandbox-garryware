@@ -46,7 +46,7 @@ public class ShootTargetAtLeastNumber : Microgame
         }
 
         // Send instructions to the players
-        ShowInstructions(string.Format("Shoot the target at least {0} times!", targetHits));
+        ShowInstructions(string.Format("Shoot the target at least {0} times!", targetHits)); // @localization
     }
     
     public override void Start()
@@ -72,11 +72,11 @@ public class ShootTargetAtLeastNumber : Microgame
             if (playerPair.Value >= targetHits)
             {
                 playerPair.Key.FlagAsRoundWinner();
-                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime);
+                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime); // @localization
             }
             else
             {
-                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You only hit it {0} times!", playerPair.Value), statDisplayTime);
+                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You only hit it {0} times!", playerPair.Value), statDisplayTime); // @localization
             }
         }
     }

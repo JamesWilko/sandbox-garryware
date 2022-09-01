@@ -57,7 +57,7 @@ public partial class Scoreboard<T> : Panel where T : ScoreboardEntry, new()
     protected virtual void AddHeader() 
     {
         Header = Add.Panel( "header" );
-        Header.Add.Label( "Round ", "round" );
+        Header.Add.Label( "#ui.round", "round" );
         RoundCount = Header.Add.Label( "0", "roundcount" );
     }
 

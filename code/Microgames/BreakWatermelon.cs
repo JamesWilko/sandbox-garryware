@@ -21,7 +21,7 @@ public class BreakWatermelon : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Break a watermelon!");
+        ShowInstructions("#microgame.instructions.smash-watermelon");
     }
 
     public override void Start()

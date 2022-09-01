@@ -15,13 +15,13 @@ public class DontGetHit : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Get ready to rumble!");
+        ShowInstructions("#microgame.get-ready-to-rumble");
     }
 
     public override void Start()
     {
         GiveWeapon<Fists>(To.Everyone);
-        ShowInstructions("Hit somebody, but don't get hit either!");
+        ShowInstructions("#microgame.instructions.hit-someone");
 
         foreach (var client in Client.All)
         {

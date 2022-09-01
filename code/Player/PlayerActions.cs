@@ -23,16 +23,16 @@ public static class PlayerActionsExtension
     
     public static string AsFriendlyName(this PlayerAction action) => action switch
     {
-        PlayerAction.None => "None",
-        PlayerAction.PrimaryAttack => "Fire",
-        PlayerAction.SecondaryAttack => "Secondary Fire",
-        PlayerAction.DropWeapon => "Drop",
-        PlayerAction.PlayerUse => "Use",
-        PlayerAction.Jump => "Jump",
-        PlayerAction.Sprint => "Run",
-        PlayerAction.Crouch => "Crouch",
-        PlayerAction.ReadyUp => "Ready Up",
-        PlayerAction.Reload => "Reload",
+        PlayerAction.None => "#action.none",
+        PlayerAction.PrimaryAttack => "#action.attack.primary",
+        PlayerAction.SecondaryAttack => "#action.attack.secondary",
+        PlayerAction.DropWeapon => "#action.drop",
+        PlayerAction.PlayerUse => "#action.use",
+        PlayerAction.Jump => "#action.jump",
+        PlayerAction.Sprint => "#action.sprint",
+        PlayerAction.Crouch => "#action.crouch",
+        PlayerAction.ReadyUp => "#action.ready-up",
+        PlayerAction.Reload => "#action.reload",
         _ => "Unknown Action"
     };
 

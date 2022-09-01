@@ -12,11 +12,11 @@ public class WinLoseRoundPopup : SimplePopup
         switch (result)
         {
             case RoundResult.Won:
-                Text = "You won!";
+                Text = "#ui.round.win";
                 AddClass("Won");
                 break;
             case RoundResult.Lost:
-                Text = "You failed!";
+                Text = "#ui.round.lost";
                 AddClass("Lost");
                 break;
             default:

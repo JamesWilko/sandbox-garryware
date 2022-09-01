@@ -21,7 +21,7 @@ public class AlarmingCrates : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.get-ready");
     }
 
     public override void Start()
@@ -66,7 +66,7 @@ public class AlarmingCrates : Microgame
             alarmSounds.Add(alarmProp, sound);
         }
         
-        ShowInstructions("Shut it off!");
+        ShowInstructions("#microgame.instructions.shut-it-off");
         GiveWeapon<Fists>(To.Everyone);
     }
     

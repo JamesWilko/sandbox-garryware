@@ -17,12 +17,12 @@ public class Magdump : Microgame
 
     public override void Setup()
     {
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.get-ready");
     }
 
     public override void Start()
     {
-        ShowInstructions("Empty your clip!");
+        ShowInstructions("#microgame.instructions.magdump");
         var weapons = GiveWeapon<Pistol>(To.Everyone);
         foreach (var weapon in weapons)
         {

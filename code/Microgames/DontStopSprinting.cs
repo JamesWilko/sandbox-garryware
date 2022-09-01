@@ -17,7 +17,7 @@ public class DontStopSprinting : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Don't stop running!");
+        ShowInstructions("#microgame.instructions.dont-stop-running");
     }
 
     public override void Start()

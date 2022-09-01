@@ -45,7 +45,7 @@ public class ShootTargetExactNumber : Microgame
         }
 
         // Send instructions to the players
-        ShowInstructions(string.Format("Shoot the target exactly {0} times!", targetHits));
+        ShowInstructions(string.Format("Shoot the target exactly {0} times!", targetHits)); // @localization
     }
     
     public override void Start()
@@ -74,7 +74,7 @@ public class ShootTargetExactNumber : Microgame
             }
             else
             {
-                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime);
+                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime); // @localization
             }
         }
     }

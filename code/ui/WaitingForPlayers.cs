@@ -10,14 +10,10 @@ public class WaitingForPlayers : Panel
     private readonly Label waiting;
     private readonly Label playersConnected;
     
-    private const string waitingForPlayersText = "Game will start once enough players are ready...   ";
-    private const string connectedPlayersText = "{0}/{1}";
-    private const string startingSoonText = "Starting shortly!";
-    
     public WaitingForPlayers()
     {
-        waiting = Add.Label(waitingForPlayersText);
-        playersConnected = Add.Label(connectedPlayersText);
+        waiting = Add.Label("#ui.waiting-for-players");
+        playersConnected = Add.Label();
     }
 
     public override void Tick()
@@ -28,12 +24,12 @@ public class WaitingForPlayers : Panel
         {
             case GameState.WaitingForPlayers:
                 Style.Opacity = 1.0f;
-                waiting.SetText(waitingForPlayersText);
-                playersConnected.SetText(string.Format(connectedPlayersText, GarrywareGame.Current.NumberOfReadyPlayers, GarrywareGame.Current.NumberOfReadiesNeededToStart));
+                waiting.SetText("#ui.waiting-for-players");
+                playersConnected.SetText(string.Format("{0}/{1}", GarrywareGame.Current.NumberOfReadyPlayers, GarrywareGame.Current.NumberOfReadiesNeededToStart)); // @localization
                 break;
             case GameState.StartingSoon:
                 Style.Opacity = 1.0f;
-                waiting.SetText(startingSoonText);
+                waiting.SetText("#ui.starting-soon");
                 playersConnected.SetText(string.Empty);
                 break;
             default:

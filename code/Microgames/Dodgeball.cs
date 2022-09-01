@@ -19,12 +19,12 @@ public class Dodgeball : Microgame
 
     public override void Setup()
     {
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.get-ready");
     }
 
     public override void Start()
     {
-        ShowInstructions("Dodge the balls!");
+        ShowInstructions("#microgame.instructions.dodge-balls");
         GiveWeapon<GravGun>(To.Everyone);
 
         var minimumBalls = 5;

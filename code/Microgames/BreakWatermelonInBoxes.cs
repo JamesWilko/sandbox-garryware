@@ -77,7 +77,7 @@ public class BreakWatermelonInBoxes : Microgame
             crates.Add(crate, prop);
         }
         
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.look-carefully");
     }
     
     public override void Start()
@@ -89,7 +89,7 @@ public class BreakWatermelonInBoxes : Microgame
         }
             
         GiveWeapon<Fists>(To.Everyone);
-        ShowInstructions("Find a watermelon!");
+        ShowInstructions("#microgame.instructions.find-watermelon");
     }
     
     private void OnBreakCrate(BreakableProp crate, Entity attacker)

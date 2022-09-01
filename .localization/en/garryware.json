@@ -1,0 +1,41 @@
+{
+  "ui.waiting-for-players": "Game will start once enough players are ready...   ",
+  "ui.player-count": "{0}/{1}",
+  "ui.starting-soon": "Starting shortly!",
+  "ui.gameover": "Temporary Game Over Screen! Thanks for playing! Returning to lobby soon...",
+  "ui.round": "Round ",
+  "ui.round.win": "You won!",
+  "ui.round.lost": "You failed!",
+  
+  "action.none": "None",
+  "action.attack.primary": "Fire",
+  "action.attack.secondary": "Secondary Fire",
+  "action.drop": "Drop",
+  "action.use": "Use",
+  "action.jump": "Jump",
+  "action.sprint": "Run",
+  "action.crouch": "Crouch",
+  "action.ready-up": "Ready Up",
+  "action.reload": "Reload",
+  
+  "microgame.get-ready": "Get ready...",
+  "microgame.look-carefully": "Look carefully...",
+  "microgame.get-ready-to-rumble": "Get ready to rumble!",
+  
+  "microgame.instructions.shut-it-off": "Shut it off!",
+  "microgame.instructions.break-every-crate": "Break every crate!",
+  "microgame.instructions.break-a-crate": "Break a crate!",
+  "microgame.instructions.smash-watermelon": "Smash a watermelon!",
+  "microgame.instructions.find-watermelon": "Find a watermelon!",
+  "microgame.instructions.shoot-color": "Shoot {0}!",
+  "microgame.instructions.dodge-balls": "Dodge the balls!",
+  "microgame.instructions.hit-someone": "Hit somebody, but don't get hit either!",
+  "microgame.instructions.dont-stop-running": "Don't stop running!",
+  "microgame.instructions.hide-evidence": "Hide the evidence!",
+  "microgame.instructions.inverted-climb": "Climb onto a box!",
+  "microgame.instructions.magdump": "Empty your clip!",
+  "microgame.instructions.shoot-target-at-least": "Shoot the target at least {0} times!",
+  "microgame.instructions.shoot-target-exactly": "Shoot the target exactly {0} times!",
+  
+  "microgame.stat.hit-target-times": "You hit it {0} times!"
+}

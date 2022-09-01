@@ -34,12 +34,12 @@ public class HideTheEvidence : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Get ready...");
+        ShowInstructions("#microgame.get-ready");
     }
 
     public override void Start()
     {
-        ShowInstructions("Hide the evidence!");
+        ShowInstructions("#microgame.instructions.hide-evidence");
         weapons = GiveWeapon<Pistol>(To.Everyone);
         
         int hidingSpotsToSpawn = (int)Math.Clamp(Client.All.Count * Rand.Float(0.25f, 0.5f), 1, Room.OnFloorSpawns.Count);

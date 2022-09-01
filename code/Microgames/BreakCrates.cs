@@ -21,7 +21,7 @@ public class BreakCrates : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("Break a crate!");
+        ShowInstructions("#microgame.instructions.break-a-crate");
     }
 
     public override void Start()
