@@ -34,8 +34,6 @@ public partial class GravityGun : Carriable
     private Entity lastTargetedEntity;
     private TimeSince timeSinceEntityLastTargeted;
     
-    private CollisionGroup heldEntityInitialCollisionGroup;
-
     private const string grabbedTag = "grabbed";
 
     public override void Spawn()
@@ -63,19 +61,7 @@ public partial class GravityGun : Carriable
             {
                 if (Input.Pressed(InputButton.PrimaryAttack))
                 {
-                    if (HeldBody.PhysicsGroup.BodyCount > 1)
-                    {
-                        // Don't throw ragdolls as hard
-                        HeldBody.PhysicsGroup.ApplyImpulse(eyeDir * (ThrowForce * 0.5f), true);
-                        HeldBody.PhysicsGroup.ApplyAngularImpulse(Vector3.Random * ThrowForce, true);
-                    }
-                    else
-                    {
-                        HeldBody.ApplyImpulse(eyeDir * (HeldBody.Mass * ThrowForce));
-                        HeldBody.ApplyAngularImpulse(Vector3.Random * (HeldBody.Mass * ThrowForce));
-                    }
-
-                    GrabEnd();
+                    PuntGrabbedEntity();
                 }
                 else if (Input.Pressed(InputButton.SecondaryAttack))
                 {
@@ -107,8 +93,7 @@ public partial class GravityGun : Carriable
             {
                 if (tr.Distance < MaxPushDistance)
                 {
-                    var pushScale = 1.0f - Math.Clamp(tr.Distance / MaxPushDistance, 0.0f, 1.0f);
-                    body.ApplyImpulseAt(tr.EndPosition, eyeDir * (body.Mass * (PushForce * pushScale)));
+                    PuntTracedEntity(tr);
                 }
             }
             else if (Input.Down(InputButton.SecondaryAttack))
@@ -327,6 +312,17 @@ public partial class GravityGun : Carriable
         // @todo: we don't want to disable ALL collisions, just the one between the player and the held prop. figure out how to do this?
         HeldEntity.EnableAllCollisions = false;
 
+        if (HeldEntity is IGravityGunCallback callbacks)
+        {
+            callbacks.OnGravityGunPickedUp(new GravityGunInfo()
+            {
+                Target = HeldEntity,
+                Weapon = this,
+                Pawn = Owner,
+                Instigator = Owner.Client
+            });
+        }
+        
         Client?.Pvs.Add(HeldEntity);
     }
 
@@ -349,6 +345,17 @@ public partial class GravityGun : Carriable
 
         if (HeldEntity.IsValid())
         {
+            if (HeldEntity is IGravityGunCallback callbacks)
+            {
+                callbacks.OnGravityGunDropped(new GravityGunInfo()
+                {
+                    Target = HeldEntity,
+                    Weapon = this,
+                    Pawn = Owner,
+                    Instigator = Owner.Client
+                });
+            }
+            
             // @todo: we don't want to disable ALL collisions, just the one between the player and the held prop. figure out how to do this?
             HeldEntity.EnableAllCollisions = true;
             HeldEntity.Tags.Remove(grabbedTag);
@@ -368,6 +375,55 @@ public partial class GravityGun : Carriable
         HoldRot = rot * HeldRot;
     }
 
+    private void PuntGrabbedEntity()
+    {
+        var eyeDir = Owner.EyeRotation.Forward;
+        
+        if (HeldBody.PhysicsGroup.BodyCount > 1)
+        {
+            // Don't throw ragdolls as hard
+            HeldBody.PhysicsGroup.ApplyImpulse(eyeDir * (ThrowForce * 0.5f), true);
+            HeldBody.PhysicsGroup.ApplyAngularImpulse(Vector3.Random * ThrowForce, true);
+        }
+        else
+        {
+            HeldBody.ApplyImpulse(eyeDir * (HeldBody.Mass * ThrowForce));
+            HeldBody.ApplyAngularImpulse(Vector3.Random * (HeldBody.Mass * ThrowForce));
+        }
+
+        GrabEnd();
+        
+        if (HeldEntity is IGravityGunCallback callbacks)
+        {
+            callbacks.OnGravityGunPunted(new GravityGunInfo()
+            {
+                Target = HeldEntity,
+                Weapon = this,
+                Pawn = Owner,
+                Instigator = Owner.Client
+            });
+        }
+    }
+
+    private void PuntTracedEntity(TraceResult tr)
+    {
+        var eyeDir = Owner.EyeRotation.Forward;
+        
+        var pushScale = 1.0f - Math.Clamp(tr.Distance / MaxPushDistance, 0.0f, 1.0f);
+        tr.Body.ApplyImpulseAt(tr.EndPosition, eyeDir * (tr.Body.Mass * (PushForce * pushScale)));
+        
+        if (HeldEntity is IGravityGunCallback callbacks)
+        {
+            callbacks.OnGravityGunPunted(new GravityGunInfo()
+            {
+                Target = HeldEntity,
+                Weapon = this,
+                Pawn = Owner,
+                Instigator = Owner.Client
+            });
+        }
+    }
+    
     public override bool IsUsable(Entity user)
     {
         return Owner == null || HeldBody.IsValid();

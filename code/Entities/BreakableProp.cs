@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using System;
 using System.Threading.Tasks;
-using SandboxEditor;
 
 namespace Garryware.Entities;
 
@@ -12,7 +11,7 @@ namespace Garryware.Entities;
 /// If the model used by the prop is configured to be used as a prop_dynamic (i.e. it should not be physically simulated) then it CANNOT be
 /// used as a prop_physics. Upon level load it will display a warning in the console and remove itself. Use a prop_dynamic instead.
 /// </summary>
-public partial class BreakableProp : BasePhysics
+public partial class BreakableProp : BasePhysics, IGravityGunCallback
 {
     /// <summary>
     /// If set, the prop will spawn with motion disabled and will act as a nav blocker until broken.
@@ -401,4 +400,20 @@ public partial class BreakableProp : BasePhysics
         UpdateGameColorMaterialOverride();
     }
     
+    [Net] public Client ClientLastPickedUpBy { get; set; }
+
+    public void OnGravityGunPickedUp(GravityGunInfo info)
+    {
+        ClientLastPickedUpBy = info.Instigator;
+    }
+
+    public void OnGravityGunDropped(GravityGunInfo info)
+    {
+        ClientLastPickedUpBy = info.Instigator;
+    }
+
+    public void OnGravityGunPunted(GravityGunInfo info)
+    {
+        ClientLastPickedUpBy = info.Instigator;
+    }
 }
