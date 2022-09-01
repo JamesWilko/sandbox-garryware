@@ -22,5 +22,6 @@ public static class MicrogamesList
         new BreakWatermelon(),
         new BreakWatermelonInBoxes(),
         new HideTheEvidence(),
+        new PickupThatCan()
     };
 }
