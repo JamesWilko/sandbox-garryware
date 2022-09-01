@@ -15,6 +15,8 @@ public enum MicrogameRules
     WinOnTimeout = 1 << 0, // Everyone who hasn't already lost will win automatically when the game finishes
     LoseOnTimeout = 1 << 1, // Everyone who hasn't already won will lose automatically when the game finishes
     EndEarlyIfEverybodyLockedIn = 1 << 2, // End the game early if everybody locks in a result
+    
+    DontClearInstructions = 1 << 3,
 }
 
 public enum MicrogameRoom
@@ -174,7 +176,9 @@ public abstract class Microgame
     /// </summary>
     protected void ClearHud()
     {
-        GameEvents.ClearInstructions();
+        if (!Rules.HasFlag(MicrogameRules.DontClearInstructions))
+            GameEvents.ClearInstructions();
+        
         GarrywareGame.Current.ClearCountdownTimer();
         GarrywareGame.Current.AvailableActions = PlayerAction.None;
     }

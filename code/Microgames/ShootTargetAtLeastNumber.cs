@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Garryware.Entities;
 using Sandbox;
 
 namespace Garryware.Microgames;
 
-public class ShootTargetExactNumber : Microgame
+public class ShootTargetAtLeastNumber : Microgame
 {
     private int targetHits;
     private readonly Dictionary<GarrywarePlayer, int> playerHits = new();
     private ShuffledDeck<float> scalesDeck;
-    
-    private const float statDisplayTime = 2.0f;
 
-    public ShootTargetExactNumber()
+    private const float statDisplayTime = 2.0f;
+    
+    public ShootTargetAtLeastNumber()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontClearInstructions;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
@@ -45,7 +46,7 @@ public class ShootTargetExactNumber : Microgame
         }
 
         // Send instructions to the players
-        ShowInstructions(string.Format("Shoot the target exactly {0} times!", targetHits));
+        ShowInstructions(string.Format("Shoot the target at least {0} times!", targetHits));
     }
     
     public override void Start()
@@ -65,16 +66,17 @@ public class ShootTargetExactNumber : Microgame
     {
         RemoveAllWeapons();
         
-        // Assign everybody who shot it the correct amount a win
+        // Assign everybody who shot it at least the correct amount a win
         foreach (var playerPair in playerHits)
         {
-            if (playerPair.Value == targetHits)
+            if (playerPair.Value >= targetHits)
             {
                 playerPair.Key.FlagAsRoundWinner();
+                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime);
             }
             else
             {
-                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime);
+                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You only hit it {0} times!", playerPair.Value), statDisplayTime);
             }
         }
     }

@@ -18,5 +18,6 @@ public static class MicrogamesList
         new DontGetHit(),
         new Dodgeball(),
         new ShootTargetExactNumber(),
+        new ShootTargetAtLeastNumber(),
     };
 }
