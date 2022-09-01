@@ -16,7 +16,7 @@ public class ShootTargetAtLeastNumber : Microgame
     public ShootTargetAtLeastNumber()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontClearInstructions;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack;
+        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Reload;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
         GameLength = 8;
 

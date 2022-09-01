@@ -15,6 +15,7 @@ public enum PlayerAction
     Sprint = 1 << 5,
     Crouch = 1 << 6,
     ReadyUp = 1 << 7,
+    Reload = 1 << 8,
 }
 
 public static class PlayerActionsExtension
@@ -31,6 +32,7 @@ public static class PlayerActionsExtension
         PlayerAction.Sprint => "Run",
         PlayerAction.Crouch => "Crouch",
         PlayerAction.ReadyUp => "Ready Up",
+        PlayerAction.Reload => "Reload",
         _ => "Unknown Action"
     };
 
@@ -45,6 +47,7 @@ public static class PlayerActionsExtension
         PlayerAction.Sprint => InputButton.Run,
         PlayerAction.Crouch => InputButton.Duck,
         PlayerAction.ReadyUp => InputButton.Flashlight,
+        PlayerAction.Reload => InputButton.Reload,
         _ => 0
     };
     
