@@ -72,8 +72,9 @@ public abstract class Microgame
             }
         }
 
-        // Clear decals
+        // Clear decals and debris
         Decal.Clear(true, true);
+        Debris.Clear();
 
         // Change to the correct room if we're not in it
         // If we change area then wait a second or two extra so that players can get their bearings

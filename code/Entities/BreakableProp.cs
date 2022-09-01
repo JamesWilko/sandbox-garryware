@@ -313,6 +313,7 @@ public partial class BreakableProp : BasePhysics
         var result = new Breakables.Result();
         result.CopyParamsFrom(LastDamage);
         Breakables.Break(this, result);
+        Debris.Add(result.Props);
 
         if (CanGibsBurst)
         {
