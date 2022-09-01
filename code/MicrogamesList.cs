@@ -19,5 +19,6 @@ public static class MicrogamesList
         new Dodgeball(),
         new ShootTargetExactNumber(),
         new ShootTargetAtLeastNumber(),
+        new BreakWatermelon(),
     };
 }
