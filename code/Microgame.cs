@@ -380,4 +380,24 @@ public abstract class Microgame
 
     }
 
+    protected int GetRandomAdjustedClientCount(float minMultiplier, float maxMultiplier)
+    {
+        if (maxMultiplier < 1.0f)
+        {
+            return Math.Clamp((int)Math.Ceiling(Client.All.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1, Client.All.Count);
+        }
+        else
+        {
+            return Math.Max((int)Math.Ceiling(Client.All.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1);
+        }
+    }
+
+    protected void Repeat(Action func, int times)
+    {
+        for (int i = 0; i < times; ++i)
+        {
+            func();
+        }
+    }
+
 }

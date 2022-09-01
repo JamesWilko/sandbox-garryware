@@ -24,5 +24,6 @@ public static class MicrogamesList
         new HideTheEvidence(),
         new PickupThatCan(),
         new TidyUpEverything(),
+        new CatchWhiteBall(),
     };
 }

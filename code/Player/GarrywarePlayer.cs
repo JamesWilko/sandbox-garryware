@@ -364,11 +364,15 @@ public partial class GarrywarePlayer : Player
     
     public void FlagAsRoundWinner()
     {
+        if(HasLockedInResult) return;
+        
         RoundResult = RoundResult.Won;
     }
 
     public void FlagAsRoundLoser()
     {
+        if(HasLockedInResult) return;
+        
         RoundResult = RoundResult.Lost;
     }
     

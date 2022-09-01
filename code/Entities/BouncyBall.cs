@@ -3,13 +3,15 @@ using System;
 
 namespace Garryware.Entities;
 
-public partial class BouncyBall : Prop
+public partial class BouncyBall : Prop, IGravityGunCallback
 {
     public float MaxSpeed { get; set; } = 1000.0f;
 
     public delegate void EntityHitDelegate(BouncyBall self, CollisionEventData eventData);
-
     public event EntityHitDelegate EntityHit;
+    
+    public delegate void GravityGunEventDelegate(BouncyBall self, GravityGunInfo info);
+    public event GravityGunEventDelegate Caught;
 
     public override void Spawn()
     {
@@ -31,5 +33,18 @@ public partial class BouncyBall : Prop
         {
             EntityHit?.Invoke(this, eventData);
         }
+    }
+
+    public void OnGravityGunPickedUp(GravityGunInfo info)
+    {
+        Caught?.Invoke(this, info);
+    }
+
+    public void OnGravityGunDropped(GravityGunInfo info)
+    {
+    }
+
+    public void OnGravityGunPunted(GravityGunInfo info)
+    {
     }
 }
