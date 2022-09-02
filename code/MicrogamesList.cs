@@ -26,5 +26,6 @@ public static class MicrogamesList
         new TidyUpEverything(),
         new CatchWhiteBall(),
         new CrateColorNumberMemory(),
+        new Blackjack(),
     };
 }

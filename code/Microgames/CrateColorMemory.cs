@@ -26,11 +26,9 @@ public class CrateColorMemory : Microgame
         int cratesSpawned = Random.Shared.Int(4, 6);
         for (int i = 0; i < cratesSpawned; ++i)
         {
-            var spawn = Room.AboveBoxSpawnsDeck.Next();
             var ent = new BreakableProp
             {
-                Position = spawn.Position,
-                Rotation = spawn.Rotation,
+                Transform = Room.AboveBoxSpawnsDeck.Next().Transform,
                 Model = CommonEntities.Crate,
                 CanGib = false,
                 PhysicsEnabled = false,
