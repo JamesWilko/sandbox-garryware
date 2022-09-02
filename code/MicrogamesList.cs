@@ -25,5 +25,6 @@ public static class MicrogamesList
         new PickupThatCan(),
         new TidyUpEverything(),
         new CatchWhiteBall(),
+        new CrateColorNumberMemory(),
     };
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sandbox;
 
 namespace Garryware;
 
@@ -86,6 +87,11 @@ public class ShuffledDeck<T>
             int k = random.Next(n + 1);
             (list[k], list[n]) = (list[n], list[k]);
         }
+    }
+
+    public T GetRandomUsedElement()
+    {
+        return Rand.FromList(usedElements);
     }
 
 }
