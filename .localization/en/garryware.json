@@ -41,6 +41,8 @@
   "microgame.instructions.catch-white": "Catch a white ball!",
   "microgame.instructions.blackjack": "Get to 21!",
   "microgame.instructions.blackjack.bust": "Bust!",
+  "microgame.instructions.stay-grounded.start": "Get on the floor!",
+  "microgame.instructions.stay-grounded.dont-get-hit": "Stay on the floor, don't get hit!",
   
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

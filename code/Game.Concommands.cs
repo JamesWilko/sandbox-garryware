@@ -25,6 +25,9 @@ public partial class GarrywareGame
                     case "fists":
                         weapon = new Fists();
                         break;
+                    case "launcher":
+                        weapon = new LauncherPistol();
+                        break;
                     case "gravgun":
                         weapon = new GravityGun();
                         var ent = new BreakableProp
