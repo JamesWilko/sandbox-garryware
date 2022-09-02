@@ -94,6 +94,18 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     /// This is so that high latency players can still get accurate results when a microgame constantly and quickly changes the properties of this prop. 
     /// </summary>
     [Net] public bool RaisesClientAuthDamageEvent { get; set; }
+    
+    /// <summary>
+    /// Should a 3d text panel be shown in the world over this prop?
+    /// </summary>
+    [Net, Change(nameof(OnShowWorldTextChanged))] public bool ShowWorldText { get; set; }
+    
+    /// <summary>
+    /// What text should be shown on the 3d text panel?
+    /// </summary>
+    [Net] public string WorldText { get; set; }
+
+    private EntityWorldTextPanel WorldTextPanel { get; set; }
         
     public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
     public event AttackerDelegate Damaged;
@@ -125,6 +137,16 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         UpdateGameColorMaterialOverride();
         
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup
+    }
+    
+    public override void ClientSpawn()
+    {
+        base.ClientSpawn();
+
+        if (ShowWorldText)
+        {
+            CreateWorldText();
+        }
     }
     
     protected virtual void SetupPhysics()
@@ -196,6 +218,13 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         //
         if (Health <= 0)
             Health = -1;
+    }
+    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        AttemptDeleteWorldText();
     }
 
     protected DamageInfo LastDamage;
@@ -416,4 +445,47 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     {
         ClientLastPickedUpBy = info.Instigator;
     }
+    
+    private void CreateWorldText()
+    {
+        AttemptDeleteWorldText();
+        
+        WorldTextPanel = new EntityWorldTextPanel
+        {
+            Transform = Transform,
+            Owner = this
+        };
+    }
+    
+    private void AttemptDeleteWorldText()
+    {
+        if (!IsClient || WorldTextPanel == null)
+            return;
+        
+        WorldTextPanel.Delete();
+        WorldTextPanel = null;
+    }
+
+    private void OnShowWorldTextChanged(bool oldValue, bool newValue)
+    {
+        if (ShowWorldText)
+        {
+            CreateWorldText();
+        }
+        else
+        {
+            AttemptDeleteWorldText();
+        }
+    }
+
+    [Event.Tick.Client]
+    private void UpdateWorldTextPanelTick()
+    {
+        if (WorldTextPanel != null)
+        {
+            WorldTextPanel.Text = WorldText;
+        }
+    }
+
+    
 }
