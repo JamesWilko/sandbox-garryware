@@ -43,6 +43,9 @@
   "microgame.instructions.blackjack.bust": "Bust!",
   "microgame.instructions.stay-grounded.start": "Get on the floor!",
   "microgame.instructions.stay-grounded.dont-get-hit": "Stay on the floor, don't get hit!",
+  "microgame.instructions.sky-high.intro": "When time runs out...",
+  "microgame.instructions.sky-high.sky": "be high in the sky!",
+  "microgame.instructions.sky-high.ground": "be on the ground!",
   
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
