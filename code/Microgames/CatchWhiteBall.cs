@@ -34,7 +34,7 @@ public class CatchWhiteBall : Microgame
             var ball = new BouncyBall
             {
                 Transform = Room.InAirSpawnsDeck.Next().Transform,
-                RenderColor = Color.White
+                GameColor = GameColor.White
             };
             ball.ApplyLocalImpulse(Vector3.Random * 512.0f);
             AutoCleanup(ball);
@@ -48,7 +48,7 @@ public class CatchWhiteBall : Microgame
             var ball = new BouncyBall
             {
                 Transform = Room.InAirSpawnsDeck.Next().Transform,
-                RenderColor = CommonEntities.ColorsDeck.Next().AsColor() // @note: use colors deck here as it can't generate white
+                GameColor = CommonEntities.ColorsDeck.Next() // @note: use colors deck here as it can't generate white
             };
             ball.ApplyLocalImpulse(Vector3.Random * 512.0f);
             AutoCleanup(ball);

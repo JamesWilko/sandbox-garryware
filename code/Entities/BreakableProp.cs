@@ -431,17 +431,17 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     
     [Net] public Client ClientLastPickedUpBy { get; set; }
 
-    public void OnGravityGunPickedUp(GravityGunInfo info)
+    public virtual void OnGravityGunPickedUp(GravityGunInfo info)
     {
         ClientLastPickedUpBy = info.Instigator;
     }
 
-    public void OnGravityGunDropped(GravityGunInfo info)
+    public virtual void OnGravityGunDropped(GravityGunInfo info)
     {
         ClientLastPickedUpBy = info.Instigator;
     }
 
-    public void OnGravityGunPunted(GravityGunInfo info)
+    public virtual void OnGravityGunPunted(GravityGunInfo info)
     {
         ClientLastPickedUpBy = info.Instigator;
     }

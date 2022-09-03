@@ -3,7 +3,7 @@ using System;
 
 namespace Garryware.Entities;
 
-public partial class BouncyBall : Prop, IGravityGunCallback
+public partial class BouncyBall : BreakableProp
 {
     public float MaxSpeed { get; set; } = 1000.0f;
 
@@ -15,12 +15,10 @@ public partial class BouncyBall : Prop, IGravityGunCallback
 
     public override void Spawn()
     {
-        base.Spawn();
-
         Model = CommonEntities.Ball;
-        SetupPhysicsFromModel(PhysicsMotionType.Dynamic, false);
         Scale = Rand.Float(1.5f, 2.0f);
-        RenderColor = Color.Random;
+        Indestructible = true;
+        base.Spawn();
     }
 
     protected override void OnPhysicsCollision(CollisionEventData eventData)
@@ -35,16 +33,9 @@ public partial class BouncyBall : Prop, IGravityGunCallback
         }
     }
 
-    public void OnGravityGunPickedUp(GravityGunInfo info)
+    public override void OnGravityGunPickedUp(GravityGunInfo info)
     {
+        base.OnGravityGunPickedUp(info);
         Caught?.Invoke(this, info);
-    }
-
-    public void OnGravityGunDropped(GravityGunInfo info)
-    {
-    }
-
-    public void OnGravityGunPunted(GravityGunInfo info)
-    {
     }
 }

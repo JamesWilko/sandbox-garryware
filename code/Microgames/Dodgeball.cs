@@ -36,7 +36,8 @@ public class Dodgeball : Microgame
             var ent = new BouncyBall
             {
                 Position = spawn.Position,
-                Rotation = spawn.Rotation
+                Rotation = spawn.Rotation,
+                RenderColor = Color.Random
             };
             ent.ApplyLocalImpulse(Vector3.Random * 1024.0f);
             ent.EntityHit += OnEntityHit;
