@@ -110,7 +110,20 @@ public partial class GarrywarePlayer : Player
         // Apply knockback from explosions
         if (info.Flags.HasFlag(DamageFlags.Blast) && Controller is GarrywareWalkController controller)
         {
-            controller.Knockback(lastDamage.Force);
+            var knockbackForce = lastDamage.Force;
+            const float rocketJumpVerticalForceMultiplier = 2.2f;
+            
+            // Rocket-jump detection
+            if (GroundEntity == null)
+            {
+                var directionToExplosion = (info.Position - Position).Normal;
+                if (Vector3.Dot(directionToExplosion, Vector3.Down) > 0.7f)
+                {
+                    knockbackForce.z *= rocketJumpVerticalForceMultiplier;
+                }
+            }
+
+            controller.Knockback(knockbackForce);
         }
     }
 

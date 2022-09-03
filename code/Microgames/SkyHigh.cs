@@ -12,7 +12,7 @@ public class SkyHigh : Microgame
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         WarmupLength = 3;
-        GameLength = 1.25f;
+        GameLength = 1.5f;
     }
 
     public override void Setup()

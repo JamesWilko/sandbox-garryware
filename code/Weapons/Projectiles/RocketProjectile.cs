@@ -1,6 +1,4 @@
-﻿using Sandbox;
-
-namespace Garryware;
+﻿namespace Garryware;
 
 public class RocketProjectile : Projectile
 {
@@ -12,10 +10,13 @@ public class RocketProjectile : Projectile
         {
             Position = Position,
             Rotation = Rotation,
+            UseForcePositionOverride = true,
+            ForcePosition = Position - Vector3.Up * 50.0f,
             ParticleOverride = "particles/explosion/barrel_explosion/explosion_barrel.vpcf",
             SoundOverride = "weapon.rpg.explosion",
             Radius = 200.0f,
             Damage = 0f,
+            ForceScale = 1.0f,
             RemoveOnExplode = true
         };
         boom.Explode(this);
