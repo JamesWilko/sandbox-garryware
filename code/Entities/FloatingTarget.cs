@@ -14,7 +14,7 @@ public class FloatingTarget : BreakableProp
     {
         Model = CommonEntities.Ball;
         Indestructible = true;
-        EnableDrawing = false;
+        EnableShadowOnly = true;
         base.Spawn();
     }
 
