@@ -8,9 +8,7 @@
   "AssetsPath": "",
   "ResourcePaths": [
     "/fonts/*",
-    "/ui/*",
-    "/materials/*",
-    "/postprocess/*"
+    "/ui/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",
@@ -21,7 +19,7 @@
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Official",
     "MapList": [
-      "garryware"
+      "dhi.garryware_map"
     ],
     "RankType": "None",
     "PerMapRanking": false,
@@ -34,10 +32,13 @@
         "Choices": [],
         "ConVarName": "gw_max_rounds",
         "DisplayName": "Rounds",
-        "DefaultValue": "30",
+        "DefaultValue": "40",
         "Minimum": 10,
         "Maximum": 60
       }
+    },
+    "ControlModes": {
+      "Keyboard": true
     }
   }
 }
