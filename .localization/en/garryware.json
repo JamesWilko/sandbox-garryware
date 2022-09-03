@@ -6,7 +6,7 @@
   "ui.round": "Round ",
   "ui.round.win": "You won!",
   "ui.round.lost": "You failed!",
-  
+
   "action.none": "None",
   "action.attack.primary": "Fire",
   "action.attack.secondary": "Secondary Fire",
@@ -17,11 +17,11 @@
   "action.crouch": "Crouch",
   "action.ready-up": "Ready Up",
   "action.reload": "Reload",
-  
+
   "microgame.get-ready": "Get ready...",
   "microgame.look-carefully": "Look carefully...",
   "microgame.get-ready-to-rumble": "Get ready to rumble!",
-  
+
   "microgame.instructions.shut-it-off": "Shut it off!",
   "microgame.instructions.break-every-crate": "Break every crate!",
   "microgame.instructions.break-a-crate": "Break a crate!",
@@ -49,6 +49,7 @@
   "microgame.instructions.rocket-jump": "Rocket jump on to a platform!",
   "microgame.instructions.fewest-players-on-platform": "Stand on the platform with the fewest players!",
   "microgame.instructions.dont-move": "Don't move!",
-  
+  "microgame.instructions.sit-in-a-chair": "Sit in a chair!",
+
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
