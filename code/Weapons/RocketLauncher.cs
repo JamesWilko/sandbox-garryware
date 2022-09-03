@@ -21,6 +21,13 @@ public partial class RocketLauncher : ProjectileWeapon<RocketProjectile>
         return false;
     }
     
+    public override void SimulateAnimator(CitizenAnimationHelper anim)
+    {
+        anim.HoldType = CitizenAnimationHelper.HoldTypes.Shotgun;
+        anim.Handedness = CitizenAnimationHelper.Hand.Right;
+        anim.AimBodyWeight = 1.0f;
+    }
+    
     public override void AttackPrimary()
     {
         base.AttackPrimary();
