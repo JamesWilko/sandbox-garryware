@@ -106,6 +106,12 @@ public partial class GarrywarePlayer : Player
         lastDamage = info;
         TookDamage(lastDamage.Flags, lastDamage.Position, lastDamage.Force);
         Hurt?.Invoke(this, info);
+        
+        // Apply knockback from explosions
+        if (info.Flags.HasFlag(DamageFlags.Blast) && Controller is GarrywareWalkController controller)
+        {
+            controller.Knockback(lastDamage.Force);
+        }
     }
 
     [ClientRpc]

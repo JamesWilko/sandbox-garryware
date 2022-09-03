@@ -4,7 +4,7 @@ using System;
 
 namespace Garryware;
 
-partial class AmmoWeapon : Weapon
+public partial class AmmoWeapon : Weapon
 {
     [Net, Predicted] public Entity LastOwner { get; set; }
     
