@@ -17,7 +17,7 @@ public partial class BouncyBall : Prop, IGravityGunCallback
     {
         base.Spawn();
 
-        SetModel("models/ball/ball.vmdl");
+        Model = CommonEntities.Ball;
         SetupPhysicsFromModel(PhysicsMotionType.Dynamic, false);
         Scale = Rand.Float(1.5f, 2.0f);
         RenderColor = Color.Random;
