@@ -57,6 +57,7 @@ public class ShootTargetExactNumber : Microgame
         if (attacker is GarrywarePlayer player)
         {
             playerHits[player] = playerHits.GetValueOrDefault(player) + 1;
+            SoundUtility.PlayTargetHit(To.Single(player));
         }
     }
 

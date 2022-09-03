@@ -100,6 +100,12 @@ public static partial class SoundUtility
         StopBGM();
     }
 
+    [ClientRpc]
+    public static void PlayTargetHit()
+    {
+        Sound.FromScreen("microgame.hit");
+    }
+
     public static void PlayPlayerLockedInWin(Entity playerEntity)
     {
         
