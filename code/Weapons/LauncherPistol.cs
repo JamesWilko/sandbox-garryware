@@ -10,6 +10,19 @@ partial class LauncherPistol : AmmoWeapon
 
     public override int MagazineCapacity => 1;
 
+    private readonly ShuffledDeck<GameColor> beamColors;
+    
+    public LauncherPistol()
+    {
+        beamColors = new ShuffledDeck<GameColor>();
+        beamColors.Add(GameColor.Red);
+        beamColors.Add(GameColor.Green);
+        beamColors.Add(GameColor.Magenta);
+        beamColors.Add(GameColor.Yellow);
+        beamColors.Add(GameColor.Cyan);
+        beamColors.Shuffle();
+    }
+
     public override void Spawn()
     {
         base.Spawn();
@@ -31,6 +44,27 @@ partial class LauncherPistol : AmmoWeapon
         TakeAmmo(1);
     }
     
+    protected override void ShootEffects()
+    {
+        base.ShootEffects();
+        if(IsServer) return;
+        
+        foreach (var tr in TraceBullet(Owner.EyePosition, Owner.EyePosition + Owner.EyeRotation.Forward * 5000))
+        {
+            if (!tr.Entity.IsValid())
+                continue;
+            
+            var muzzle = EffectEntity.GetAttachment("muzzle").GetValueOrDefault();
+            var fx = Particles.Create("particles/launcher.beam.vpcf");
+            fx.SetPosition(0, muzzle.Position);
+            fx.SetPosition(1, tr.HitPosition);
+            fx.SetPosition(2, beamColors.Next().AsColor());
+            fx.SetPosition(3, new Vector3(7f, 1f, 0f));
+            fx.Destroy();
+            break;
+        }
+    }
+    
     public override void ShootBullet(Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize)
     {
         var forward = dir;
@@ -39,8 +73,6 @@ partial class LauncherPistol : AmmoWeapon
         
         foreach (var tr in TraceBullet(pos, pos + forward * 5000, bulletSize))
         {
-            // @todo: effects
-
             if (!IsServer) continue;
             if (!tr.Entity.IsValid()) continue;
             
