@@ -32,5 +32,6 @@ public static class MicrogamesList
         new SkyHigh(),
         new RocketJump(),
         new FewestPlayersOnPlatform(),
+        new DontMove(),
     };
 }
