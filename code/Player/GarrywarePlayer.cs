@@ -386,14 +386,23 @@ public partial class GarrywarePlayer : Player
     /// </summary>
     public bool IsOnABox()
     {
+        return Tags.Has(Garryware.Tags.OnBox);
+    }
+
+    /// <summary>
+    /// Gets the OnBoxTrigger that the player is currently in, or null if not in one
+    /// </summary>
+    public Entities.OnBoxTrigger GetOnBoxTrigger()
+    {
+        if (!Tags.Has(Garryware.Tags.OnBox)) return null;
         foreach (var trigger in GarrywareGame.Current.CurrentRoom.OnBoxTriggers)
         {
             if (trigger.ContainsEntity(this))
             {
-                return true;
+                return trigger;
             }
         }
-        return false;
+        return null;
     }
 
     /// <summary>
