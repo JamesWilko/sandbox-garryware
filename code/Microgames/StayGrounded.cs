@@ -11,6 +11,7 @@ public class StayGrounded : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Boxes };
         WarmupLength = 2;
         GameLength = 5;
+        MinimumPlayers = 2;
     }
     
     public override void Setup()
