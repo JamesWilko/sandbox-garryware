@@ -75,7 +75,7 @@ public class FloatingTarget : BreakableProp
     public virtual void DoRender(SceneObject obj)
     {
         Render.SetupLighting(obj);
-
+        
         // Create the vertex buffer for the sprite
         var vb = Render.GetDynamicVB();
 

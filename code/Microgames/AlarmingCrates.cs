@@ -55,7 +55,7 @@ public class AlarmingCrates : Microgame
             {
                 Position = spawnCrate.Position + Vector3.Up * 5,
                 Rotation = spawnCrate.Rotation,
-                Model = CommonEntities.Ball,
+                Model = CommonEntities.BeachBall,
                 PhysicsEnabled = false
             };
             AutoCleanup(alarmProp);

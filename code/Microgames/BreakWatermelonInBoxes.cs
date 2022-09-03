@@ -21,7 +21,7 @@ public class BreakWatermelonInBoxes : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 5;
         
-        decoyModels.Add(CommonEntities.Ball);
+        decoyModels.Add(CommonEntities.BeachBall);
         decoyModels.Add(Model.Load("models/sbox_props/fire_extinguisher/fire_extinguisher.vmdl"));
         decoyModels.Add(Model.Load("models/sbox_props/traffic_cone/traffic_cone.vmdl"));
         decoyModels.Add(Model.Load("models/sbox_props/gas_cylinder_fat/gas_cylinder_fat.vmdl"));
