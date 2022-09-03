@@ -17,7 +17,7 @@ public class ShootTargetExactNumber : Microgame
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontClearInstructions;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Reload;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
-        GameLength = 8;
+        GameLength = 10;
 
         scalesDeck = new ShuffledDeck<float>();
         scalesDeck.Add(5.0f, 3);
