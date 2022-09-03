@@ -34,7 +34,7 @@ public class SkyHigh : Microgame
             if (client.Pawn is GarrywarePlayer player)
             {
                 if ((wantsPlayersInSky && player.Position.z > 200.0f)
-                    || (!wantsPlayersInSky && player.Position.z < 100.0f))
+                    || (!wantsPlayersInSky && player.Position.z < 60.0f))
                 {
                     player.FlagAsRoundWinner();
                 }
