@@ -14,9 +14,6 @@ namespace Garryware;
 [Title("Explosion"), Category("Effects"), Icon("radar")]
 public partial class ExplosionEntity : Entity
 {
-    [ConVar.Server]
-    static bool debug_prop_explosion { get; set; } = false;
-
     /// <summary>
     /// Radius of the explosion.
     /// </summary>
@@ -77,9 +74,6 @@ public partial class ExplosionEntity : Entity
         // Damage, etc
         var overlaps = Entity.FindInSphere(Position, Radius);
 
-        if (debug_prop_explosion)
-            DebugOverlay.Sphere(Position, Radius, Color.Orange, 5, true);
-
         foreach (var overlap in overlaps)
         {
             if (overlap is not ModelEntity ent || !ent.IsValid())
@@ -99,22 +93,6 @@ public partial class ExplosionEntity : Entity
             var damageDist = Vector3.DistanceBetween(Position, targetPos);
             if (damageDist > Radius)
                 continue;
-
-            var tr = Trace.Ray(Position, targetPos)
-                .Ignore(activator)
-                .WorldOnly()
-                .Run();
-
-            if (tr.Fraction < 0.95f)
-            {
-                if (debug_prop_explosion)
-                    DebugOverlay.Line(Position, tr.EndPosition, Color.Red, 5, true);
-
-                continue;
-            }
-
-            if (debug_prop_explosion)
-                DebugOverlay.Line(Position, targetPos, 5, true);
             
             var damageDistanceMul = 1.0f - Math.Clamp(damageDist / Radius, 0.0f, 1.0f);
             var damage = Damage * damageDistanceMul;

@@ -11,7 +11,7 @@ public class DontMove : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         WarmupLength = 1.5f;
         GameLength = 5;
-        // MinimumPlayers = 2;
+        MinimumPlayers = 2;
     }
     
     public override void Setup()
