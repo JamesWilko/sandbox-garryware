@@ -6,6 +6,7 @@ namespace Garryware;
 public class ProjectileWeapon<T> : AmmoWeapon where T : Entity, new()
 {
     public virtual float ProjectileLaunchSpeed => 500.0f;
+    public virtual float LaunchDistanceOffset => 20.0f;
     
     protected List<Entity> OwnedProjectiles { get; private set; } = new();
     
@@ -51,7 +52,7 @@ public class ProjectileWeapon<T> : AmmoWeapon where T : Entity, new()
 
         using (Prediction.Off())
         {
-            var location = Owner.EyePosition + Owner.EyeRotation.Forward * 20.0f;
+            var location = Owner.EyePosition + Owner.EyeRotation.Forward * LaunchDistanceOffset;
             var rotation = Owner.EyeRotation;
             var velocity = forward * launchSpeed;
             OwnedProjectiles.Add(CreateProjectile(location, rotation, velocity));

@@ -1,4 +1,5 @@
-﻿using Garryware.UI;
+﻿using System;
+using Garryware.UI;
 using Sandbox;
 
 namespace Garryware;
@@ -104,7 +105,6 @@ public partial class GarrywarePlayer : Player
         base.TakeDamage(info);
         
         lastDamage = info;
-        TookDamage(lastDamage.Flags, lastDamage.Position, lastDamage.Force);
         Hurt?.Invoke(this, info);
         
         // Apply knockback from explosions
@@ -127,11 +127,20 @@ public partial class GarrywarePlayer : Player
         }
     }
 
-    [ClientRpc]
-    public void TookDamage(DamageFlags damageFlags, Vector3 forcePos, Vector3 force)
+    protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
-    }
+        base.OnPhysicsCollision(eventData);
 
+        // If the player is hit hard enough by something, then get knocked about by it
+        // @note: this is crap but it's used by one thing only so who really cares for now
+        if (eventData.Speed > 500f && eventData.Other.Entity.PhysicsGroup.Mass >= 10.0f
+            && Controller is GarrywareWalkController controller)
+        {
+            var knockbackForce = eventData.Velocity.Normal * eventData.Speed * 0.3f;
+            controller.Knockback(knockbackForce);
+        }
+    }
+    
     public override PawnController GetActiveController()
     {
         if (DevController != null) return DevController;
