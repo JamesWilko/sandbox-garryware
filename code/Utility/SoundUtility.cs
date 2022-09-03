@@ -93,6 +93,13 @@ public static partial class SoundUtility
         StopBGM();
     }
 
+    [ClientRpc]
+    public static void PlayGameOver()
+    {
+        Sound.FromScreen("garryware.gameover");
+        StopBGM();
+    }
+
     public static void PlayPlayerLockedInWin(Entity playerEntity)
     {
         
