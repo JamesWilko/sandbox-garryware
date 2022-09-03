@@ -3,6 +3,7 @@
   "ui.player-count": "{0}/{1}",
   "ui.starting-soon": "Starting shortly!",
   "ui.gameover": "Temporary Game Over Screen! Thanks for playing! Returning to lobby soon...",
+  "ui.gameover.header": "Game Over! Thanks for playing!",
   "ui.round": "Round ",
   "ui.round.win": "You won!",
   "ui.round.lost": "You failed!",

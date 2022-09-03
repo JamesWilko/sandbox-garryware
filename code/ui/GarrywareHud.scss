@@ -1,10 +1,4 @@
 
-rootpanel
-{
-	background-color: rgba( #333, 0 );
-	transition: background-color 0.2s ease-in;
-}
-
 Crosshair
 {
 	position: absolute;
@@ -24,19 +18,24 @@ WaitingForPlayers
 {
 	position: absolute;
 	width: 100%;
-	height: 64px;
+	height: 80px;
 	bottom: 0;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
-	text-align: center;
+	text-align: left;
+	
+	padding-left: 50px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	
 	font-family: Poppins;
 	font-weight: bold;
+	font-style: italic;
 	font-size: 32px;
-	color: #fff;
-	text-stroke: 5px #000;
+	color: white;
+	text-shadow: 2px 2px black;
 	
-	background-color: rgba(#111, 0.6);
+	background-color: rgba(black, 0.8);
 	backdrop-filter: blur(20px);
 }
 
@@ -49,8 +48,8 @@ CountdownTimer
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	
-	font-family: Open24;
+		
+	font-family: AlarmClock;
 	font-size: 96px;
 	color: #fff;
 	text-stroke: 10px #000;
@@ -73,7 +72,7 @@ InstructionsPopup
 	color: #fff;
 	text-shadow: 2px 2px #000;
 
-	background-color: rgba(#111, 0.6);
+	background-color: rgba(black, 0.8);
 	backdrop-filter: blur(20px);
 	border-radius: 20px;
 	padding: 10px 20px 10px 20px;
@@ -110,7 +109,7 @@ WinLoseRoundPopup
 	color: white;
 	text-shadow: 2px 2px #000;
 
-	background-color: rgba(#111, 0.6);
+	background-color: rgba(black, 0.8);
 	backdrop-filter: blur(20px);
 	border-radius: 20px;
 	padding: 10px 20px 10px 20px;
@@ -155,7 +154,7 @@ MicrogameControls
 	align-items: center;
 	
 	font-family: Poppins;
-	background-color: rgba(#111, 0.6);
+	background-color: rgba(black, 0.8);
 	backdrop-filter: blur(20px);
 	border-radius: 10px;
 	text-stroke: 7px #000;
@@ -177,7 +176,7 @@ GameOver
 	color: #fff;
 	text-stroke: 5px #000;
 
-	background-color: rgba(#111, 0.6);
+	background-color: rgba(black, 0.8);
 	backdrop-filter: blur(20px);
 }
 
@@ -195,7 +194,7 @@ OnScreenControls
 		
 	.canvas
 	{
-		background-color: rgba(black, 0.6);
+		background-color: rgba(black, 0.8);
 		backdrop-filter: blur(20px);
 		border-radius: 20px;
 		padding: 10px 20px 10px 20px;
