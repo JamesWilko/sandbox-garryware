@@ -36,8 +36,7 @@ public class ShootTargetExactNumber : Microgame
         {
             var targetEntity = new FloatingTarget
             {
-                Transform = Room.InAirSpawnsDeck.Next().Transform,
-                GameColor = GameColor.Red
+                Transform = Room.InAirSpawnsDeck.Next().Transform
             };
             AutoCleanup(targetEntity);
             targetEntity.Scale = scalesDeck.Next();
