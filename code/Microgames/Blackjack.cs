@@ -116,7 +116,10 @@ public class Blackjack : Microgame
             
             // Increase player value by what they hit
             playerValues[player] += crateValue;
-            
+
+            // Let them know the hit the crate
+            SoundUtility.PlayTargetHit(To.Single(player));
+
             // Check if the player has gone bust
             if (playerValues[player] > 21)
             {
