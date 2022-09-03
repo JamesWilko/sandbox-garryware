@@ -16,7 +16,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     /// <summary>
     /// If set, the prop will spawn with motion disabled and will act as a nav blocker until broken.
     /// </summary>
-    [Property]
+    [Property, Net]
     public bool Static { get; set; } = false;
 
     /// <summary>
@@ -117,23 +117,23 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     public override void Spawn()
     {
         base.Spawn();
-
-        PhysicsEnabled = true;
+        
         UsePhysicsCollision = true;
         EnableHideInFirstPerson = true;
         EnableShadowInFirstPerson = true;
         EnableLagCompensation = true;
         Tags.Add("prop", "solid");
-        
+
         if (Static)
         {
-            PhysicsEnabled = false;
+            SetupPhysicsFromModel(PhysicsMotionType.Static);
         }
         else
         {
+            PhysicsEnabled = true;
             SetupPhysics();
         }
-        
+
         UpdateGameColorMaterialOverride();
         
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup

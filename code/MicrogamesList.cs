@@ -29,6 +29,7 @@ public static class MicrogamesList
         new Blackjack(),
         new StayGrounded(),
         new BoxJump(),
-        new SkyHigh()
+        new SkyHigh(),
+        new RocketJump(),
     };
 }

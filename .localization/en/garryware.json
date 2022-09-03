@@ -46,6 +46,7 @@
   "microgame.instructions.sky-high.intro": "When time runs out...",
   "microgame.instructions.sky-high.sky": "be high in the sky!",
   "microgame.instructions.sky-high.ground": "be on the ground!",
+  "microgame.instructions.rocket-jump": "Rocket jump on to a platform!",
   
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
