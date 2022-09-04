@@ -37,5 +37,6 @@ public static class MicrogamesList
         new DontFallOffPlatform(),
         new StayInCenterPlatform(),
         new GetOnABox(),
+        new StandOnMissingProp(),
     };
 }
