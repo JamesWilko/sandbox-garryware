@@ -39,5 +39,6 @@ public static class MicrogamesList
         new GetOnABox(),
         new StandOnMissingProp(),
         new GetOnColoredPlatform(),
+        new DontStandOnPlatforms(),
     };
 }

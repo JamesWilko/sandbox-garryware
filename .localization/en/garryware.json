@@ -56,6 +56,7 @@
   "microgame.instructions.get-to-center-platform": "Stay in the center!",
   "microgame.instructions.get-on-a-box": "Get on top of a box!",
   "microgame.instructions.stand-on-missing": "Stand on a missing crate!",
+  "microgame.instructions.dont-stand-on-platform": "Don't stand on the platforms!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
