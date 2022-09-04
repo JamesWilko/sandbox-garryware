@@ -278,6 +278,20 @@ public abstract class Microgame
     {
         return UseColor(CommonEntities.ColorsDeck.Next());
     }
+    
+    /// <summary>
+    /// Get a random color from the colors deck and add it to the list of in-use colors, except for the specified color.
+    /// </summary>
+    protected GameColor GetRandomColorExcept(GameColor exclude)
+    {
+        GameColor color;
+        do
+        {
+            color = CommonEntities.ColorsDeck.Next();
+        }
+        while(color == exclude);
+        return UseColor(color);
+    }
 
     /// <summary>
     /// Specify a specific color to be used, and add it to the randomization list in case we want to access it later
