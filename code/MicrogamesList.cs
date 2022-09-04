@@ -34,5 +34,6 @@ public static class MicrogamesList
         new FewestPlayersOnPlatform(),
         new DontMove(),
         new MusicalChairs(),
+        new DontFallOffPlatform()
     };
 }

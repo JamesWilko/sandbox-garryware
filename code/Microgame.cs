@@ -90,6 +90,18 @@ public abstract class Microgame
             await GameTask.DelayRealtimeSeconds(1.0f);
         }
         
+        // If we're in the platform room and players have already fallen off the edge then put them back so they don't immediately lose the next round
+        if (Room.Contents == MicrogameRoom.Platform)
+        {
+            foreach (var client in Client.All)
+            {
+                if (client.Pawn is GarrywarePlayer player && player.Position.z < -1f)
+                {
+                    player.TeleportTo(Room.SpawnPointsDeck.Next().Transform);
+                }
+            }
+        }
+
         // Run the microgame logic
         var microgameName = GetType().Name;
         

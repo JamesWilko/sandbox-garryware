@@ -51,6 +51,8 @@
   "microgame.instructions.fewest-players-on-platform": "Stand on the platform with the fewest players!",
   "microgame.instructions.dont-move": "Don't move!",
   "microgame.instructions.sit-in-a-chair": "Sit in a chair!",
+  "microgame.instructions.dont-fall-off.phase-1": "Get out of the center!",
+  "microgame.instructions.dont-fall-off.phase-2": "...and don't get knocked off!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
