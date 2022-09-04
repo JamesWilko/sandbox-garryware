@@ -54,6 +54,7 @@
   "microgame.instructions.dont-fall-off.phase-1": "Get out of the center!",
   "microgame.instructions.dont-fall-off.phase-2": "...and don't get knocked off!",
   "microgame.instructions.get-to-center-platform": "Stay in the center!",
+  "microgame.instructions.get-on-a-box": "Get on top of a box!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

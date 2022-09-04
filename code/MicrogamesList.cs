@@ -36,5 +36,6 @@ public static class MicrogamesList
         new MusicalChairs(),
         new DontFallOffPlatform(),
         new StayInCenterPlatform(),
+        new GetOnABox(),
     };
 }
