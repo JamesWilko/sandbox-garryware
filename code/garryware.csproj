@@ -17,6 +17,9 @@
 		<None Update="**\*.sass" DependentUpon="%(Filename).cs" />
 		<None Update="**\*.html" DependentUpon="%(Filename).cs" />
 		<None Update="**\*.htm" DependentUpon="%(Filename).cs" />
+		<None Update="ui\Scoreboard\FullScoreboard.html">
+		  <DependentUpon>FullScoreboard.cs</DependentUpon>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>

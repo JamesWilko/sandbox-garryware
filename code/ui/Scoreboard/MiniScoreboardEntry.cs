@@ -4,7 +4,7 @@ using Sandbox.UI.Construct;
 
 namespace Garryware.UI;
 
-public partial class ScoreboardEntry : Panel
+public partial class MiniScoreboardEntry : Panel
 {
     public Client Client;
     private GarrywarePlayer clientPlayer;
@@ -20,7 +20,7 @@ public partial class ScoreboardEntry : Panel
     
     private static readonly string[] PlaceEmojis = { "🥇", "🥈", "🥉" };
 
-    public ScoreboardEntry()
+    public MiniScoreboardEntry()
     {
         AddClass("entry");
 
@@ -76,7 +76,7 @@ public partial class ScoreboardEntry : Panel
         }
 
         PlayerName.Text = Client.Name;
-        SetClass("me", Client == Local.Client);
+        PlayerName.SetClass("me", Client == Local.Client);
         SetClass("won", clientPlayer?.HasWonRound ?? false);
         SetClass("lost", clientPlayer?.HasLostRound ?? false);
         

@@ -13,13 +13,12 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         if (!IsClient)
             return;
         
-        RootPanel.StyleSheet.Load( "/ui/GarrywareHud.scss" );
+        RootPanel.StyleSheet.Load("/ui/GarrywareHud.scss");
 
         // Build
         RootPanel.AddChild<ChatBox>();
         RootPanel.AddChild<VoiceList>();
         RootPanel.AddChild<VoiceSpeaker>();
-        RootPanel.AddChild<Garryware.UI.Scoreboard<Garryware.UI.ScoreboardEntry>>();
         RootPanel.AddChild<NameTags<NameTag>>();
         RootPanel.AddChild<KillFeed>();
         RootPanel.AddChild<Crosshair>();
@@ -28,6 +27,8 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<CountdownTimer>();
         RootPanel.AddChild<OnScreenControls>();
         RootPanel.AddChild<AmmoCounter>();
+        RootPanel.AddChild<MiniScoreboard<MiniScoreboardEntry>>();
+        RootPanel.AddChild<FullScoreboard>();
         
         // Listen to game events
         GameEvents.OnNewInstructions += OnNewInstructions;

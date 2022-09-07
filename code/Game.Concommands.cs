@@ -75,6 +75,16 @@ public partial class GarrywareGame
         
     }
     
+    [ConCmd.Admin("gw_randomize_streak")]
+    public static void RandomizeStreak()
+    {
+        foreach (var client in Client.All)
+        {
+            client.SetInt(Garryware.Tags.Streak, Rand.Int(2, 10));
+            client.SetInt(Garryware.Tags.MaxStreak, Rand.Int(10, 15));
+        }
+    }
+    
     [ConCmd.Admin("gw_force_ready")]
     public static void ForceReadyUp()
     {

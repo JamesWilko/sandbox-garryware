@@ -1,0 +1,189 @@
+﻿.mini-scoreboard
+{
+	position: absolute;
+	flex-direction: column;
+	font-family: Poppins;
+	font-size: 24px;
+	font-weight: 500;
+	color: white;
+	left: 2%;
+	top: 2%;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.1s ease-out;
+	transform-origin: 50% 50%;
+
+	.header
+	{
+		font-weight: 300;
+		text-stroke: 4px #000;
+	}
+	
+	.roundcount
+	{
+		font-weight: 800;
+	}
+	
+	.name
+	{
+		flex-grow: 1;
+
+		&.me
+		{
+			color: #b6ff00;
+		}
+	}
+	
+	.place
+	{
+		width: 40px;
+		text-align: left;
+		text-shadow: 0 0 black;
+	}
+
+	.points
+	{
+		width: 100px;
+		text-align: right;
+	}
+
+	.fire
+	{
+		z-index: 99;
+		position: absolute;
+		right: 48px;
+		bottom: 0;
+		
+		font-size: 48px;
+		text-shadow: 0 0 black;
+	}
+	
+	.streak
+	{
+		z-index: 100;
+		position: absolute;
+		width: 100%;
+		bottom: 4px;
+
+		font-size: 24px;
+		text-stroke: 5px #000;
+		text-align: center;
+	}
+	
+	.canvas
+	{
+		flex-direction: column;
+		min-height: 50%;
+		min-width: 30%;
+
+		.entry
+		{
+			margin-bottom: 2px;
+			padding: 4px;
+			background-color: rgba(#111, 0.6);
+			text-shadow: 2px 2px #000;
+
+			&.fifth-or-worse
+			{
+				margin-top: 20px;
+			}
+
+			&.gold
+			{
+				background-color: rgba(gold, 0.6);
+			}
+
+			&.silver
+			{
+				background-color: rgba(silver, 0.8);
+			}
+
+			&.bronze
+			{
+				background-color: rgba(#cd7f32, 0.8);
+			}
+		}
+
+		.won
+		{
+			background-color: rgba(#040, 0.6);
+		}
+
+		.lost
+		{
+			background-color: rgba(#400, 0.6);
+		}
+	}	
+}
+
+.scoreboard-full
+{
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	height: 80%;
+
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	text-align: left;
+	
+	overflow: scroll;
+	
+	padding: 50px;
+	border-radius: 20px;
+	background-color: rgba(black, 0.8);
+	
+	opacity: 1; // 0
+}
+
+.open
+{
+	transition: all 0.2s ease-out;
+	pointer-events: all;
+	opacity: 1;
+}
+
+.scoreboard-entry
+{
+	height: 50px;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 5px;
+	padding: 0 10px;
+	
+	font-family: Poppins;
+	font-size: 24px;
+	color: white;
+	text-align: left;
+	text-shadow: 2px 2px black;
+	background-color: rgba(black, 0.6);
+
+	> .medal
+	{
+		font-size: 32px;
+		text-shadow: 0 0 white;
+	}
+
+	> .score
+	{
+		margin-left: auto;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	&.gold
+	{
+		background-color: rgba(#ffd700, 0.6);
+	}
+
+	&.silver
+	{
+		background-color: rgba(#c0c0c0, 0.8);
+	}
+
+	&.bronze
+	{
+		background-color: rgba(#cd7f32, 0.8);
+	}
+}
