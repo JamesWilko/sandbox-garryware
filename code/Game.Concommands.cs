@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Garryware.Entities;
 using Sandbox;
 
@@ -7,7 +8,7 @@ namespace Garryware;
 public partial class GarrywareGame
 {
     
-    [ConCmd.Server("gw_dev")]
+    [ConCmd.Admin("gw_dev")]
     public static void EnableDevMode(string param)
     {
         Current?.RequestTransition(GameState.Dev);
@@ -52,16 +53,29 @@ public partial class GarrywareGame
         }
     }
     
-    [ConCmd.Server("gw_randomize_points")]
+    [ConCmd.Admin("gw_randomize_points")]
     public static void RandomizePoints()
     {
+        var pointsPlacing = new List<int>();
         foreach (var client in Client.All)
         {
-            client.SetInt(Garryware.Tags.Points, Rand.Int(2, 50));
+            var points = Rand.Int(2, 50);
+            client.SetInt(Garryware.Tags.Points, points);
+            pointsPlacing.AddUnique(points);
         }
+        
+        // Sort points out into their points order and assign a place to each player based on their points 
+        pointsPlacing.Sort();
+        pointsPlacing.Reverse();
+        foreach (var client in Client.All)
+        {
+            int place = pointsPlacing.IndexOf(client.GetInt(Garryware.Tags.Points)) + 1;
+            client.SetInt(Garryware.Tags.Place, place);
+        }
+        
     }
     
-    [ConCmd.Server("gw_force_ready")]
+    [ConCmd.Admin("gw_force_ready")]
     public static void ForceReadyUp()
     {
         foreach (var client in Client.All)
@@ -76,7 +90,7 @@ public partial class GarrywareGame
         AttemptToStartGame();
     }
     
-    [ConCmd.Server("gw_force_ready_all")]
+    [ConCmd.Admin("gw_force_ready_all")]
     public static void ForceReadyUpAll()
     {
         foreach (var client in Client.All)
@@ -90,7 +104,7 @@ public partial class GarrywareGame
         AttemptToStartGame();
     }
     
-    [ConCmd.Server("gw_random_controls")]
+    [ConCmd.Admin("gw_random_controls")]
     public static void RandomizeControls()
     {
         Current.AvailableActions = PlayerAction.None;
@@ -101,7 +115,7 @@ public partial class GarrywareGame
         }
     }
     
-    [ConCmd.Server("gw_hide_controls")]
+    [ConCmd.Admin("gw_hide_controls")]
     public static void HideControls()
     {
         Current.AvailableActions = PlayerAction.None;
