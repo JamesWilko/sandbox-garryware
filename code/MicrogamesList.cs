@@ -42,5 +42,6 @@ public static class MicrogamesList
         new DontStandOnPlatforms(),
         new ShootInOrder(),
         new ShootInOrderMemory(),
+        new Squats(),
     };
 }

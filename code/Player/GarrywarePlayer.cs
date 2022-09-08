@@ -24,6 +24,8 @@ public partial class GarrywarePlayer : Player
     public bool HasLockedInResult => RoundResult != RoundResult.Undecided;
     public bool HasWonRound => RoundResult == RoundResult.Won;
     public bool HasLostRound => RoundResult == RoundResult.Lost;
+
+    public bool IsDucking => Controller.HasTag("ducked");
     
     public delegate void DamageDelegate(GarrywarePlayer victim, DamageInfo info);
     public event DamageDelegate Hurt;

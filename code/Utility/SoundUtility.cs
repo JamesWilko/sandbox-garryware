@@ -105,6 +105,12 @@ public static partial class SoundUtility
     {
         Sound.FromScreen("microgame.hit");
     }
+    
+    [ClientRpc]
+    public static void PlaySmallTargetHit()
+    {
+        Sound.FromScreen("microgame.hit.small");
+    }
 
     public static void PlayPlayerLockedInWin(Entity playerEntity)
     {
