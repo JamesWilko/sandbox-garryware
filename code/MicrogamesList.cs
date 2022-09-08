@@ -41,5 +41,6 @@ public static class MicrogamesList
         new GetOnColoredPlatform(),
         new DontStandOnPlatforms(),
         new ShootInOrder(),
+        new ShootInOrderMemory(),
     };
 }

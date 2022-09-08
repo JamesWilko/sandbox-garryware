@@ -6,12 +6,12 @@ namespace Garryware.Microgames;
 
 public class ShootInOrder : Microgame
 {
-    private bool ascending;
-    private readonly List<int> targetValues = new();
-    private readonly Dictionary<BreakableProp, int> propValues = new();
-    private readonly Dictionary<GarrywarePlayer, int> playerIndices = new();
+    protected bool ascending;
+    protected readonly List<int> targetValues = new();
+    protected readonly Dictionary<BreakableProp, int> propValues = new();
+    protected readonly Dictionary<GarrywarePlayer, int> playerIndices = new();
 
-    private readonly ShuffledDeck<int> difficultyDeck = new();
+    protected readonly ShuffledDeck<int> difficultyDeck = new();
 
     public ShootInOrder()
     {
@@ -20,17 +20,27 @@ public class ShootInOrder : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         WarmupLength = 3f;
         GameLength = 8f;
-        
+    }
+
+    protected virtual void BuildDifficultyDeck()
+    {
+        difficultyDeck.Clear();
         difficultyDeck.Add(4, 3);
         difficultyDeck.Add(5, 3);
         difficultyDeck.Add(6, 2);
         difficultyDeck.Add(7, 1);
         difficultyDeck.Shuffle();
     }
+
+    protected virtual void ShowSetupInstruction()
+    {
+        ShowInstructions("#microgame.get-ready");
+    }
     
     public override void Setup()
     {
-        ShowInstructions("#microgame.get-ready");
+        BuildDifficultyDeck();
+        ShowSetupInstruction();
         
         // Determine what values each target should have
         int numTargets = difficultyDeck.Next();
@@ -115,10 +125,15 @@ public class ShootInOrder : Microgame
         }
     }
 
+    protected virtual void ShowFinishInstruction()
+    {
+        ShowInstructions($"The correct order was {string.Join(", ", targetValues)}!"); // @localization
+    }
+    
     public override void Finish()
     {
         RemoveAllWeapons();
-        ShowInstructions($"The correct order was {string.Join(", ", targetValues)}!"); // @localization
+        ShowFinishInstruction();
     }
 
     public override void Cleanup()
