@@ -20,7 +20,7 @@ public class TidyUpEverything : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
         GameLength = 8;
         
-        RubbishModels.Add(Model.Load("models/citizen_props/sodacan01.vmdl"), 1); // @note: can is very small and easy to miss so don't spawn it often
+        RubbishModels.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
         RubbishModels.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
         RubbishModels.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
         RubbishModels.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
