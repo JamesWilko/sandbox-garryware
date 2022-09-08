@@ -37,6 +37,17 @@
     width: 100px;
     text-align: right;
   }
+
+  .result
+  {
+    position: absolute;
+    left: -100px;
+    width: 100px;
+    top: 4px;
+    text-align: right;
+    vertical-align: center;
+    text-shadow: 0 0 black;
+  }
   
   .header
   {

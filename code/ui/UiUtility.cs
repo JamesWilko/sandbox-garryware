@@ -1,4 +1,6 @@
-﻿namespace Garryware.UI;
+﻿using Sandbox;
+
+namespace Garryware.UI;
 
 public static class UiUtility
 {
@@ -9,6 +11,15 @@ public static class UiUtility
     {
         int index = place - 1;
         return index >= 0 && index < PlaceEmojis.Length ? PlaceEmojis[index] : string.Empty;
+    }
+
+    public static string GetEmojiForLockedInResult(Client client)
+    {
+        if (client.Pawn is GarrywarePlayer player && player.HasLockedInResult)
+        {
+            return player.HasWonRound ? "✔" : "❌";
+        }
+        return string.Empty;
     }
 
     // @localization

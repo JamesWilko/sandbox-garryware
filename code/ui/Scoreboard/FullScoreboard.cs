@@ -23,6 +23,17 @@ public partial class FullScoreboard : Panel
         Canvas = Add.Panel("canvas");
     }
 
+    public override void OnHotloaded()
+    {
+        base.OnHotloaded();
+
+        foreach (var pair in Rows)
+        {
+            pair.Value.Delete();
+        }
+        Rows.Clear();
+    }
+
     public override void Tick()
     {
         base.Tick();
@@ -79,6 +90,7 @@ public partial class FullScoreboardEntry : Panel
     public Label Points;
     public Label Streak;
     public Label Ping;
+    public Label Result;
 
     public FullScoreboardEntry()
     {
@@ -88,6 +100,7 @@ public partial class FullScoreboardEntry : Panel
         Points = Add.Label("", "points");
         Streak = Add.Label("", "streak");
         Ping = Add.Label("", "ping");
+        Result = Add.Label("", "result");
     }
 
     RealTimeSince TimeSinceUpdate = 0;
@@ -111,12 +124,28 @@ public partial class FullScoreboardEntry : Panel
 
     public virtual void UpdateData()
     {
+        var place = Client.GetInt(Tags.Place, 99);
+        
         PlayerName.Text = Client.Name;
         Points.Text = Client.GetInt(Tags.Points).ToString();
         Streak.Text = Client.GetInt(Tags.Streak).ToString();
         Ping.Text = Client.Ping.ToString();
         SetClass("me", Client == Local.Client);
-        Style.Order = Client.GetInt(Tags.Place, 99);
+        Style.Order = place;
+
+        switch (GarrywareGame.Current.State)
+        {
+            // Show how well the player is doing
+            default:
+                Result.Text = UiUtility.GetEmojiForLockedInResult(Client);
+                break;
+            
+            // Show the players ready-up state next to their name in the scoreboard if they're ready to play
+            case GameState.WaitingForPlayers:
+            case GameState.StartingSoon:
+                Result.Text = Client.GetInt(Tags.IsReady) == 1 ? "👍" : string.Empty;
+                break;
+        }
     }
 
     public virtual void UpdateFrom(Client client)
