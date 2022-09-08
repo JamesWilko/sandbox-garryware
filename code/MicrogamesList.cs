@@ -43,5 +43,6 @@ public static class MicrogamesList
         new ShootInOrder(),
         new ShootInOrderMemory(),
         new Squats(),
+        new BalloonPop(),
     };
 }

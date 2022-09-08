@@ -59,6 +59,7 @@
   "microgame.instructions.dont-stand-on-platform": "Don't stand on the platforms!",
   "microgame.instructions.shoot-in-order.ascending": "Shoot in ascending order!",
   "microgame.instructions.shoot-in-order.descending": "Shoot in descending order!",
+  "microgame.instructions.balloon-pop": "Pop a balloon!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
