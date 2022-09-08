@@ -16,19 +16,17 @@ public partial class MiniScoreboardEntry : Panel
     public Label StreakFire;
     public Label CurrentStreak;
     
+    public bool ShowLongestStreak { get; set; }
+    
     private RealTimeSince timeSinceUpdate = 0;
     
-    private static readonly string[] PlaceEmojis = { "🥇", "🥈", "🥉" };
-
     public MiniScoreboardEntry()
     {
         AddClass("entry");
 
-        Place = Add.Label("", "place");
+        Place = Add.Label("", "place medal");
         PlayerName = Add.Label("PlayerName", "name");
-        
         Points = Add.Label("", "points");
-
         StreakFire = Add.Label("🔥", "fire");
         CurrentStreak = StreakFire.Add.Label("", "streak");
     }
@@ -58,14 +56,14 @@ public partial class MiniScoreboardEntry : Panel
         }
         
         var points = Client.GetInt(Tags.Points);
-        var streak = Client.GetInt(Tags.Streak);
+        var streak = Client.GetInt(ShowLongestStreak ? Tags.MaxStreak : Tags.Streak);
         var place = Client.GetInt(Tags.Place);
         
         switch (GarrywareGame.Current.State)
         {
             // Show how well the player is doing
             default:
-                Place.Text = place > 0 && place < PlaceEmojis.Length ? PlaceEmojis[place - 1] : string.Empty;
+                Place.Text = UiUtility.GetEmojiForPlace(place);
                 break;
             
             // Show the players ready-up state next to their name in the scoreboard if they're ready to play
@@ -84,6 +82,14 @@ public partial class MiniScoreboardEntry : Panel
         
         CurrentStreak.Text = streak.ToString();
         StreakFire.Style.Opacity = streak > 2 ? 1.0f : 0.0f;
+        
+        SetClass("gold", place == 1);
+        SetClass("silver", place == 2);
+        SetClass("bronze", place == 3);
+        
+        // Automatically sort this entry when it is placed into a scoreboard
+        Style.Order = place;
+        Style.ZIndex = place; // Increase the z-index as we go so that streaks don't end up under the row above
     }
 
     public virtual void UpdateFrom(Client client)

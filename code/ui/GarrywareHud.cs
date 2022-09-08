@@ -16,9 +16,6 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.StyleSheet.Load("/ui/GarrywareHud.scss");
 
         // Build
-        RootPanel.AddChild<ChatBox>();
-        RootPanel.AddChild<VoiceList>();
-        RootPanel.AddChild<VoiceSpeaker>();
         RootPanel.AddChild<NameTags<NameTag>>();
         RootPanel.AddChild<KillFeed>();
         RootPanel.AddChild<Crosshair>();
@@ -29,6 +26,11 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<AmmoCounter>();
         RootPanel.AddChild<MiniScoreboard<MiniScoreboardEntry>>();
         RootPanel.AddChild<FullScoreboard>();
+        RootPanel.AddChild<GameOverScreen>();
+        
+        RootPanel.AddChild<ChatBox>();
+        RootPanel.AddChild<VoiceList>();
+        RootPanel.AddChild<VoiceSpeaker>();
         
         // Listen to game events
         GameEvents.OnNewInstructions += OnNewInstructions;

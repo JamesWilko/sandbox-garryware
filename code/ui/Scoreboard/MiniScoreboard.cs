@@ -62,13 +62,8 @@ public partial class MiniScoreboard<T> : Panel where T : MiniScoreboardEntry, ne
                 place = 99;
             }
             
-            entry.Style.Order = place;
-            entry.Style.ZIndex = place; // Increase the z-index as we go so that streaks don't end up under the row above
             entry.Style.Opacity = (place > 3 && !client.IsOwnedByLocalClient) ? 0 : 1;
             entry.SetClass("fifth-or-worse", client.IsOwnedByLocalClient && place > 4);
-            entry.SetClass("gold", place == 1);
-            entry.SetClass("silver", place == 2);
-            entry.SetClass("bronze", place == 3);
         }
         
         // Update the round count

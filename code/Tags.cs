@@ -9,4 +9,5 @@ public static class Tags
     public const string Place = "place";
     public const string Streak = "streak";
     public const string MaxStreak = "max-streak";
+    public const string PerRoundResults = "per-round-results";
 }

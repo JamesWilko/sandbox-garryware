@@ -385,12 +385,18 @@ public abstract class Microgame
             }
             
             pointsPlacing.AddUnique(newPoints);
+
+            var oldRoundResults = client.GetValue(Tags.PerRoundResults, string.Empty);
+            client.SetValue(Tags.PerRoundResults, oldRoundResults + "✔");
         }
         
         // Reset the streak on all losers
         foreach (var client in losers)
         {
             client.SetInt(Tags.Streak, 0);
+            
+            var oldRoundResults = client.GetValue(Tags.PerRoundResults, string.Empty);
+            client.SetValue(Tags.PerRoundResults, oldRoundResults + "❌");
             
             pointsPlacing.AddUnique(client.GetInt(Tags.Points));
         }
