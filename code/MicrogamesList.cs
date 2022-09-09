@@ -44,6 +44,7 @@ public static class MicrogamesList
         new ShootInOrderMemory(),
         new Squats(),
         new BalloonPop(),
-        new CompleteTheWord()
+        new CompleteTheWord(),
+        new AvoidTheLight(),
     };
 }
