@@ -23,7 +23,8 @@ public enum MicrogameRoom
 {
     Empty,
     Boxes,
-    Platform
+    Platform,
+    DarkRoom
 }
 
 public enum ShowGameActions
