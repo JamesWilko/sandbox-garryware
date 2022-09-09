@@ -61,6 +61,7 @@
   "microgame.instructions.shoot-in-order.descending": "Shoot in descending order!",
   "microgame.instructions.balloon-pop": "Pop a balloon!",
   "microgame.instructions.avoid-light": "Stay out of the light!",
+  "microgame.instructions.stay-in-light": "Stay in the light!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

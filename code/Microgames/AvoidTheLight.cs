@@ -9,9 +9,7 @@ public class AvoidTheLight : Microgame
 {
     private List<FloatingSpotlight> spotlights = new();
     private readonly ShuffledDeck<Vector3> directions = new();
-
-    protected virtual float MinSpeed { get; set; } = 250.0f;
-    protected virtual float MaxSpeed { get; set; } = 450.0f;
+    private bool avoidLight = true;
     
     public AvoidTheLight()
     {
@@ -38,7 +36,8 @@ public class AvoidTheLight : Microgame
     
     public override void Setup()
     {
-        ShowInstructions("#microgame.instructions.avoid-light");
+        avoidLight = Rand.Float() > 0.5f;
+        ShowInstructions(avoidLight ? "#microgame.instructions.avoid-light" : "#microgame.instructions.stay-in-light");
 
         int numLights = Room.Size switch
         {
@@ -56,9 +55,17 @@ public class AvoidTheLight : Microgame
                 Position = Room.AboveBoxSpawnsDeck.Next().Position,
                 Rotation = new Angles(90f, 0, 0).ToRotation()
             };
-            spotlight.ApplyAbsoluteImpulse(directions.Next() * Rand.Float(MinSpeed, MaxSpeed));
             AutoCleanup(spotlight);
             spotlights.Add(spotlight);
+            
+            if (avoidLight)
+            {
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Rand.Float(300f, 500f));
+            }
+            else
+            {
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Rand.Float(200f, 400f));
+            }
         }
     }
 
@@ -67,7 +74,7 @@ public class AvoidTheLight : Microgame
         GiveWeapon<BallLauncher>(To.Everyone);
     }
 
-    protected bool IsPlayerInLight(GarrywarePlayer player)
+    private bool IsPlayerInLight(GarrywarePlayer player)
     {
         foreach (var spotlight in spotlights)
         {
@@ -86,8 +93,17 @@ public class AvoidTheLight : Microgame
 
         foreach (var client in Client.All)
         {
-            if(client.Pawn is GarrywarePlayer player && !player.HasLockedInResult && IsPlayerInLight(player))
-                player.FlagAsRoundWinner();
+            if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
+            {
+                if (avoidLight && IsPlayerInLight(player))
+                {
+                    player.FlagAsRoundLoser();
+                }
+                else if (!avoidLight && !IsPlayerInLight(player))
+                {
+                    player.FlagAsRoundLoser();
+                }
+            }
         }
     }
 
