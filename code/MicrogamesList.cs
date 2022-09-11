@@ -46,5 +46,6 @@ public static class MicrogamesList
         new BalloonPop(),
         new CompleteTheWord(),
         new AvoidTheLight(),
+        new KeepItUp(),
     };
 }
