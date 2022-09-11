@@ -63,6 +63,7 @@
   "microgame.instructions.avoid-light": "Stay out of the light!",
   "microgame.instructions.stay-in-light": "Stay in the light!",
   "microgame.instructions.keep-it-up": "Keep the bins up in the air!",
+  "microgame.instructions.avoid-lasers": "Avoid the lasers!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
