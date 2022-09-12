@@ -68,6 +68,7 @@
   "microgame.instructions.build-to-the-top": "Climb your way to the platforms!",
   "microgame.instructions.dark-room-shoot-all-boxes": "Find and shoot every box!",
   "microgame.instructions.stay-in-the-air": "Stay in the air!",
+  "microgame.instructions.dont-get-shot": "Don't get shot!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

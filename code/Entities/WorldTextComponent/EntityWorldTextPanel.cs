@@ -5,6 +5,7 @@ using Sandbox.UI.Construct;
 
 namespace Garryware.Entities;
 
+// @todo: scale these based on distance or replace with something better
 public class EntityWorldTextPanel : WorldPanel
 {
     private const float w = 1000;

@@ -9,44 +9,62 @@ public class TurretNpc : AnimatedEntity
     private ClothingContainer Clothing { get; set; } = new();
     private Inventory Inventory { get; set; }
     private NpcWeapon ActiveWeapon { get; set; }
-    
+
     public bool CanFire { get; set; }
     public TimeUntil TeagbagTime { get; set; }
     private TimeUntil TimeUntilPickANewTarget { get; set; }
-    
+
     private GarrywarePlayer currentTarget;
-    
+
     private bool isCrouching;
     private TimeUntil timeUntilInvertCrouch;
 
     // How long does this npc fire at a single player
     private const float AttentionSpan = 6f;
     private const float TeabagSpeed = 0.2f;
-    
+
     public override void Spawn()
     {
         base.Spawn();
 
         SetModel("models/citizen/citizen.vmdl");
-
+        
         SetupPhysicsFromCapsule(PhysicsMotionType.Keyframed, Capsule.FromHeightAndRadius(80, 12));
         EnableAllCollisions = true;
         EnableDrawing = true;
         EnableHideInFirstPerson = true;
         EnableShadowInFirstPerson = true;
-        
+
         Inventory = new Inventory(this);
         GiveWeapon<NpcSmg>();
 
         // Load army clothing
-        // @todo: less naked
+        LoadClothing("models/citizen_clothes/", "skin01", "skin02", "skin03", "skin04", "skin05");
+        LoadClothing("models/citizen_clothes/trousers/cargopants/", "cargo_pants_army");
+        LoadClothing("models/citizen_clothes/shoes/boots/", "army_boots");
+        LoadClothing("models/citizen_clothes/gloves/tactical_gloves/", "army_gloves", "tactical_gloves");
+        LoadClothing("models/citizen_clothes/hat/tactical_helmet/", "tactical_helmet_army", "tactical_helmet");
+        LoadClothing("models/citizen_clothes/shirt/army_shirt/", "army_shirt");
         Clothing.DressEntity(this);
     }
 
+    /// <summary>
+    /// Load a random one of the clothing items passed in 
+    /// </summary>
+    private void LoadClothing(string parentPath, params string[] items)
+    {
+        var item = Rand.FromArray(items);
+        var path = $"{parentPath}{item}.clothing";
+        if (ResourceLibrary.TryGet<Clothing>(path, out var clothingAsset))
+        {
+            Clothing.Clothing.Add(clothingAsset);
+        }
+    }
+    
     protected void GiveWeapon<T>() where T : NpcWeapon, new()
     {
         Inventory.DeleteContents();
-        
+
         ActiveWeapon = new T();
         Inventory.Add(ActiveWeapon, true);
         ActiveWeapon.ActiveStart(this);
@@ -69,7 +87,7 @@ public class TurretNpc : AnimatedEntity
         TeagbagTime = 1.5f;
         TimeUntilPickANewTarget = Math.Max(TeagbagTime, TimeUntilPickANewTarget);
     }
-    
+
     [Event.Tick.Server]
     protected virtual void Tick()
     {
@@ -77,10 +95,10 @@ public class TurretNpc : AnimatedEntity
         {
             PickNewTarget();
         }
-        
-        if(currentTarget == null)
+
+        if (currentTarget == null)
             return;
-        
+
         // Shoot at the chest
         var lookTarget = currentTarget.GetBoneTransform("spine_1").Position;
         var directionToTarget = (lookTarget - EyePosition).Normal;
@@ -92,7 +110,7 @@ public class TurretNpc : AnimatedEntity
 
         EyePosition = Position + Vector3.Up * 60f;
         EyeRotation = directionToTarget.EulerAngles.ToRotation();
-        
+
         var anim = new CitizenAnimationHelper(this);
         anim.WithLookAt(lookTarget);
         anim.WithVelocity(Velocity);
@@ -101,11 +119,11 @@ public class TurretNpc : AnimatedEntity
         if (ActiveWeapon != null && ActiveWeapon.IsValid)
         {
             ActiveWeapon.SimulateAnimator(anim);
-            
-            if(CanFire && ActiveWeapon.CanPrimaryAttack())
+
+            if (CanFire && ActiveWeapon.CanPrimaryAttack())
                 ActiveWeapon.AttackPrimary();
         }
-        
+
         if (TeagbagTime > 0f && timeUntilInvertCrouch <= 0f)
         {
             isCrouching = !isCrouching;
@@ -113,5 +131,4 @@ public class TurretNpc : AnimatedEntity
             timeUntilInvertCrouch = TeabagSpeed;
         }
     }
-    
 }

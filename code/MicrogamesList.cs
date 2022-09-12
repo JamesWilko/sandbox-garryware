@@ -52,5 +52,6 @@ public static class MicrogamesList
         new BuildToTheTop(),
         new ShootAllDarkRoomBoxes(),
         new StayInTheAir(),
+        new DontGetShot(),
     };
 }
