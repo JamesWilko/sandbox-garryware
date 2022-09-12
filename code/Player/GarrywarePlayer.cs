@@ -1,5 +1,5 @@
 using System;
-﻿using Garryware.Entities;
+ using Garryware.Entities;
 using Garryware.UI;
 using Sandbox;
 
@@ -124,6 +124,12 @@ public partial class GarrywarePlayer : Player
         }
     }
 
+    public void Knockback(Vector3 force)
+    {
+        if(Controller is GarrywareWalkController controller)
+            controller.Knockback(force);
+    }
+    
     protected override void OnPhysicsCollision(CollisionEventData eventData)
     {
         base.OnPhysicsCollision(eventData);
