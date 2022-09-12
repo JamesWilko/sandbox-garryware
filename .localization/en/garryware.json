@@ -65,6 +65,7 @@
   "microgame.instructions.keep-it-up": "Keep the bins up in the air!",
   "microgame.instructions.avoid-lasers": "Avoid the lasers!",
   "microgame.instructions.just-dont-look": "Don't stare!",
+  "microgame.instructions.build-to-the-top": "Climb your way to the platforms!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

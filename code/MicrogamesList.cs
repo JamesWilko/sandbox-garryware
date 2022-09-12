@@ -49,5 +49,6 @@ public static class MicrogamesList
         new KeepItUp(),
         new AvoidLasers(),
         new JustDontLook(),
+        new BuildToTheTop(),
     };
 }
