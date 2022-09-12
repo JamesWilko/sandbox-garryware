@@ -2,14 +2,13 @@
 
 namespace Garryware;
 
-partial class Pistol : AmmoWeapon
+public partial class Pistol : AmmoWeapon
 {
     public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
     public override float PrimaryRate => 15.0f;
-
     public override int MagazineCapacity => 10;
-
+    
     public override void Spawn()
     {
         base.Spawn();

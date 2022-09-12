@@ -66,6 +66,7 @@
   "microgame.instructions.avoid-lasers": "Avoid the lasers!",
   "microgame.instructions.just-dont-look": "Don't stare!",
   "microgame.instructions.build-to-the-top": "Climb your way to the platforms!",
+  "microgame.instructions.dark-room-shoot-all-boxes": "Find and shoot every box!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
