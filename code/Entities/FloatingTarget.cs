@@ -4,11 +4,12 @@ namespace Garryware.Entities;
 
 public class FloatingTarget : BreakableProp
 {
-    public Material SpriteMaterial { get; set; }
+    public virtual Material SpriteMaterial { get; set; } = Material.Load("materials/ware_bullseye.vmat");
 
-    public float SpriteScale { get; set; } = 20f; // This needs to change if you change the model
+    // This needs to change if you change the model
+    private float SpriteScale { get; set; } = 20f;
 
-    private SceneCustomObject so;
+    protected SceneCustomObject so;
 
     public override void Spawn()
     {
@@ -37,7 +38,6 @@ public class FloatingTarget : BreakableProp
         base.ClientSpawn();
         if (IsClient)
         {
-            SpriteMaterial = Material.Load("materials/ware_bullseye.vmat");
             CreateSceneObject();
         }
     }

@@ -48,5 +48,6 @@ public static class MicrogamesList
         new AvoidTheLight(),
         new KeepItUp(),
         new AvoidLasers(),
+        new JustDontLook(),
     };
 }
