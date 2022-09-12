@@ -8,6 +8,7 @@ public partial class Pistol : AmmoWeapon
 
     public override float PrimaryRate => 15.0f;
     public override int MagazineCapacity => 10;
+    public override bool FiresTracers => true;
     
     public override void Spawn()
     {

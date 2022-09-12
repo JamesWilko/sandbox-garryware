@@ -76,6 +76,8 @@ public partial class AmmoWeapon : Weapon
         foreach (var tr in TraceBullet(pos, pos + forward * 5000, bulletSize))
         {
             tr.Surface.DoBulletImpact(tr);
+            if(FiresTracers)
+                ShootTracer(tr.EndPosition);
             
             if (!tr.Entity.IsValid()) continue;
 

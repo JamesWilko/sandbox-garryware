@@ -5,10 +5,9 @@ namespace Garryware;
 partial class LauncherPistol : AmmoWeapon
 {
     public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
-
     public override float PrimaryRate => 0.5f;
-
     public override int MagazineCapacity => 1;
+    public override bool FiresTracers => true;
 
     private readonly ShuffledDeck<GameColor> beamColors;
     
@@ -44,27 +43,16 @@ partial class LauncherPistol : AmmoWeapon
         TakeAmmo(1);
     }
     
-    protected override void ShootEffects()
+    protected override void ShootTracer(Vector3 hitLocation)
     {
-        base.ShootEffects();
-        if(IsServer) return;
-        
-        foreach (var tr in TraceBullet(Owner.EyePosition, Owner.EyePosition + Owner.EyeRotation.Forward * 5000))
-        {
-            if (!tr.Entity.IsValid())
-                continue;
-            
-            var muzzle = EffectEntity.GetAttachment("muzzle").GetValueOrDefault();
-            var fx = Particles.Create("particles/launcher.beam.vpcf");
-            fx.SetPosition(0, muzzle.Position);
-            fx.SetPosition(1, tr.HitPosition);
-            fx.SetPosition(2, beamColors.Next().AsColor());
-            fx.SetPosition(3, new Vector3(7f, 1f, 0f));
-            fx.Destroy();
-            break;
-        }
+        var muzzle = EffectEntity.GetAttachment("muzzle").GetValueOrDefault();
+        var fx = Particles.Create("particles/launcher.beam.vpcf");
+        fx.SetPosition(0, muzzle.Position);
+        fx.SetPosition(1, hitLocation);
+        fx.SetPosition(2, beamColors.Next().AsColor());
+        fx.SetPosition(3, new Vector3(7f, 1f, 0f));
     }
-    
+
     public override void ShootBullet(Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize)
     {
         var forward = dir;
@@ -73,6 +61,9 @@ partial class LauncherPistol : AmmoWeapon
         
         foreach (var tr in TraceBullet(pos, pos + forward * 5000, bulletSize))
         {
+            if(FiresTracers)
+                ShootTracer(tr.HitPosition);
+            
             if (!IsServer) continue;
             if (!tr.Entity.IsValid()) continue;
             

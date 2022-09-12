@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public partial class Weapon : BaseWeapon, IUse
 {
 	public virtual float ReloadTime => 3.0f;
-
+	public virtual bool FiresTracers => false;
+	
 	public PickupTrigger PickupTrigger { get; protected set; }
 
 	[Net, Predicted]
@@ -138,6 +139,17 @@ public partial class Weapon : BaseWeapon, IUse
 		ViewModelEntity?.SetAnimParameter( "fire", true );
 	}
 
+	[ClientRpc]
+	protected virtual void ShootTracer(Vector3 hitLocation)
+	{
+		Host.AssertClient();
+		
+		var muzzle = EffectEntity.GetAttachment("muzzle").GetValueOrDefault();
+		var tracer = Particles.Create("particles/weapon.tracer.vpcf");
+		tracer.SetPosition(0, muzzle.Position);
+		tracer.SetPosition(2, hitLocation);
+	}
+	
 	public override IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2.0f )
 	{
 		bool underWater = Trace.TestPoint( start, "water" );
@@ -206,6 +218,9 @@ public partial class Weapon : BaseWeapon, IUse
 		foreach ( var tr in TraceBullet( pos, pos + forward * 5000, bulletSize ) )
 		{
 			tr.Surface.DoBulletImpact( tr );
+			
+			if(FiresTracers)
+				ShootTracer(tr.HitPosition);
 
 			if ( !IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;

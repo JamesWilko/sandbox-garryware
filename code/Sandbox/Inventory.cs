@@ -8,6 +8,11 @@ partial class Inventory : BaseInventory
 	{
 	}
 
+	// +garryware
+	public Inventory(Entity owner) : base(owner)
+	{
+	}
+
 	public override bool CanAdd( Entity entity )
 	{
 		if ( !entity.IsValid() )
