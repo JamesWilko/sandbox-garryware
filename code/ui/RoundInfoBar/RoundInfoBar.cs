@@ -73,12 +73,12 @@ public class RoundInfoBar : Panel
         LosersCountLabel.Text = GarrywareGame.Current.NumberOfLosers.ToString();
         
         // Add the kill feed entries with a small delay between them so we don't get overlapping names
-        if (lastWinnerAdded > 0.35f && winnersQueue.Count > 0)
+        if (lastWinnerAdded > 0.2f && winnersQueue.Count > 0)
         {
             AddKillfeedEntry(winnersQueue.Dequeue(), RoundResult.Won);
             lastWinnerAdded = 0;
         }
-        if (lastLoserAdded > 0.35f && losersQueue.Count > 0)
+        if (lastLoserAdded > 0.2f && losersQueue.Count > 0)
         {
             AddKillfeedEntry(losersQueue.Dequeue(), RoundResult.Lost);
             lastLoserAdded = 0;

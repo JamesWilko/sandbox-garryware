@@ -36,7 +36,7 @@ public partial class KillFeedEntry : Panel
     {
         base.Tick();
 
-        if (timeSinceBorn > 5)
+        if (timeSinceBorn > 3.5f)
         {
             Delete();
         }
