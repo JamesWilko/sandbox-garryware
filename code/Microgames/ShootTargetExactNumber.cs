@@ -14,7 +14,7 @@ public class ShootTargetExactNumber : Microgame
 
     public ShootTargetExactNumber()
     {
-        Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontClearInstructions;
+        Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontShowEndOfRoundStats;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Reload;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
         GameLength = 10;
@@ -74,7 +74,7 @@ public class ShootTargetExactNumber : Microgame
             }
             else
             {
-                GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime); // @localization
+                GameEvents.SendIntegerStat(To.Single(playerPair.Key), RoundStat.YouHitTheTargetXTimes_Failed, playerPair.Value);
             }
         }
     }

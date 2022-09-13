@@ -150,5 +150,28 @@ public partial class GarrywareGame
         GameEvents.PlayerLockedInResult(ConsoleSystem.Caller, RoundResult.Lost);
     }
 
+    [ConCmd.Admin("gw_stat_everybody_won")]
+    public static void SendStat_EverybodyWon()
+    {
+        GameEvents.SendIntegerStat(RoundStat.EverybodyWon, 0);
+    }
+
+    [ConCmd.Admin("gw_stat_everybody_lost")]
+    public static void SendStat_EverybodyLost()
+    {
+        GameEvents.SendIntegerStat(RoundStat.EverybodyLost, 0);
+    }
+    
+    [ConCmd.Admin("gw_stat_int_test")]
+    public static void SendStat_IntegerTest()
+    {
+        GameEvents.SendIntegerStat(RoundStat.OnlyXPeopleWon, Rand.Int(2, 5));
+    }
+    
+    [ConCmd.Admin("gw_stat_client_test")]
+    public static void SendStat_ClientTest()
+    {
+        GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, ConsoleSystem.Caller);
+    }
     
 }

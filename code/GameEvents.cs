@@ -13,6 +13,9 @@ public partial class GameEvents : BaseNetworkable
     public static event RoundResultDelegate OnPlayerLockedInResult;
     public static event RoundResultDelegate OnPlayerWon;
     public static event RoundResultDelegate OnPlayerLost;
+
+    public static event System.Action<RoundStat, Client> ClientStatReceived;
+    public static event System.Action<RoundStat, int> IntegerStatReceived;
     
     [ClientRpc]
     public static void NewInstructions(string text, float displayTime)
@@ -42,4 +45,16 @@ public partial class GameEvents : BaseNetworkable
         }
     }
 
+    [ClientRpc]
+    public static void SendClientStat(RoundStat stat, Client subject)
+    {
+        ClientStatReceived?.Invoke(stat, subject);
+    }
+
+    [ClientRpc]
+    public static void SendIntegerStat(RoundStat stat, int value)
+    {
+        IntegerStatReceived?.Invoke(stat, value);
+    }
+    
 }

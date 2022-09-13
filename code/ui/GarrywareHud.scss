@@ -276,3 +276,56 @@ AmmoCounter
 		color: red;
 	}
 }
+
+RoundStatPopup
+{
+	position: absolute;
+	width: 100%;
+	height: 80px;
+	bottom: 0;
+	justify-content: flex-start;
+	align-items: center;
+	text-align: left;
+	
+	opacity: 1;
+	transform: translateY(+0%);
+	transition: all 0.5s ease-out;
+
+	padding-left: 50px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	font-family: Poppins;
+	font-weight: bold;
+	font-size: 32px;
+	color: white;
+	
+	background-color: rgba(black, 0.8);
+	backdrop-filter: blur(20px);
+	
+	> .emoji
+	{
+		font-size: 40px;
+		margin-right: 10px;
+	}
+
+	> .text
+	{
+		text-shadow: 2px 2px black;
+	}
+
+	&:intro
+	{
+		transition: all 0.5s ease-out;
+		transform: translateY(+100%);
+		opacity: 0;
+	}
+
+	&:outro
+	{
+		transition: all 0.5s ease-in;
+		transform: translateY(+100%);
+		opacity: 0;
+	}
+	
+}

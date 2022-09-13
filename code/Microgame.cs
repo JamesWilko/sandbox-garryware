@@ -17,6 +17,7 @@ public enum MicrogameRules
     EndEarlyIfEverybodyLockedIn = 1 << 2, // End the game early if everybody locks in a result
     
     DontClearInstructions = 1 << 3,
+    DontShowEndOfRoundStats = 1 << 4,
 }
 
 public enum MicrogameRoom
@@ -63,6 +64,8 @@ public abstract class Microgame
     private TimeSince timeSinceGameStarted;
     private bool hasGameFinishedEarly;
     private TimeSince timeSinceEarlyFinish;
+    private bool didEverybodyWin;
+    private bool didEverybodyLose;
     
     public virtual bool CanBePlayed()
     {
@@ -138,6 +141,7 @@ public abstract class Microgame
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();
         UpdateScores();
+        AttemptToSendEndOfRoundStat();
         GarrywareGame.Current.AvailableActions = PlayerAction.None;
         await GameTask.DelayRealtimeSeconds(CooldownLength);
         
@@ -340,22 +344,22 @@ public abstract class Microgame
             }
         }
 
+        // Update our counts on who won and who lost
         GarrywareGame.Current.UpdateWinLoseCounts();
+        didEverybodyWin = GarrywareGame.Current.NumConnectedClients > 2 && GarrywareGame.Current.NumberOfWinners == GarrywareGame.Current.NumConnectedClients;
+        didEverybodyLose = GarrywareGame.Current.NumberOfLosers == GarrywareGame.Current.NumConnectedClients;
     }
 
     private void PlayEndOfGameSoundEvents()
     {
         var winners = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
         var losers = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
-
-        bool everyoneWon = GarrywareGame.Current.NumConnectedClients > 2 && winners.Length == GarrywareGame.Current.NumConnectedClients;
-        bool everyoneLost = losers.Length == GarrywareGame.Current.NumConnectedClients;
-
-        if (everyoneWon)
+        
+        if (didEverybodyWin)
         {
             SoundUtility.PlayEveryoneWon();
         }
-        else if (everyoneLost)
+        else if (didEverybodyLose)
         {
             SoundUtility.PlayEveryoneLost();
         }
@@ -416,6 +420,64 @@ public abstract class Microgame
 
     }
 
+    private void AttemptToSendEndOfRoundStat()
+    {
+        const int minimumPopulationForStats = 4;
+        const float chanceToSendStat = 0.25f;
+        
+        const float lowWinnerPopulationCutoff = 0.25f;
+        const float highWinnerPopulationCutoff = 0.75f;
+        
+        // Are we allowed to send an end of round stat by the microgame?
+        if(Rules.HasFlag(MicrogameRules.DontShowEndOfRoundStats))
+            return;
+        
+        // Do we have enough people to send a stat
+        if(GarrywareGame.Current.NumConnectedClients < minimumPopulationForStats)
+            return;
+        
+        // Everybody won and lost stats are always sent if they occur
+        if (didEverybodyWin)
+        {
+            GameEvents.SendIntegerStat(RoundStat.EverybodyWon, 0);
+            return;
+        }
+        else if (didEverybodyLose)
+        {
+            GameEvents.SendIntegerStat(RoundStat.EverybodyLost, 0);
+            return;
+        }
+        
+        // Check if we should send a stat randomly
+        if(Rand.Float() > chanceToSendStat)
+            return;
+        
+        // Send the excessive ratio stats if a lot of people won or lost 
+        float winnerPopulation = (float)GarrywareGame.Current.NumberOfWinners / GarrywareGame.Current.NumConnectedClients;
+        if (winnerPopulation >= highWinnerPopulationCutoff)
+        {
+            GameEvents.SendIntegerStat(RoundStat.HighPercentPeopleWon,  (int)Math.Round(winnerPopulation * 100));
+            return;
+        }
+        else if (winnerPopulation <= lowWinnerPopulationCutoff)
+        {
+            // Pick a random variant to send
+            if(Rand.Float() > 0.5f)
+                GameEvents.SendIntegerStat(RoundStat.LowPercentPeopleWon,  (int)Math.Round(winnerPopulation * 100));
+            else
+                GameEvents.SendIntegerStat(RoundStat.OnlyXPeopleWon,  GarrywareGame.Current.NumberOfWinners);
+            return;
+        }
+
+        // Send the person who won this game the fastest if players can meet a win condition during the round
+        if (!Rules.HasFlag(MicrogameRules.WinOnTimeout))
+        {
+            // @todo
+            GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, Client.All[0]);
+            return;
+        }
+    }
+    
     protected int GetRandomAdjustedClientCount(float minMultiplier, float maxMultiplier)
     {
         if (maxMultiplier < 1.0f)

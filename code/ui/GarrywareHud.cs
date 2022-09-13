@@ -29,11 +29,13 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<ChatBox>();
         RootPanel.AddChild<VoiceList>();
         RootPanel.AddChild<VoiceSpeaker>();
-        
+
         // Listen to game events
         GameEvents.OnNewInstructions += OnNewInstructions;
         GameEvents.OnClearInstructions += OnClearInstructions;
         GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
+        GameEvents.ClientStatReceived += OnClientStatReceived;
+        GameEvents.IntegerStatReceived += OnIntegerStatReceived;
     }
     
     protected override void OnDestroy()
@@ -44,6 +46,8 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         GameEvents.OnNewInstructions -= OnNewInstructions;
         GameEvents.OnClearInstructions -= OnClearInstructions;
         GameEvents.OnPlayerLockedInResult -= OnPlayerLockedInResult;
+        GameEvents.ClientStatReceived -= OnClientStatReceived;
+        GameEvents.IntegerStatReceived -= OnIntegerStatReceived;
     }
     
     private void OnNewInstructions(string text, float displayTime)
@@ -80,5 +84,17 @@ public partial class GarrywareHud : HudEntity<RootPanel>
             resultPopup.SetResult(result);
         }
     }
+    
+    private void OnClientStatReceived(RoundStat stat, Client subject)
+    {
+        var statPopup = RootPanel.AddChild<RoundStatPopup>();
+        statPopup.SetDetails(stat, subject);
+    }
 
+    private void OnIntegerStatReceived(RoundStat stat, int value)
+    {
+        var statPopup = RootPanel.AddChild<RoundStatPopup>();
+        statPopup.SetDetails(stat, value);
+    }
+    
 }

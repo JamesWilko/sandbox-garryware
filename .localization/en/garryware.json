@@ -13,7 +13,10 @@
   "ui.bar.waiting-for-players": "Waiting for players",
   "ui.bar.starting-soon": "Starting soon",
   "ui.bar.instructions": "Learn to play",
-  "ui.bar.game-over": "Game Over!",
+  "ui.bar.game-over": "Game Over",
+  
+  "stats.everybody-won": "Everybody won that round!",
+  "stats.everybody-lost": "Everybody failed that round!",
   
   "action.none": "None",
   "action.attack.primary": "Fire",
