@@ -17,7 +17,6 @@ public partial class GarrywareHud : HudEntity<RootPanel>
 
         // Build
         RootPanel.AddChild<NameTags<NameTag>>();
-        RootPanel.AddChild<KillFeed>();
         RootPanel.AddChild<Crosshair>();
         RootPanel.AddChild<GameOver>();
         RootPanel.AddChild<WaitingForPlayers>();
@@ -73,11 +72,6 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         }
     }
 
-    private void OnAvailableControlsUpdated(PlayerAction availableActions)
-    {
-        // @todo: update on screen controls list
-    }
-    
     private void OnPlayerLockedInResult(Client player, RoundResult result)
     {
         if (player.IsOwnedByLocalClient)

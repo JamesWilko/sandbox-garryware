@@ -39,22 +39,6 @@ WaitingForPlayers
 	backdrop-filter: blur(20px);
 }
 
-CountdownTimer
-{
-	position: absolute;
-	width: 100%;
-	top: 5%;
-	height: 96px;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-		
-	font-family: AlarmClock;
-	font-size: 96px;
-	color: #fff;
-	text-stroke: 10px #000;
-}
-
 InstructionsPopup
 {
 	position: absolute;

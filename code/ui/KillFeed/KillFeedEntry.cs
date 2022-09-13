@@ -6,8 +6,8 @@ namespace Garryware.UI;
 
 public partial class KillFeedEntry : Panel
 {
-    private Label Left { get; set; }
-    private Label Method { get; set; }
+    private Label Name { get; set; }
+    private Label Result { get; set; }
 
     private readonly RealTimeSince timeSinceBorn = 0;
 
@@ -16,27 +16,27 @@ public partial class KillFeedEntry : Panel
     
     public KillFeedEntry()
     {
-        Left = Add.Label("", "left");
-        Method = Add.Label("", "method");
+        Result = Add.Label("", "result");
+        Name = Add.Label("", "name");
     }
 
     public void SetPlayer(long lsteamid, string name)
     {
-        Left.Text = name;
-        Left.SetClass("me", lsteamid == (Local.Client?.PlayerId));
+        Name.Text = name;
+        Name.SetClass("me", lsteamid == (Local.Client?.PlayerId));
     }
     
     public void SetResult(RoundResult result)
     {
-        AddClass(result == RoundResult.Won ? "Won" : "Lost");
-        Method.Text = Rand.FromArray(result == RoundResult.Won ? WinnerEmojis : LoserEmojis);
+        AddClass(result == RoundResult.Won ? "won" : "lost");
+        Result.Text = Rand.FromArray(result == RoundResult.Won ? WinnerEmojis : LoserEmojis);
     }
 
     public override void Tick()
     {
         base.Tick();
 
-        if (timeSinceBorn > 4)
+        if (timeSinceBorn > 5)
         {
             Delete();
         }

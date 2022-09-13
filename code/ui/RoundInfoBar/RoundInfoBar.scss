@@ -1,5 +1,12 @@
 
-RoundInfoBar
+.round-info-bar
+{
+  position: absolute;
+  width: 100%;
+  height: 90px;
+}
+
+.container
 {
   position: absolute;
   top: 0;
@@ -7,6 +14,7 @@ RoundInfoBar
   width: 800px;
   height: 90px;
   transform: translateX(-50%);
+  z-index: 500;
 
   background-color: rgba(black, 0.8);
   backdrop-filter: blur(20px);
@@ -16,12 +24,7 @@ RoundInfoBar
   font-size: 32px;
   color: white;
   text-shadow: 2px 2px black;
-  
-  > .container
-  {
-    width: 100%;
-  }
-  
+    
   > .center-container
   {
     position: absolute;
@@ -160,3 +163,110 @@ RoundInfoBar
   
 }
 
+.killfeed-winners
+{
+  position: absolute;
+  width: 50%;
+  height: 50px;
+  left: -400px;
+  z-index: 400;
+
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.killfeed-losers
+{
+  position: absolute;
+  width: 50%;
+  height: 50px;
+  right: -400px;
+  z-index: 400;
+
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+KillFeedEntry
+{
+  height: 100%;
+  margin-right: 5px;
+  margin-left: 5px;
+  align-items: center;
+  text-align: center;
+
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  
+  background-color: rgba(black, 0.8);
+  color: white;
+  opacity: 1;
+
+  flex-shrink: 0;
+  flex-grow: 0;
+  transition: all 0.2s ease-in;
+
+  &:intro
+  {
+    transform: scale(2);
+    opacity: 0;
+  }
+
+  &:outro
+  {
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.3s ease-in;
+  }
+
+  .name
+  {
+    padding: 0 8px;
+
+    &.me
+    {
+      color: #b6ff00;
+    }
+  }
+
+  .result
+  {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 1;
+
+    align-items: center;
+    text-align: center;
+  }
+
+  &.won
+  {
+    background-color: rgba(darkgreen, 0.8);
+
+    > .result
+    {
+      order: 0;
+    }
+  }
+
+  &.lost
+  {
+    background-color: rgba(darkred, 0.8);
+
+    > .result
+    {
+      order: 1;
+    }
+  }
+
+  &.noname .name
+  {
+    display: none;
+  }
+
+  &.noavatar image
+  {
+    display: none;
+  }
+}

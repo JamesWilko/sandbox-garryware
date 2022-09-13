@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Garryware.Entities;
+using Garryware.UI;
 using Sandbox;
 
 namespace Garryware;
@@ -135,6 +136,18 @@ public partial class GarrywareGame
     public static void ShowCountdown(int seconds)
     {
         Current.SetCountdownTimer(seconds);
+    }
+    
+    [ConCmd.Admin("gw_killfeed_success")]
+    public static void ShowKillfeedSuccess()
+    {
+        GameEvents.PlayerLockedInResult(ConsoleSystem.Caller, RoundResult.Won);
+    }
+    
+    [ConCmd.Admin("gw_killfeed_fail")]
+    public static void ShowKillfeedFail()
+    {
+        GameEvents.PlayerLockedInResult(ConsoleSystem.Caller, RoundResult.Lost);
     }
 
     
