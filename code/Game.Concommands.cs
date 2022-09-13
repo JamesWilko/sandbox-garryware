@@ -131,4 +131,11 @@ public partial class GarrywareGame
         Current.AvailableActions = PlayerAction.None;
     }
     
+    [ConCmd.Admin("gw_countdown")]
+    public static void ShowCountdown(int seconds)
+    {
+        Current.SetCountdownTimer(seconds);
+    }
+
+    
 }

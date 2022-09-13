@@ -338,6 +338,7 @@ public partial class GarrywarePlayer : Player
         if(HasLockedInResult) return;
         
         RoundResult = RoundResult.Won;
+        GarrywareGame.Current.UpdateWinLoseCounts();
     }
 
     public void FlagAsRoundLoser()
@@ -345,6 +346,7 @@ public partial class GarrywarePlayer : Player
         if(HasLockedInResult) return;
         
         RoundResult = RoundResult.Lost;
+        GarrywareGame.Current.UpdateWinLoseCounts();
     }
     
     public void OnRoundStateChanged(RoundResult oldResult, RoundResult newResult)

@@ -79,6 +79,7 @@ public abstract class Microgame
                 player.ResetRound();
             }
         }
+        GarrywareGame.Current.UpdateWinLoseCounts();
 
         // Clear decals and debris
         Decal.Clear(true, true);
@@ -338,6 +339,8 @@ public abstract class Microgame
                 player.FlagAsRoundLoser();
             }
         }
+
+        GarrywareGame.Current.UpdateWinLoseCounts();
     }
 
     private void PlayEndOfGameSoundEvents()

@@ -21,12 +21,11 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<Crosshair>();
         RootPanel.AddChild<GameOver>();
         RootPanel.AddChild<WaitingForPlayers>();
-        RootPanel.AddChild<CountdownTimer>();
         RootPanel.AddChild<OnScreenControls>();
         RootPanel.AddChild<AmmoCounter>();
-        RootPanel.AddChild<MiniScoreboard<MiniScoreboardEntry>>();
         RootPanel.AddChild<FullScoreboard>();
         RootPanel.AddChild<GameOverScreen>();
+        RootPanel.AddChild<RoundInfoBar>();
         
         RootPanel.AddChild<ChatBox>();
         RootPanel.AddChild<VoiceList>();

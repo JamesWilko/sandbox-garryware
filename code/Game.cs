@@ -12,6 +12,8 @@ public partial class GarrywareGame : Sandbox.Game
     private readonly ShuffledDeck<Microgame> microgamesDeck = new();
     
     [Net] public int NumConnectedClients { get; set; }
+    [Net] public int NumberOfWinners { get; set; }
+    [Net] public int NumberOfLosers { get; set; }
     
     [Net] public bool IsCountdownTimerEnabled { get; private set; }
     [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
@@ -125,7 +127,7 @@ public partial class GarrywareGame : Sandbox.Game
     {
         // Determine which games we'll be able to play
         RefreshAvailableMicrogames();
-
+        
         // Pick a random microgame from the deck
         // Play the game
         // Check if we can continue playing and repeat
@@ -138,7 +140,7 @@ public partial class GarrywareGame : Sandbox.Game
             await microgame.Play();
         }
         while (CanContinuePlaying());
-
+        
         RequestTransition(GameState.GameOver);
     }
     
@@ -277,6 +279,24 @@ public partial class GarrywareGame : Sandbox.Game
         if (playerCount >= 12) return RoomSize.Large;
         if (playerCount <= 6) return RoomSize.Small;
         return RoomSize.Medium;
+    }
+    
+    public void UpdateWinLoseCounts()
+    {
+        int winners = 0;
+        int losers = 0;
+        
+        foreach (var client in Client.All)
+        {
+            if (client.Pawn is GarrywarePlayer player && player.HasLockedInResult)
+            {
+                winners += player.HasWonRound ? 1 : 0;
+                losers += player.HasLostRound ? 1 : 0;
+            }
+        }
+
+        NumberOfWinners = winners;
+        NumberOfLosers = losers;
     }
 
 }

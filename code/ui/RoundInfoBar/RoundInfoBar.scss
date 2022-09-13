@@ -1,0 +1,162 @@
+
+RoundInfoBar
+{
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 800px;
+  height: 90px;
+  transform: translateX(-50%);
+
+  background-color: rgba(black, 0.8);
+  backdrop-filter: blur(20px);
+
+  font-family: Poppins;
+  font-weight: bold;
+  font-size: 32px;
+  color: white;
+  text-shadow: 2px 2px black;
+  
+  > .container
+  {
+    width: 100%;
+  }
+  
+  > .center-container
+  {
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+        
+    > .countdown
+    {
+      position: absolute;
+      width: 100%;
+      top: -5px;
+
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 48px;
+    }
+
+    > .sub-countdown
+    {
+      position: absolute;
+      width: 100%;
+      left: 40px;
+      top: 12px;
+
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 32px;
+    }
+    
+    & .critical
+    {
+      color: red;
+    }
+    
+  }
+  
+  > .under-container
+  {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+
+    justify-content: center;
+    align-items: flex-end;
+    
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-size: 24px;
+  }
+  
+  > .right-container
+  {
+    position: absolute;
+    width: 300px;
+    height: 50px;
+    left: 500px;
+    background-color: crimson;
+        
+    > .count
+    {
+      position: absolute;
+      height: 100%;
+      aspect-ratio: 1;
+      left: 0;
+      top: 0;
+      background-color: white;
+      color: crimson;
+
+      justify-content: center;
+      text-align: center;
+    }
+    
+    > .name
+    {
+      position: absolute;
+      width: 100%;
+      height: 50px;
+      left: 60px;
+    }
+    
+    > .icon
+    {
+      position: absolute;
+      height: 100%;
+      aspect-ratio: 1;
+      right: 0;
+      text-align: right;
+      text-shadow: 0px 0px black;
+    }
+  }
+
+  > .left-container
+  {
+    position: absolute;
+    width: 300px;
+    height: 50px;
+    left: 0;
+    background-color: limegreen;
+
+    > .count
+    {
+      position: absolute;
+      height: 100%;
+      aspect-ratio: 1;
+      right: 0;
+      top: 0;
+      background-color: white;
+      color: limegreen;
+
+      justify-content: center;
+      text-align: center;
+    }
+
+    > .name
+    {
+      position: absolute;
+      width: 100%;
+      height: 50px;
+      right: 60px;
+      text-align: right;
+    }
+
+    > .icon
+    {
+      position: absolute;
+      height: 100%;
+      aspect-ratio: 1;
+      left: 0;
+      text-shadow: 0px 0px black;
+    }
+  }
+  
+}
+
