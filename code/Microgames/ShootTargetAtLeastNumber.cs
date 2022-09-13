@@ -59,6 +59,11 @@ public class ShootTargetAtLeastNumber : Microgame
         {
             playerHits[player] = playerHits.GetValueOrDefault(player) + 1;
             SoundUtility.PlayTargetHit(To.Single(player));
+
+            if (playerHits[player] >= targetHits && !player.HasLockedInResult)
+            {
+                player.FlagAsRoundWinner();
+            }
         }
     }
 
@@ -71,7 +76,6 @@ public class ShootTargetAtLeastNumber : Microgame
         {
             if (playerPair.Value >= targetHits)
             {
-                playerPair.Key.FlagAsRoundWinner();
                 GameEvents.NewInstructions(To.Single(playerPair.Key), string.Format("You hit it {0} times!", playerPair.Value), statDisplayTime); // @localization
             }
             else
