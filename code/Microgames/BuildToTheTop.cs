@@ -11,6 +11,7 @@ public class BuildToTheTop : Microgame
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
+        WarmupLength = 3;
         GameLength = 20;
         MinimumPlayers = 2;
     }
@@ -48,6 +49,7 @@ public class BuildToTheTop : Microgame
 
     public override void Start()
     {
+        ShowInstructions("#microgame.instructions.build-to-the-top.hint");
         GiveWeapon<GravityGun>(To.Everyone);
     }
 
