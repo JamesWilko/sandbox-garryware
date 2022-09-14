@@ -470,11 +470,26 @@ public abstract class Microgame
         }
 
         // Send the person who won this game the fastest if players can meet a win condition during the round
-        if (!Rules.HasFlag(MicrogameRules.WinOnTimeout))
+        if (GarrywareGame.Current.NumberOfWinners > 0 && !Rules.HasFlag(MicrogameRules.WinOnTimeout))
         {
-            // @todo
-            GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, Client.All[0]);
-            return;
+            // Find the player who won the quickest
+            int fastestLockIn = Int32.MaxValue;
+            Client fastestWinner = null;
+            foreach (var client in Client.All)
+            {
+                if (client.Pawn is GarrywarePlayer player && player.HasWonRound && player.LockedInResultOnTick < fastestLockIn)
+                {
+                    fastestLockIn = player.LockedInResultOnTick;
+                    fastestWinner = client;
+                }
+            }
+            
+            // Send the stat if there was a winning player
+            if (fastestWinner != null)
+            {
+                GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, Client.All[0]);
+                return;
+            }
         }
     }
     

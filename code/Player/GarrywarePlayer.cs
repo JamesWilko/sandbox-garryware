@@ -22,6 +22,7 @@ public partial class GarrywarePlayer : Player
     protected RoundResult RoundResult { get; set; }
 
     public bool HasLockedInResult => RoundResult != RoundResult.Undecided;
+    public int LockedInResultOnTick { get; private set; }
     public bool HasWonRound => RoundResult == RoundResult.Won;
     public bool HasLostRound => RoundResult == RoundResult.Lost;
 
@@ -331,6 +332,7 @@ public partial class GarrywarePlayer : Player
     {
         // @todo: turn this into an event?
         RoundResult = RoundResult.Undecided;
+        LockedInResultOnTick = -1;
     }
     
     public void FlagAsRoundWinner()
@@ -338,6 +340,7 @@ public partial class GarrywarePlayer : Player
         if(HasLockedInResult) return;
         
         RoundResult = RoundResult.Won;
+        LockedInResultOnTick = Time.Tick;
         GarrywareGame.Current.UpdateWinLoseCounts();
     }
 
@@ -346,6 +349,7 @@ public partial class GarrywarePlayer : Player
         if(HasLockedInResult) return;
         
         RoundResult = RoundResult.Lost;
+        LockedInResultOnTick = Time.Tick;
         GarrywareGame.Current.UpdateWinLoseCounts();
     }
     
