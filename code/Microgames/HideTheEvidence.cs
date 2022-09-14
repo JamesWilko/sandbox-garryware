@@ -10,10 +10,8 @@ namespace Garryware.Microgames;
 /// </summary>
 public class HideTheEvidence : Microgame
 {
-    private readonly ShuffledDeck<Model> bushModels = new();
     private readonly ShuffledDeck<Model> binModels = new();
-
-    private readonly List<BreakableProp> bushes = new();
+    
     private List<Pistol> weapons;
     
     public HideTheEvidence()
@@ -22,10 +20,6 @@ public class HideTheEvidence : Microgame
         ActionsUsedInGame = PlayerAction.DropWeapon;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 4;
-        
-        bushModels.Add(Model.Load("models/sbox_props/shrubs/beech/beech_bush_medium.vmdl"));
-        bushModels.Add(Model.Load("models/sbox_props/shrubs/beech/beech_bush_regular_medium_b.vmdl"));
-        bushModels.Shuffle();
         
         binModels.Add(Model.Load("models/sbox_props/park_bin/park_bin.vmdl"));
         binModels.Add(Model.Load("models/sbox_props/bin/street_bin.vmdl"));
@@ -41,39 +35,28 @@ public class HideTheEvidence : Microgame
     {
         ShowInstructions("#microgame.instructions.hide-evidence");
         weapons = GiveWeapon<Pistol>(To.Everyone);
-        
-        int hidingSpotsToSpawn = GetRandomAdjustedClientCount(0.25f, 0.5f, 1, Room.OnFloorSpawns.Count);
+
+        int hidingSpotsToSpawn = Client.All.Count switch
+        {
+            < 5 => 1,
+            < 10 => 2,
+            < 15 => 3,
+            _ => 4
+        };
         for (int i = 0; i < hidingSpotsToSpawn; ++i)
         {
             var spawn = Room.OnFloorSpawnsDeck.Next();
-            if (Rand.Float() < 0.33f)
+            var binProp = new BreakableProp()
             {
-                var binProp = new BreakableProp()
-                {
-                    Position = spawn.Position,
-                    Rotation = Rotation.FromYaw(Rand.Float() * 360.0f),
-                    Model = binModels.Next(),
-                    Indestructible = true,
-                    Static = true,
-                    PhysicsEnabled = false,
-                };
-                AutoCleanup(binProp);
-                binProp.PhysicsCollision += OnPhysicsCollisionWithBin;
-            }
-            else
-            {
-                var bushProp = new BreakableProp()
-                {
-                    Position = spawn.Position - Vector3.Up * 10.0f,
-                    Rotation = Rotation.FromYaw(Rand.Float() * 360.0f),
-                    Model = bushModels.Next(),
-                    Indestructible = true,
-                    Static = true,
-                    PhysicsEnabled = false,
-                };
-                AutoCleanup(bushProp);
-                bushes.Add(bushProp);
-            }
+                Position = spawn.Position,
+                Rotation = Rotation.FromYaw(Rand.Float() * 360.0f),
+                Model = binModels.Next(),
+                Indestructible = true,
+                Static = true,
+                PhysicsEnabled = false,
+            };
+            AutoCleanup(binProp);
+            binProp.PhysicsCollision += OnPhysicsCollisionWithBin;
         }
     }
 
@@ -96,30 +79,9 @@ public class HideTheEvidence : Microgame
             if(!pistol.IsValid)
                 continue;
             
-            // Determine if the weapon is hidden or not
+            // If the pistol has an owner or a last owner then it is still either held or in the world, so cause this player to lose
             var owner = (pistol.Owner ?? pistol.LastOwner) as GarrywarePlayer;
-            var isHidden = false;
-            
-            if (pistol.Owner != null)
-            {
-                // Player is still holding their weapon, it's not been hidden
-                isHidden = false;
-            }
-            else
-            {
-                // Check if its close enough to a bush to be considered hidden
-                foreach (var bush in bushes)
-                {
-                    if (Vector3.DistanceBetween(pistol.Position, bush.Position) < 50.0f)
-                    {
-                        isHidden = true;
-                        break;
-                    }
-                }
-            }
-            
-            // If the weapon hasn't been hidden then cause the player to lose
-            if (!isHidden)
+            if (owner != null)
             {
                 owner.FlagAsRoundLoser();
             }
@@ -132,6 +94,5 @@ public class HideTheEvidence : Microgame
     public override void Cleanup()
     {
         RemoveAllWeapons();
-        bushes.Clear();
     }
 }
