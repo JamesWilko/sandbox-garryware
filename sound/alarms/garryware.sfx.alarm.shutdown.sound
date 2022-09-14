@@ -7,15 +7,13 @@
 		VolumeRandom = 0
 		Pitch = 1
 		PitchRandom = 0
-		Decibels = 115
+		Decibels = 130
 		Sounds = 
 		[
-			resource:"sound/alarms/annoying e.vsnd",
-			resource:"sound/alarms/doubt d.vsnd",
-			resource:"sound/alarms/foreboding e.vsnd",
+			resource:"sound/alarms/alarm.shutdown.vsnd",
 		]
 		SelectionMode = "Random"
-		MaximumDistance = 3033.086
-		MinimumDistance = 151.6543
+		MaximumDistance = 3867.0361
+		MinimumDistance = 193.3518
 	}
 }

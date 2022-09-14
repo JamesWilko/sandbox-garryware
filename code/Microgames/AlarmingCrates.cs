@@ -83,7 +83,7 @@ public class AlarmingCrates : Microgame
 
                 if (alarmSounds.TryGetValue(alarmProp, out Sound sound))
                 {
-                    // @todo: play a cutoff sound here
+                    Sound.FromEntity("garryware.sfx.alarm.shutdown", alarmProp);
                     sound.Stop(To.Everyone);
                 }
             }
