@@ -32,6 +32,7 @@ public class RoundStatPopup : Panel
             case RoundStat.XWasTheFastestToWin:
                 emojiLabel.Text = "🏆";
                 textLabel.Text = string.Format("{0} won the round first!", subject.Name); // @localization
+                PlaySound(subject == Local.Client ? SoundEffect.Positive : SoundEffect.General);
                 break;
             default:
                 throw new NotImplementedException();
