@@ -54,7 +54,9 @@ public class Dodgeball : Microgame
         {
             player.FlagAsRoundLoser();
             player.RemoveWeapons();
-            // TODO: Probably spew some particles or something
+            
+            Particles.Create("particles/microgame.confetti.burst.vpcf", player).Destroy();
+            Sound.FromEntity("garryware.sfx.confetti.pop", player);
         }
     }
 
