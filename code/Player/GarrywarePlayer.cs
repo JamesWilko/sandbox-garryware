@@ -330,7 +330,6 @@ public partial class GarrywarePlayer : Player
 
     public void ResetRound()
     {
-        // @todo: turn this into an event?
         RoundResult = RoundResult.Undecided;
         LockedInResultOnTick = -1;
     }

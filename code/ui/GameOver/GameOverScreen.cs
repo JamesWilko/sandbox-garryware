@@ -3,6 +3,7 @@ using Sandbox.UI;
 
 namespace Garryware.UI;
 
+// @todo: finish implementing
 [UseTemplate]
 public class GameOverScreen : Panel
 {

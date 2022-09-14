@@ -35,7 +35,7 @@ public class RoundStatPopup : Panel
                 PlaySound(subject == Local.Client ? SoundEffect.Positive : SoundEffect.General);
                 break;
             default:
-                throw new NotImplementedException();
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -84,7 +84,7 @@ public class RoundStatPopup : Panel
                 PlaySound(SoundEffect.Negative);
                 break;
             default:
-                throw new NotImplementedException();
+                throw new ArgumentOutOfRangeException();
         }
     }
 

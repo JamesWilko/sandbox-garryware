@@ -20,7 +20,7 @@ public class WinLoseRoundPopup : SimplePopup
                 AddClass("Lost");
                 break;
             default:
-                throw new NotImplementedException();
+                throw new ArgumentOutOfRangeException();
         }
     }
     

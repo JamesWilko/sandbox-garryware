@@ -21,7 +21,7 @@ public class NameTag : WorldPanel
     {
         PanelBounds = new Rect(-(w / 2), -(h / 2), w, h);
         StyleSheet.Load("/ui/NameTags/NameTag.scss");
-
+        
         var column = Add.Panel("content");
         {
             var awards = column.Add.Panel("awards");
