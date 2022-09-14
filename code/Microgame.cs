@@ -111,8 +111,8 @@ public abstract class Microgame
         var microgameName = GetType().Name;
         
         Log.Info($"[{microgameName}] Setting up");
-        SoundUtility.PlayNewRound(WarmupLength + GameLength);
         Setup();
+        SoundUtility.PlayNewRound(WarmupLength + GameLength); // @note: play sound after setup as we might modify the WarmupLength during setup
         if (ShowActionsToPlayer == ShowGameActions.AfterSetup)
         {
             GarrywareGame.Current.AvailableActions = ActionsUsedInGame;

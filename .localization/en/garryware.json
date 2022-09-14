@@ -79,6 +79,9 @@
   "microgame.instructions.dark-room-shoot-all-boxes": "Find and shoot every box!",
   "microgame.instructions.stay-in-the-air": "Stay in the air!",
   "microgame.instructions.dont-get-shot": "Don't get shot!",
+  "microgame.instructions.pay-attention": "Pay attention!",
+  "microgame.instructions.repeat-pattern": "Repeat the pattern!",
+  "microgame.instructions.repeat-pattern-backwards": "Repeat the pattern backwards!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

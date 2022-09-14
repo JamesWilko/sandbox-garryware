@@ -55,5 +55,6 @@ public static class MicrogamesList
         new DontGetShot(),
         new ShootTargetAtLeastNumberFunCamera(),
         new ShootTargetExactNumberFunCamera(),
+        new SimonSays(),
     };
 }
