@@ -23,7 +23,7 @@ public static class MicrogamesList
         new BreakWatermelonInBoxes(),
         new HideTheEvidence(),
         new PickupThatCan(),
-        new TidyUpEverything(),
+        new TidyUp(),
         new CatchWhiteBall(),
         new CrateColorNumberMemory(),
         new Blackjack(),
