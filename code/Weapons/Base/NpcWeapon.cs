@@ -8,7 +8,7 @@ public partial class NpcWeapon : Weapon
     public virtual float MaxSpread { get; } = 1f;
     public virtual float MinSpread { get; } = 0.05f;
     public virtual float FocusFireTime { get; } = 3.0f;
-    public virtual float FocusFireDelay { get; } = 2.0f;
+    public virtual float FocusFireDelay { get; } = 1.5f;
 
     private TimeSince timeSinceStartedShootingThisTarget;
     

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Garryware.Entities;
 using Sandbox;
 
@@ -19,8 +20,16 @@ public class DontGetShot : Microgame
     public override void Setup()
     {
         ShowInstructions("#microgame.instructions.dont-get-shot");
+
+        int numTurrets = Client.All.Count switch
+        {
+            < 3 => 1,
+            < 5 => 2,
+            < 9 => 3,
+            < 12 => 4,
+            _ => 5
+        };
         
-        int numTurrets = GetRandomAdjustedClientCount(0.3f, 0.6f);
         for (int i = 0; i < numTurrets; ++i)
         {
             var turret = new TurretNpc()

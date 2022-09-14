@@ -20,8 +20,8 @@ public class TurretNpc : AnimatedEntity
     private TimeUntil timeUntilInvertCrouch;
 
     // How long does this npc fire at a single player
-    private const float AttentionSpan = 6f;
-    private const float TeabagSpeed = 0.2f;
+    private const float AttentionSpan = 5f;
+    private const float TeabagSpeed = 0.16f;
 
     public override void Spawn()
     {
