@@ -82,6 +82,7 @@
   "microgame.instructions.pay-attention": "Pay attention!",
   "microgame.instructions.repeat-pattern": "Repeat the pattern!",
   "microgame.instructions.repeat-pattern-backwards": "Repeat the pattern backwards!",
+  "microgame.instructions.hit-the-target-physics": "Hit the target with something!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }
