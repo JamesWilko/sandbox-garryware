@@ -29,7 +29,8 @@ public class KnockbackPlatform : BiggerPlatform
                 var direction = new Vector3(x, y, 1f);
                 player.Knockback(direction * Rand.Float(650f, 800f));
                 
-                // @todo: add vfx, sfx
+                Particles.Create("particles/microgame.confetti.burst.vpcf", player).Destroy();
+                Sound.FromEntity("garryware.sfx.confetti.pop", player);
             }
         }
         
