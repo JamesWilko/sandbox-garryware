@@ -53,5 +53,7 @@ public static class MicrogamesList
         new ShootAllDarkRoomBoxes(),
         new StayInTheAir(),
         new DontGetShot(),
+        new ShootTargetAtLeastNumberFunCamera(),
+        new ShootTargetExactNumberFunCamera(),
     };
 }

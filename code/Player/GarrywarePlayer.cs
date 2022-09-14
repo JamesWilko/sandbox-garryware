@@ -424,4 +424,15 @@ public partial class GarrywarePlayer : Player
             return Parent is Chair;
         }
     }
+
+    public void OverrideCameraType(Type cameraType)
+    {
+        CameraMode = TypeLibrary.Create<CameraMode>(cameraType);
+    }
+
+    public void RestoreNormalCamera()
+    {
+        CameraMode = new FirstPersonCamera();
+    }
+    
 }
