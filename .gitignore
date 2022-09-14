@@ -402,3 +402,4 @@ code/obj
 # S&box stuff
 maps/_bakeresourcecache
 *.generated.*
+*.pkf

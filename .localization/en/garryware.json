@@ -83,6 +83,7 @@
   "microgame.instructions.repeat-pattern": "Repeat the pattern!",
   "microgame.instructions.repeat-pattern-backwards": "Repeat the pattern backwards!",
   "microgame.instructions.hit-the-target-physics": "Hit the target with something!",
+  "microgame.instructions.avoid-fireballs": "Don't let the fire demons get you!",
 
   "microgame.stat.hit-target-times": "You hit it {0} times!"
 }

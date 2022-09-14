@@ -57,5 +57,6 @@ public static class MicrogamesList
         new ShootTargetExactNumberFunCamera(),
         new SimonSays(),
         new HitTheTargetPhysics(),
+        new AvoidFireballs(),
     };
 }
