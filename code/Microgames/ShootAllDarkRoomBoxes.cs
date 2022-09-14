@@ -15,7 +15,7 @@ public class ShootAllDarkRoomBoxes : Microgame
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.Reload;
         AcceptableRooms = new[] { MicrogameRoom.DarkRoom };
-        GameLength = 7;
+        GameLength = 8;
 
         difficultyDeck = new ShuffledDeck<int>();
         difficultyDeck.Add(4, 1);
