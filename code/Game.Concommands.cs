@@ -18,7 +18,7 @@ public partial class GarrywareGame
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                BaseCarriable weapon;
+                BaseCarriable weapon = null;
                 switch (param)
                 {
                     case "pistol":
@@ -38,18 +38,30 @@ public partial class GarrywareGame
                         break;
                     case "gravgun":
                         weapon = new GravityGun();
-                        var ent = new BreakableProp
+                        _ = new BreakableProp
                         {
                             Position = player.EyePosition,
                             Model = CommonEntities.Crate,
                             CanGib = false
                         };
                         break;
+                    case "crate":
+                        _ = new BreakableProp
+                        {
+                            Position = Current.CurrentRoom.AboveBoxSpawnsDeck.Next().Position,
+                            Model = CommonEntities.Crate,
+                            CanGib = false,
+                            ShowWorldText = true,
+                            WorldText = "69"
+                        };
+                        break;
                     default:
                         Log.Error($"Invalid weapon type {param}");
                         return;
                 }
-                player.Inventory.Add(weapon, true);
+                
+                if(weapon != null)
+                    player.Inventory.Add(weapon, true);
             }
         }
     }

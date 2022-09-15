@@ -98,7 +98,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     /// <summary>
     /// Should a 3d text panel be shown in the world over this prop?
     /// </summary>
-    [Net, Change(nameof(OnShowWorldTextChanged))] public bool ShowWorldText { get; set; }
+    [Net] public bool ShowWorldText { get; set; }
     
     /// <summary>
     /// What text should be shown on the 3d text panel?
@@ -137,16 +137,6 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         UpdateGameColorMaterialOverride();
         
         // @todo: check if a microgame is running and automatically add this ent to the auto-cleanup
-    }
-    
-    public override void ClientSpawn()
-    {
-        base.ClientSpawn();
-
-        if (ShowWorldText)
-        {
-            CreateWorldText();
-        }
     }
     
     protected virtual void SetupPhysics()
@@ -220,13 +210,6 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
             Health = -1;
     }
     
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-
-        AttemptDeleteWorldText();
-    }
-
     protected DamageInfo LastDamage;
 
     /// <summary>
@@ -445,56 +428,5 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     {
         ClientLastPickedUpBy = info.Instigator;
     }
-    
-    private void CreateWorldText()
-    {
-        AttemptDeleteWorldText();
-        
-        WorldTextPanel = new EntityWorldTextPanel
-        {
-            Transform = Transform,
-            Owner = this
-        };
-    }
-    
-    private void AttemptDeleteWorldText()
-    {
-        if (!IsClient || WorldTextPanel == null)
-            return;
-        
-        WorldTextPanel.Delete();
-        WorldTextPanel = null;
-    }
-
-    private void OnShowWorldTextChanged(bool oldValue, bool newValue)
-    {
-        if (ShowWorldText)
-        {
-            CreateWorldText();
-        }
-        else
-        {
-            AttemptDeleteWorldText();
-        }
-    }
-
-    [Event.Tick.Client]
-    private void UpdateWorldTextPanelTick()
-    {
-        if (ShowWorldText && WorldTextPanel == null)
-        {
-            CreateWorldText();
-        }
-        else if(!ShowWorldText)
-        {
-            AttemptDeleteWorldText();
-        }
-        
-        if (WorldTextPanel != null)
-        {
-            WorldTextPanel.Text = WorldText;
-        }
-    }
-
     
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.StateMachine;
 using Garryware.Entities;
 using Sandbox;
@@ -298,6 +299,49 @@ public partial class GarrywareGame : Sandbox.Game
         NumberOfWinners = winners;
         NumberOfLosers = losers;
     }
+    
+    
+    private readonly Curve sizeAtDistanceCurve = new(new List<Curve.Frame>()
+    {
+        new(0, 0.5f),
+        new(200, 0.08f),
+        new(1000, 0.04f),
+    });
 
+    private readonly Curve fontSizeAtDistanceCurve = new(new List<Curve.Frame>()
+    {
+        new(0, 256),
+        new(200, 32),
+        new(1000, 24),
+    });
+    
+    public override void RenderHud()
+    {
+        base.RenderHud();
+
+        var draw = Render.Draw2D;
+        draw.FontFamily = "Poppins";
+        draw.FontWeight = 600;
+        
+        // @todo: this is really shit, but it works without any fuss so it's fine for now
+        foreach (var ent in Entity.All)
+        {
+            if (ent is BreakableProp prop && prop.ShowWorldText)
+            {
+                float distance = Local.Pawn.EyePosition.Distance(prop.Position);
+                float size = sizeAtDistanceCurve.Evaluate(distance) * Screen.Height;
+                
+                var screenPosition = prop.WorldSpaceBounds.Center.ToScreen();
+                var rect = new Rect(screenPosition.x * Screen.Width - size * 0.5f, screenPosition.y * Screen.Height - size * 0.5f, size, size);
+                draw.Color = Color.Black.WithAlpha(0.8f);
+                draw.Box(rect);
+
+                draw.FontSize = fontSizeAtDistanceCurve.Evaluate(distance);
+                draw.Color = Color.White;
+                draw.DrawText(rect, prop.WorldText);
+            }
+        }
+        
+    }
+    
 }
-
