@@ -194,7 +194,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         UpdateGameColorMaterialOverride();
     }
 
-    protected new virtual void UpdatePropData(Model model)
+    protected virtual void UpdatePropData(Model model)
     {
         Host.AssertServer();
 

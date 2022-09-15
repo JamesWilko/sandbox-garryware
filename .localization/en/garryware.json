@@ -29,6 +29,15 @@
   "action.ready-up": "Ready Up",
   "action.reload": "Reload",
 
+  "tutorial.intro.1": "Lets get this show on the road!",
+  "tutorial.intro.2": "Playing is easy, just do what it tells you to!",
+  "tutorial.intro.3": "Think you can do that?",
+  "tutorial.get-on-a-box": "Get on a box!",
+  "tutorial.get-on-a-box.success": "You did it!",
+  "tutorial.get-on-a-box.failure": "You can do better than that...",
+  "tutorial.outro.1": "That's all there is to it! Simple, right?",
+  "tutorial.outro.2": "Now here we go, do your best!",
+  
   "microgame.get-ready": "Get ready...",
   "microgame.look-carefully": "Look carefully...",
   "microgame.get-ready-to-rumble": "Get ready to rumble!",

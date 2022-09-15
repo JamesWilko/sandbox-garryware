@@ -94,6 +94,13 @@ public static partial class SoundUtility
     }
 
     [ClientRpc]
+    public static void PlayTutorial()
+    {
+        Sound.FromScreen("garryware.tutorial");
+        StopBGM();
+    }
+    
+    [ClientRpc]
     public static void PlayGameOver()
     {
         Sound.FromScreen("garryware.gameover");

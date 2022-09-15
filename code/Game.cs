@@ -115,12 +115,15 @@ public partial class GarrywareGame : Sandbox.Game
         }
     }
     
-    private void OnEnterInstructionsState(TransitionArgs<GameState> args)
+    private async void OnEnterInstructionsState(TransitionArgs<GameState> args)
     {
         ClearCountdownTimer();
+
+        // Play the tutorial game
+        var tutorialGame = new Microgames.TutorialGame();
+        await tutorialGame.Play();
         
-        // @todo: tutorial microgame
-        // For now we'll just skip straight to playing
+        // Then move onto playing for real
         RequestTransition(GameState.Playing);
     }
     
@@ -147,10 +150,7 @@ public partial class GarrywareGame : Sandbox.Game
     
     private bool CanContinuePlaying()
     {
-        // Have we reached the round limit?
-        // Has somebody won?
-        // Has everybody left?
-        // @todo
+        // Keep playing until we reach the number of rounds set in the lobby
         return CurrentRound < MaxRounds;
     }
 
