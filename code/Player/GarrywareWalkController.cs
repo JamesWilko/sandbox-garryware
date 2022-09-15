@@ -5,6 +5,11 @@ namespace Garryware;
 public partial class GarrywareWalkController : WalkController
 {
     [Predicted] public Vector3 KnockbackVelocity { get; protected set; }
+
+    public GarrywareWalkController()
+    {
+        AirAcceleration = 120f;
+    }
     
     public override void Simulate()
     {
