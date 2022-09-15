@@ -12,8 +12,7 @@ public partial class KnockbackBall : BreakableProp
         Model = CommonEntities.BeachBall;
         Indestructible = true;
         base.Spawn();
-
-        PhysicsBody.Mass = 20.0f;
+        
         timeSinceSpawn = 0;
     }
     
@@ -33,4 +32,27 @@ public partial class KnockbackBall : BreakableProp
         }
         base.OnDestroy();
     }
+
+    protected override void OnPhysicsCollision(CollisionEventData eventData)
+    {
+        base.OnPhysicsCollision(eventData);
+        
+        // Don't knockback with the person who fired this for just a short time 
+        if(eventData.Other.Entity == Owner && timeSinceSpawn < 0.1f)
+            return;
+        
+        const float minSpeedToKnockback = 300f;
+        
+        // If we hit a player hard enough, then knock them around
+        if (eventData.Speed >= minSpeedToKnockback
+            && eventData.Other.Entity is GarrywarePlayer player
+            && player.Controller is GarrywareWalkController controller)
+        {
+            var speed = (eventData.Speed - minSpeedToKnockback) * 0.5f;
+            var knockbackForce = eventData.Velocity.Normal * speed;
+            controller.Knockback(knockbackForce);
+        }
+        
+    }
+    
 }

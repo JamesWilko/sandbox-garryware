@@ -131,20 +131,6 @@ public partial class GarrywarePlayer : Player
             controller.Knockback(force);
     }
     
-    protected override void OnPhysicsCollision(CollisionEventData eventData)
-    {
-        base.OnPhysicsCollision(eventData);
-
-        // If the player is hit hard enough by something, then get knocked about by it
-        // @note: this is crap but it's used by one thing only so who really cares for now
-        if (eventData.Speed > 500f && eventData.Other.Entity.PhysicsGroup.Mass >= 10.0f
-            && Controller is GarrywareWalkController controller)
-        {
-            var knockbackForce = eventData.Velocity.Normal * eventData.Speed * 0.3f;
-            controller.Knockback(knockbackForce);
-        }
-    }
-    
     public override void Simulate(Client cl)
     {
         base.Simulate(cl);

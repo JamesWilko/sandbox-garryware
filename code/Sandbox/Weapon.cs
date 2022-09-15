@@ -37,6 +37,23 @@ public partial class Weapon : BaseWeapon, IUse
 		base.ActiveStart( ent );
 
 		TimeSinceDeployed = 0;
+		
+		EnableAllCollisions = false;
+		if (PickupTrigger != null)
+		{
+			PickupTrigger.EnableAllCollisions = false;
+		}
+	}
+
+	public override void ActiveEnd(Entity ent, bool dropped)
+	{
+		base.ActiveEnd(ent, dropped);
+		
+		EnableAllCollisions = true;
+		if (PickupTrigger != null)
+		{
+			PickupTrigger.EnableTouch = true;
+		}
 	}
 
 	public override void Reload()

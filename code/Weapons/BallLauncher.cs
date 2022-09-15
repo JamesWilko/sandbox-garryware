@@ -9,7 +9,7 @@ public partial class BallLauncher : ProjectileWeapon<KnockbackBall>
     public override float PrimaryRate => 2.0f;
     public override int MagazineCapacity => 1;
     public override float ProjectileLaunchSpeed => 1500.0f;
-    public override float LaunchDistanceOffset => 40.0f;
+    public override float LaunchDistanceOffset => 20.0f;
     
     public override void Spawn()
     {
