@@ -481,6 +481,15 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     [Event.Tick.Client]
     private void UpdateWorldTextPanelTick()
     {
+        if (ShowWorldText && WorldTextPanel == null)
+        {
+            CreateWorldText();
+        }
+        else if(!ShowWorldText)
+        {
+            AttemptDeleteWorldText();
+        }
+        
         if (WorldTextPanel != null)
         {
             WorldTextPanel.Text = WorldText;
