@@ -10,6 +10,7 @@ public class RocketJump : Microgame
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
+        WarmupLength = 2;
         GameLength = 5;
     }
     

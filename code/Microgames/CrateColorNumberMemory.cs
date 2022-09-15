@@ -22,6 +22,7 @@ public class CrateColorNumberMemory : Microgame
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
+        WarmupLength = 2;
         GameLength = 3;
         
         for(int i = 10; i < 100; i++)

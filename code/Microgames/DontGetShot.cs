@@ -14,6 +14,7 @@ public class DontGetShot : Microgame
         Rules = MicrogameRules.WinOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.Crouch | PlayerAction.Sprint;
         AcceptableRooms = new[] { MicrogameRoom.Boxes };
+        WarmupLength = 3;
         GameLength = 10;
     }
     

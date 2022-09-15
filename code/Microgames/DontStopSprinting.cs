@@ -13,6 +13,7 @@ public class DontStopSprinting : Microgame
         ActionsUsedInGame = PlayerAction.Sprint;
         ShowActionsToPlayer = ShowGameActions.AfterSetup;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
+        WarmupLength = 2;
         GameLength = 5;
     }
     
