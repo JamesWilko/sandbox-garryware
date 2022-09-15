@@ -72,7 +72,7 @@ public class TurretNpc : AnimatedEntity
 
     protected void PickNewTarget()
     {
-        var newTarget = Rand.FromList(Client.All.ToList()).Pawn as GarrywarePlayer;
+        var newTarget = TargetingUtility.GetRandomPlayerStillInPlay();
         if (currentTarget != newTarget)
         {
             ActiveWeapon?.OnChoseNewTarget();

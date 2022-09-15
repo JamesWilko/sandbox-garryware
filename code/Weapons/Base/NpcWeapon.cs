@@ -23,6 +23,12 @@ public partial class NpcWeapon : Weapon
 
         return TimeSincePrimaryAttack > (1 / rate);
     }
+    
+    public override void AttackPrimary()
+    {
+        base.AttackPrimary();
+        TimeSincePrimaryAttack = 0;
+    }
 
     // @note: this really should be an event, but we're only used on one weapon and by one npc right now so fuck it
     public void OnChoseNewTarget()
