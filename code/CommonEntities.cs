@@ -38,7 +38,8 @@ public static class CommonEntities
         ColorsDeck.Add(GameColor.Yellow);
         ColorsDeck.Add(GameColor.Cyan);
         ColorsDeck.Shuffle();
-        
+
+        RubbishDeck = new ShuffledDeck<Model>();
         RubbishDeck.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
         RubbishDeck.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
         RubbishDeck.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
