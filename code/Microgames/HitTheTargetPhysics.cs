@@ -6,7 +6,6 @@ namespace Garryware.Microgames;
 public class HitTheTargetPhysics : Microgame
 {
     private readonly ShuffledDeck<float> scalesDeck = new();
-    private readonly ShuffledDeck<Model> rubbishModels = new();
     
     public HitTheTargetPhysics()
     {
@@ -23,14 +22,6 @@ public class HitTheTargetPhysics : Microgame
         scalesDeck.Add(3.0f, 3);
         scalesDeck.Add(2.0f, 1);
         scalesDeck.Shuffle();
-        
-        rubbishModels.Clear();
-        rubbishModels.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
-        rubbishModels.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
-        rubbishModels.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
-        rubbishModels.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
-        rubbishModels.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);
-        rubbishModels.Shuffle();
     }
     
     public override void Setup()
@@ -54,7 +45,7 @@ public class HitTheTargetPhysics : Microgame
             var rubbish = new BreakableProp
             {
                 Transform = Room.InAirSpawnsDeck.Next().Transform,
-                Model = rubbishModels.Next(),
+                Model = CommonEntities.RubbishDeck.Next(),
                 Indestructible = true,
             };
             AutoCleanup(rubbish);

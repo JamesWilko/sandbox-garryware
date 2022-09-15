@@ -9,12 +9,13 @@ public static class CommonEntities
 {
 
     public static ShuffledDeck<GameColor> ColorsDeck { get; private set; }
-
+    
     public static Model Crate;
     public static Model Balloon;
     public static Model BeachBall;
     public static Model Ball;
     public static Model Watermelon;
+    public static ShuffledDeck<Model> RubbishDeck { get; private set; }
 
     public static Material WhiteMaterial;
     
@@ -37,11 +38,19 @@ public static class CommonEntities
         ColorsDeck.Add(GameColor.Yellow);
         ColorsDeck.Add(GameColor.Cyan);
         ColorsDeck.Shuffle();
+        
+        RubbishDeck.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
+        RubbishDeck.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
+        RubbishDeck.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
+        RubbishDeck.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
+        RubbishDeck.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);
+        RubbishDeck.Shuffle();
     }
     
     public static void ShuffleDecks()
     {
         ColorsDeck.Shuffle();
+        RubbishDeck.Shuffle();
     }
     
 }

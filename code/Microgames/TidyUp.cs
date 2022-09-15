@@ -8,7 +8,6 @@ namespace Garryware.Microgames;
 public class TidyUp : Microgame
 {
     private static readonly Model BinModel = Model.Load("models/sbox_props/park_bin/park_bin.vmdl");
-    private static readonly ShuffledDeck<Model> RubbishModels = new();
 
     private Dictionary<GarrywarePlayer, int> rubbishClearedPerPlayer = new();
     private int targetToClear;
@@ -19,13 +18,6 @@ public class TidyUp : Microgame
         ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
         GameLength = 8;
-        
-        RubbishModels.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
-        RubbishModels.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
-        RubbishModels.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
-        RubbishModels.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
-        RubbishModels.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);
-        RubbishModels.Shuffle();
     }
     
     public override void Setup()
@@ -61,7 +53,7 @@ public class TidyUp : Microgame
             var rubbish = new BreakableProp
             {
                 Transform = Room.InAirSpawnsDeck.Next().Transform,
-                Model = RubbishModels.Next(),
+                Model = CommonEntities.RubbishDeck.Next(),
                 Indestructible = true,
             };
             AutoCleanup(rubbish);
@@ -71,7 +63,7 @@ public class TidyUp : Microgame
         // Set how much rubbish we have to clean up
         targetToClear = numPlayers switch
         {
-            < 2 => 1,
+            <= 2 => 1,
             < 5 => 2,
             _ => 3
         };
@@ -88,7 +80,7 @@ public class TidyUp : Microgame
             && prop.ClientLastPickedUpBy.IsValid()
             && prop.ClientLastPickedUpBy.Pawn is GarrywarePlayer player)
         {
-            rubbishClearedPerPlayer[player] = rubbishClearedPerPlayer.GetValueOrDefault(player) + 1;
+            rubbishClearedPerPlayer[player] = rubbishClearedPerPlayer.GetValueOrDefault(player, 0) + 1;
 
             Particles.Create("particles/impact.smokepuff.vpcf", prop.Position).Destroy();
             Sound.FromEntity("sounds/balloon_pop_cute.sound", collisionData.This.Entity);
