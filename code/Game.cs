@@ -29,7 +29,10 @@ public partial class GarrywareGame : Sandbox.Game
     
     [Net] public GarrywareRoom CurrentRoom { get; set; }
     private int playerCountWhenRoomLastChanged;
-
+    
+    [ConVar.Server("gw_skip_tutorial")]
+    public static bool SkipTutorial { get; set; }
+    
     public GarrywareGame()
     {
         Current = this;
@@ -119,10 +122,13 @@ public partial class GarrywareGame : Sandbox.Game
     {
         ClearCountdownTimer();
 
-        // Play the tutorial game
-        var tutorialGame = new Microgames.TutorialGame();
-        await tutorialGame.Play();
-        
+        if (!SkipTutorial)
+        {
+            // Play the tutorial game
+            var tutorialGame = new Microgames.TutorialGame();
+            await tutorialGame.Play();
+        }
+
         // Then move onto playing for real
         RequestTransition(GameState.Playing);
     }
