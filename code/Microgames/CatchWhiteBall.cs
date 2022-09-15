@@ -33,10 +33,11 @@ public class CatchWhiteBall : Microgame
         {
             var ball = new BouncyBall
             {
-                Transform = Room.InAirSpawnsDeck.Next().Transform,
+                Position = Room.AboveBoxSpawnsDeck.Next().Position,
+                Rotation = Rotation.Random,
                 GameColor = GameColor.White
             };
-            ball.ApplyLocalImpulse(Vector3.Random * 512.0f);
+            ball.ApplyLocalImpulse(Vector3.Random.WithZ(0).Normal * 512.0f);
             AutoCleanup(ball);
             
             ball.Caught += OnWhiteBallCaught;
@@ -47,10 +48,11 @@ public class CatchWhiteBall : Microgame
         {
             var ball = new BouncyBall
             {
-                Transform = Room.InAirSpawnsDeck.Next().Transform,
+                Position = Room.AboveBoxSpawnsDeck.Next().Position,
+                Rotation = Rotation.Random,
                 GameColor = CommonEntities.ColorsDeck.Next() // @note: use colors deck here as it can't generate white
             };
-            ball.ApplyLocalImpulse(Vector3.Random * 512.0f);
+            ball.ApplyLocalImpulse(Vector3.Random.WithZ(0).Normal * 512.0f);
             AutoCleanup(ball);
         }
         
