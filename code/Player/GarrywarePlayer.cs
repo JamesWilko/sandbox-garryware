@@ -27,6 +27,13 @@ public partial class GarrywarePlayer : Player
     public bool HasLostRound => RoundResult == RoundResult.Lost;
 
     public bool IsDucking => Controller.HasTag("ducked");
+    private bool WasDucking { get; set; }
+    private TimeSince TimeSinceSwitchingStance { get; set; }
+    public bool IsSquatting { get; set; }
+    public event Action<GarrywarePlayer> Squatted; 
+
+    private const float SquatDownTime = 0.15f;
+    private const float SquatUpTime = 0.1f;
     
     public delegate void DamageDelegate(GarrywarePlayer victim, DamageInfo info);
     public event DamageDelegate Hurt;
@@ -179,6 +186,28 @@ public partial class GarrywarePlayer : Player
                 timeSinceDropped = 0;
             }
         }
+        
+        // Squat detection
+        if (IsDucking && !WasDucking)
+        {
+            TimeSinceSwitchingStance = 0.0f;
+        }
+        else if(!IsDucking && WasDucking)
+        {
+            TimeSinceSwitchingStance = 0.0f;
+        }
+        WasDucking = IsDucking;
+
+        if (IsDucking && !IsSquatting && TimeSinceSwitchingStance > SquatDownTime)
+        {
+            IsSquatting = true;
+        }
+        if (!IsDucking && IsSquatting && TimeSinceSwitchingStance > SquatUpTime)
+        {
+            IsSquatting = false;
+            Squatted?.Invoke(this);
+        }
+        
     }
 
     public override void StartTouch(Entity other)

@@ -5,19 +5,8 @@ namespace Garryware.Microgames;
 
 public class Squats : Microgame
 {
-    class SquatData
-    {
-        public int Total;
-        public bool IsDucking;
-        public bool HasSquatted;
-        public TimeSince TimeSinceSwitchingStance;
-    }
-    
     private int target;
-    private readonly Dictionary<GarrywarePlayer, SquatData> playerData = new();
-
-    private const float DownTime = 0.25f;
-    private const float UpTime = 0.1f;
+    private readonly Dictionary<GarrywarePlayer, int> numPlayerSquats = new();
 
     public Squats()
     {
@@ -25,6 +14,7 @@ public class Squats : Microgame
         ActionsUsedInGame = PlayerAction.Crouch;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty, MicrogameRoom.Platform };
         GameLength = 10;
+        UiClass = "MicrogameUiSquats";
     }
     
     public override void Setup()
@@ -36,73 +26,43 @@ public class Squats : Microgame
     public override void Start()
     {
         ShowInstructions(string.Format("Squat at least {0} times!", target)); // @localization
-    }
-
-    public override void Tick()
-    {
-        base.Tick();
 
         foreach (var client in Client.All)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                // Make sure player has their data
-                if (!playerData.ContainsKey(player))
-                {
-                    playerData.Add(player, new SquatData());
-                }
-
-                var squatData = playerData[player];
-                
-                // Check if we started or stopped crouching
-                if (player.IsDucking && !squatData.IsDucking)
-                {
-                    squatData.IsDucking = true;
-                    squatData.TimeSinceSwitchingStance = 0.0f;
-                }
-                else if(!player.IsDucking && squatData.IsDucking)
-                {
-                    squatData.IsDucking = false;
-                    squatData.TimeSinceSwitchingStance = 0.0f;
-                }
-                
-                // Check if enough time has passed to consider it a successful squat
-                if (squatData.IsDucking
-                    && !squatData.HasSquatted
-                    && squatData.TimeSinceSwitchingStance >= DownTime)
-                {
-                    squatData.HasSquatted = true;
-                    SoundUtility.PlaySmallTargetHit(To.Single(player));
-                }
-
-                if (squatData.HasSquatted
-                    && !squatData.IsDucking
-                    && squatData.TimeSinceSwitchingStance >= UpTime)
-                {
-                    squatData.HasSquatted = false;
-                    squatData.Total++;
-                    
-                    if (squatData.Total >= target)
-                    {
-                        player.FlagAsRoundWinner();
-                    }
-                    else
-                    {
-                        SoundUtility.PlayTargetHit(To.Single(player));
-                    }
-                }
+                player.Squatted += OnPlayerSquatted;
             }
         }
-        
+    }
+
+    private void OnPlayerSquatted(GarrywarePlayer player)
+    {
+        numPlayerSquats[player] = numPlayerSquats.GetValueOrDefault(player, 0) + 1;
+        if (numPlayerSquats[player] >= target)
+        {
+            player.FlagAsRoundWinner();
+        }
+        else
+        {
+            SoundUtility.PlayTargetHit(To.Single(player));
+        }
     }
 
     public override void Finish()
     {
+        foreach (var client in Client.All)
+        {
+            if (client.Pawn is GarrywarePlayer player)
+            {
+                player.Squatted -= OnPlayerSquatted;
+            }
+        }
     }
 
     public override void Cleanup()
     {
-        playerData.Clear();
+        numPlayerSquats.Clear();
     }
     
 }
