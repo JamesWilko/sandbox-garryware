@@ -48,7 +48,10 @@ public partial class Weapon : BaseWeapon, IUse
 	public override void ActiveEnd(Entity ent, bool dropped)
 	{
 		base.ActiveEnd(ent, dropped);
-		
+
+		if (!IsValid)
+			return;
+
 		EnableAllCollisions = true;
 		if (PickupTrigger != null)
 		{
