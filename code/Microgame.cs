@@ -46,6 +46,7 @@ public abstract class Microgame
     public float GameLength { get; protected set; } = 10.0f;
     public float WarmupLength { get; protected set; } = 1.5f;
     public float CooldownLength { get; protected set; } = 2.5f;
+    public string UiClass { get; protected set; }
     
     public PlayerAction ActionsUsedInGame { get; protected set; } = PlayerAction.None;
     public MicrogameRules Rules { get; protected set; } = MicrogameRules.None;
@@ -113,6 +114,10 @@ public abstract class Microgame
         Log.Info($"[{microgameName}] Setting up");
         Setup();
         SoundUtility.PlayNewRound(WarmupLength + GameLength); // @note: play sound after setup as we might modify the WarmupLength during setup
+        if (!string.IsNullOrEmpty(UiClass))
+        {
+            GameEvents.ShowMicrogameUi(UiClass);
+        }
         if (ShowActionsToPlayer == ShowGameActions.AfterSetup)
         {
             GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
@@ -147,6 +152,10 @@ public abstract class Microgame
         
         Log.Info($"[{microgameName}] Cleaning up");
         Cleanup();
+        if (!string.IsNullOrEmpty(UiClass))
+        {
+            GameEvents.RemoveMicrogameUi();
+        }
         
         // Automatically clean up as well in case we forget to in the cleanup function
         RemoveAllWeapons();

@@ -1,5 +1,6 @@
 ﻿using Garryware;
 using Garryware.UI;
+using Garryware.UI.Microgames;
 using Sandbox;
 using Sandbox.UI;
 
@@ -7,6 +8,7 @@ using Sandbox.UI;
 public partial class GarrywareHud : HudEntity<RootPanel>
 {
     private SimplePopup CurrentInstructions { get; set; }
+    private Panel CurrentMicrogameUi { get; set; }
     
     public GarrywareHud()
     {
@@ -29,13 +31,15 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         RootPanel.AddChild<ChatBox>();
         RootPanel.AddChild<VoiceList>();
         RootPanel.AddChild<VoiceSpeaker>();
-
+        
         // Listen to game events
         GameEvents.OnNewInstructions += OnNewInstructions;
         GameEvents.OnClearInstructions += OnClearInstructions;
         GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
         GameEvents.ClientStatReceived += OnClientStatReceived;
         GameEvents.IntegerStatReceived += OnIntegerStatReceived;
+        GameEvents.NewMicrogameUi += GameEventsOnNewMicrogameUi;
+        GameEvents.ClearMicrogameUi += GameEventsOnClearMicrogameUi;
     }
     
     protected override void OnDestroy()
@@ -48,6 +52,8 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         GameEvents.OnPlayerLockedInResult -= OnPlayerLockedInResult;
         GameEvents.ClientStatReceived -= OnClientStatReceived;
         GameEvents.IntegerStatReceived -= OnIntegerStatReceived;
+        GameEvents.NewMicrogameUi -= GameEventsOnNewMicrogameUi;
+        GameEvents.ClearMicrogameUi -= GameEventsOnClearMicrogameUi;
     }
     
     private void OnNewInstructions(string text, float displayTime)
@@ -95,6 +101,18 @@ public partial class GarrywareHud : HudEntity<RootPanel>
     {
         var statPopup = RootPanel.AddChild<RoundStatPopup>();
         statPopup.SetDetails(stat, value);
+    }
+    
+    private void GameEventsOnNewMicrogameUi(string classname)
+    {
+        CurrentMicrogameUi = TypeLibrary.Create<Panel>(classname);
+        CurrentMicrogameUi.Parent = RootPanel;
+    }
+    
+    private void GameEventsOnClearMicrogameUi(string classname)
+    {
+        CurrentMicrogameUi?.Delete();
+        CurrentMicrogameUi = null;
     }
     
 }

@@ -16,6 +16,10 @@ public partial class GameEvents : BaseNetworkable
 
     public static event System.Action<RoundStat, Client> ClientStatReceived;
     public static event System.Action<RoundStat, int> IntegerStatReceived;
+
+    public delegate void MicrogameUiClassDelegate(string className);
+    public static event MicrogameUiClassDelegate NewMicrogameUi;
+    public static event MicrogameUiClassDelegate ClearMicrogameUi;
     
     [ClientRpc]
     public static void NewInstructions(string text, float displayTime)
@@ -55,6 +59,18 @@ public partial class GameEvents : BaseNetworkable
     public static void SendIntegerStat(RoundStat stat, int value)
     {
         IntegerStatReceived?.Invoke(stat, value);
+    }
+
+    [ClientRpc]
+    public static void ShowMicrogameUi(string className)
+    {
+        NewMicrogameUi?.Invoke(className);
+    }
+    
+    [ClientRpc]
+    public static void RemoveMicrogameUi()
+    {
+        ClearMicrogameUi?.Invoke(string.Empty);
     }
     
 }
