@@ -318,7 +318,7 @@ public partial class GarrywareGame : Sandbox.Game
     {
         new(0, 256),
         new(200, 32),
-        new(1000, 24),
+        new(1000, 20),
     });
     
     public override void RenderHud()
