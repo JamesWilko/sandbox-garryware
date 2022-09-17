@@ -77,7 +77,7 @@ public class GameOverScreen : Panel
 
         foreach (var client in Client.All)
         {
-            var entry = ScoreboardContainer.AddChild<MiniScoreboardEntry>();
+            var entry = ScoreboardContainer.AddChild<GameOverScoreboardEntry>();
             entry.Client = client;
             entry.ShowLongestStreak = true;
             entry.UpdateData();
