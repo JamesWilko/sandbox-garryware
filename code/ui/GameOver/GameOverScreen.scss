@@ -8,6 +8,7 @@
   backdrop-filter: blur(40px);
   pointer-events: none;
   opacity: 0;
+  transition: all 0.5s ease-out;
 }
 
 .open
@@ -69,6 +70,23 @@
   {
     margin-left: auto;
     font-style: normal;
+  }
+  
+  button
+  {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(white, 0.1);
+    
+    &:hover
+    {
+      background-color: rgba(white, 0.3);
+    }
+    
+    &:active
+    {
+      background-color: rgba(forestgreen, 1);
+    }
   }
   
 }

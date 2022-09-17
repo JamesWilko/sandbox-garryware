@@ -3,7 +3,6 @@ using Sandbox.UI;
 
 namespace Garryware.UI;
 
-// @todo: finish implementing
 [UseTemplate]
 public class GameOverScreen : Panel
 {
@@ -17,16 +16,34 @@ public class GameOverScreen : Panel
     public GameOverScreen()
     {
         StyleSheet.Load("/ui/GameOver/GameOverScreen.scss");
+        
+        var place = Local.Client.GetInt(Tags.Place, 99);
+        var points = Local.Client.GetInt(Tags.Points, 0);
+        
+        // Update player place and results
+        MedalLabel.Text = UiUtility.GetEmojiForPlace(place);
+        ResultLabel.Text = $"You came {UiUtility.GetPlaceQualifier(place)}!"; // @localization
+        PointsLabel.Text = $"{points} Points"; // @localization
+        BuildRoundResults();
+        BuildEndOfGameScoreboard();
+        Show();
+    }
+
+    private async void Show()
+    {
+        await GameTask.Yield();
+        SetClass("open", true);
     }
 
     public override void Tick()
     {
         base.Tick();
 
-        // @todo: remove
         if (Input.Pressed(InputButton.Menu))
-            Show();
-        
+        {
+            SetClass("open", !HasClass("open"));
+        }
+
         if(!IsVisible)
             return;
 
@@ -40,30 +57,7 @@ public class GameOverScreen : Panel
             ReturnToLobbyTimer.Text = "Returning to lobby shortly..."; // @localization
         }
     }
-
-    public void Show()
-    {
-        // @todo: remove
-        if (IsVisible)
-        {
-            SetClass("open", false);
-            return;
-        }
-
-        var place = Local.Client.GetInt(Tags.Place, 99);
-        var points = Local.Client.GetInt(Tags.Points, 0);
-        
-        // Update player place and results
-        MedalLabel.Text = UiUtility.GetEmojiForPlace(place);
-        ResultLabel.Text = $"You came {UiUtility.GetPlaceQualifier(place)}!"; // @localization
-        PointsLabel.Text = $"{points} Points"; // @localization
-        BuildRoundResults();
-        BuildEndOfGameScoreboard();
-
-        // Show game over screen
-        SetClass("open", true);
-    }
-
+    
     private void BuildRoundResults()
     {
         RoundResults.DeleteChildren();

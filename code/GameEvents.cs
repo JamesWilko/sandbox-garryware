@@ -20,6 +20,8 @@ public partial class GameEvents : BaseNetworkable
     public delegate void MicrogameUiClassDelegate(string className);
     public static event MicrogameUiClassDelegate NewMicrogameUi;
     public static event MicrogameUiClassDelegate ClearMicrogameUi;
+
+    public static event System.Action GameOver;
     
     [ClientRpc]
     public static void NewInstructions(string text, float displayTime)
@@ -71,6 +73,13 @@ public partial class GameEvents : BaseNetworkable
     public static void RemoveMicrogameUi()
     {
         ClearMicrogameUi?.Invoke(string.Empty);
+    }
+    
+    [ClientRpc]
+    public static void TriggerGameOver()
+    {
+        SoundUtility.PlayGameOver();
+        GameOver?.Invoke();
     }
     
 }

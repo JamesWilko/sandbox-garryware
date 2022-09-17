@@ -20,12 +20,10 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         // Build
         RootPanel.AddChild<NameTags<NameTag>>();
         RootPanel.AddChild<Crosshair>();
-        RootPanel.AddChild<GameOver>();
         RootPanel.AddChild<WaitingForPlayers>();
         RootPanel.AddChild<OnScreenControls>();
         RootPanel.AddChild<AmmoCounter>();
         RootPanel.AddChild<FullScoreboard>();
-        RootPanel.AddChild<GameOverScreen>();
         RootPanel.AddChild<RoundInfoBar>();
         
         RootPanel.AddChild<ChatBox>();
@@ -40,6 +38,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         GameEvents.IntegerStatReceived += OnIntegerStatReceived;
         GameEvents.NewMicrogameUi += GameEventsOnNewMicrogameUi;
         GameEvents.ClearMicrogameUi += GameEventsOnClearMicrogameUi;
+        GameEvents.GameOver += OnGameOver;
     }
     
     protected override void OnDestroy()
@@ -54,6 +53,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         GameEvents.IntegerStatReceived -= OnIntegerStatReceived;
         GameEvents.NewMicrogameUi -= GameEventsOnNewMicrogameUi;
         GameEvents.ClearMicrogameUi -= GameEventsOnClearMicrogameUi;
+        GameEvents.GameOver -= OnGameOver;
     }
     
     private void OnNewInstructions(string text, float displayTime)
@@ -113,6 +113,11 @@ public partial class GarrywareHud : HudEntity<RootPanel>
     {
         CurrentMicrogameUi?.Delete();
         CurrentMicrogameUi = null;
+    }
+    
+    private void OnGameOver()
+    {
+        RootPanel.AddChild<GameOverScreen>();
     }
     
 }

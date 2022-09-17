@@ -181,16 +181,16 @@ public partial class GarrywareGame : Sandbox.Game
 
     private async void OnEnterGameOverState(TransitionArgs<GameState> args)
     {
-        const float returnToLobbySeconds = 30.0f;
-        SoundUtility.PlayGameOver();
-
+        const float returnToLobbySeconds = 300.0f;
+        
         await GameServices.EndGameAsync();
+        GameEvents.TriggerGameOver();
         
         SetCountdownTimer(returnToLobbySeconds);
         await GameTask.DelayRealtimeSeconds(returnToLobbySeconds);
         
         // Kick everybody out of the game
-        Client.All.ToList().ForEach( cl => cl.Kick() );
+        Client.All.ToList().ForEach(cl => cl.Kick());
     }
     
     public override void ClientJoined(Client client)
