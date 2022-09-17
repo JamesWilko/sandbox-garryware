@@ -14,7 +14,7 @@
   width: 800px;
   height: 90px;
   transform: translateX(-50%);
-  z-index: 500;
+  z-index: 50;
 
   background-color: rgba(black, 0.8);
   backdrop-filter: blur(20px);
@@ -169,7 +169,7 @@
   width: 50%;
   height: 50px;
   left: -400px;
-  z-index: 400;
+  z-index: 40;
 
   flex-direction: row-reverse;
   align-items: flex-end;
@@ -181,7 +181,7 @@
   width: 50%;
   height: 50px;
   right: -400px;
-  z-index: 400;
+  z-index: 40;
 
   flex-direction: row;
   align-items: flex-start;
