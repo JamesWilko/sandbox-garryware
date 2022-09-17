@@ -21,8 +21,9 @@ public class TutorialGame
         SoundUtility.PlayNewRound(tutorialRoundTimer);
         GameEvents.NewInstructions("#tutorial.get-on-a-box", 3);
         GarrywareGame.Current.SetCountdownTimer(tutorialRoundTimer);
-        await GameTask.DelaySeconds(tutorialRoundTimer); 
+        await GameTask.DelaySeconds(tutorialRoundTimer);
         GarrywareGame.Current.ClearCountdownTimer();
+        GarrywareGame.Current.AvailableActions = PlayerAction.None;
         
         foreach (var client in Client.All)
         {
@@ -30,11 +31,17 @@ public class TutorialGame
             {
                 bool onBox = player.IsOnABox();
                 GameEvents.PlayerLockedInResult(client, onBox ? RoundResult.Won : RoundResult.Lost);
-                GameEvents.NewInstructions(To.Single(client), onBox ? "#tutorial.get-on-a-box.success" : "#tutorial.get-on-a-box.failure", 3f);
+            }
+        }
+        await GameTask.DelaySeconds(1.5f);
+        foreach (var client in Client.All)
+        {
+            if (client.Pawn is GarrywarePlayer player)
+            {
+                GameEvents.NewInstructions(To.Single(client), player.HasWonRound ? "#tutorial.get-on-a-box.success" : "#tutorial.get-on-a-box.failure", 3f);
             }
         }
         await GameTask.DelaySeconds(3);
-        GarrywareGame.Current.AvailableActions = PlayerAction.None;
         
         await ShowInstructions("#tutorial.outro.1");
         await ShowInstructions("#tutorial.outro.2");
