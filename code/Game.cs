@@ -181,7 +181,7 @@ public partial class GarrywareGame : Sandbox.Game
 
     private async void OnEnterGameOverState(TransitionArgs<GameState> args)
     {
-        const float returnToLobbySeconds = 300.0f;
+        const float returnToLobbySeconds = 30.0f;
         
         await GameServices.EndGameAsync();
         GameEvents.TriggerGameOver();
