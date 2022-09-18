@@ -5,8 +5,15 @@ namespace Garryware;
 
 public partial class GravityGun : Carriable
 {
-    public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
-
+    // @note: if we change the model from the flashlight then the light attachment needs to be updated
+    public override string ViewModelPath => "weapons/rust_flashlight/v_rust_flashlight.vmdl";
+    private const string ViewModelTracerAttachment = "light";
+    private const string WorldModelTracerAttachment = "muzzle";
+    private string EffectAttachmentPoint => ViewModelEntity.IsValid() && IsFirstPersonMode ? ViewModelTracerAttachment : WorldModelTracerAttachment;
+    
+    [Net, Change(nameof(OnValidGrabChanged))] public bool HasValidGrab { get; set; }
+    [Net, Predicted] public bool IsAttemptingToPullEntity { get; set; }
+    
     public PhysicsBody HeldBody { get; private set; }
     public Vector3 HeldPos { get; private set; }
     public Rotation HeldRot { get; private set; }
@@ -30,9 +37,13 @@ public partial class GravityGun : Carriable
     protected virtual float BreakLinearForce => 2000.0f;
 
     private TimeSince timeSinceDrop;
+
+    private Sound pullEntitySoundLoop;
+    private Particles pullEntityParticles;
     
     private Entity lastTargetedEntity;
     private TimeSince timeSinceEntityLastTargeted;
+    private TimeSince timeSinceEntityPunted;
     
     private const string grabbedTag = "grabbed";
 
@@ -46,8 +57,23 @@ public partial class GravityGun : Carriable
 
     public override void Simulate(Client client)
     {
-        if (Owner is not Player owner) return;
+        if (Owner is not Player owner)
+            return;
         
+        if (Input.Down(InputButton.SecondaryAttack) && !IsAttemptingToPullEntity)
+        {
+            IsAttemptingToPullEntity = true;
+            if (!HasValidGrab)
+            {
+                PlayWeaponSound("weapon.gravgun.pull.start");
+            }
+        }
+        else if(!Input.Down(InputButton.SecondaryAttack) && IsAttemptingToPullEntity)
+        {
+            IsAttemptingToPullEntity = false;
+        }
+        SetGrabParticlesVisible(IsAttemptingToPullEntity || HasValidGrab);
+
         if (!IsServer)
             return;
 
@@ -57,6 +83,7 @@ public partial class GravityGun : Carriable
             var eyeRot = owner.EyeRotation;
             var eyeDir = owner.EyeRotation.Forward;
 
+            HasValidGrab = HeldBody.IsValid() && HeldBody.PhysicsGroup != null;
             if (HeldBody.IsValid() && HeldBody.PhysicsGroup != null)
             {
                 if (Input.Pressed(InputButton.PrimaryAttack))
@@ -85,7 +112,7 @@ public partial class GravityGun : Carriable
             
             var body = tr.Body;
             var modelEnt = tr.Entity as ModelEntity;
-
+            
             if (body.BodyType != PhysicsBodyType.Dynamic)
                 return;
 
@@ -326,7 +353,7 @@ public partial class GravityGun : Carriable
         Client?.Pvs.Add(HeldEntity);
     }
 
-    private void GrabEnd()
+    private void GrabEnd(bool fromPunt = false)
     {
         timeSinceDrop = 0;
 
@@ -391,8 +418,9 @@ public partial class GravityGun : Carriable
             HeldBody.ApplyAngularImpulse(Vector3.Random * (HeldBody.Mass * ThrowForce));
         }
 
-        GrabEnd();
-        
+        ShootPuntTracer(HeldEntity.WorldSpaceBounds.Center);
+        GrabEnd(fromPunt: true);
+
         if (HeldEntity is IGravityGunCallback callbacks)
         {
             callbacks.OnGravityGunPunted(new GravityGunInfo()
@@ -411,6 +439,7 @@ public partial class GravityGun : Carriable
         
         var pushScale = 1.0f - Math.Clamp(tr.Distance / MaxPushDistance, 0.0f, 1.0f);
         tr.Body.ApplyImpulseAt(tr.EndPosition, eyeDir * (tr.Body.Mass * (PushForce * pushScale)));
+        ShootPuntTracer(tr.HitPosition);
         
         if (HeldEntity is IGravityGunCallback callbacks)
         {
@@ -428,4 +457,61 @@ public partial class GravityGun : Carriable
     {
         return Owner == null || HeldBody.IsValid();
     }
+
+    [ClientRpc]
+    private void ShootPuntTracer(Vector3 location)
+    {
+        PlayWeaponSound("weapon.gravgun.punt");
+        
+        var muzzle = EffectEntity.GetAttachment(EffectAttachmentPoint).GetValueOrDefault();
+        var tracer = Particles.Create("particles/gravgun/weapon.gravgun.punt.vpcf", EffectEntity);
+        tracer.SetPosition(1, muzzle.Position);
+        tracer.SetPosition(2, location);
+        tracer.Destroy();
+        timeSinceEntityPunted = 0;
+    }
+
+    private void OnValidGrabChanged(bool wasValidGrab, bool hasValidGrab)
+    {
+        if (hasValidGrab)
+        {
+            pullEntitySoundLoop = PlayWeaponSound("weapon.gravgun.pull.loop");
+        }
+        else
+        {
+            pullEntitySoundLoop.Stop();
+            
+            // @note: lazy hack to stop the end sound playing when punt something directly from holding it
+            if (timeSinceEntityPunted > 0.3f)
+            {
+                PlayWeaponSound("weapon.gravgun.pull.end");
+            }
+        }
+    }
+
+    private void SetGrabParticlesVisible(bool visible)
+    {
+        if (visible && pullEntityParticles == null)
+        {
+            pullEntityParticles = Particles.Create("particles/gravgun/weapon.gravgun.pull.vpcf", EffectEntity, EffectAttachmentPoint);
+        }
+        else if (!visible && pullEntityParticles != null)
+        {
+            pullEntityParticles?.Destroy();
+            pullEntityParticles = null;
+        }
+    }
+    
+    private Sound PlayWeaponSound(string eventName)
+    {
+        if (ViewModelEntity.IsValid() && IsFirstPersonMode)
+        {
+            return Sound.FromScreen($"{eventName}.local");
+        }
+        else
+        {
+            return Sound.FromEntity(eventName, EffectEntity);
+        }
+    }
+    
 }

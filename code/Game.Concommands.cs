@@ -40,9 +40,8 @@ public partial class GarrywareGame
                         weapon = new GravityGun();
                         _ = new BreakableProp
                         {
-                            Position = player.EyePosition,
-                            Model = CommonEntities.Crate,
-                            CanGib = false
+                            Position = player.EyePosition + player.EyeRotation.Forward * 60.0f,
+                            Model = CommonEntities.Crate
                         };
                         break;
                     case "crate":

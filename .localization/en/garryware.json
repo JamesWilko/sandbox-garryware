@@ -21,7 +21,7 @@
   
   "action.none": "None",
   "action.attack.primary": "Fire",
-  "action.attack.secondary": "Pick Up",
+  "action.attack.secondary": "Grab",
   "action.drop": "Drop",
   "action.use": "Use",
   "action.jump": "Jump",
