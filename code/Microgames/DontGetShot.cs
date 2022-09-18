@@ -12,7 +12,7 @@ public class DontGetShot : Microgame
     public DontGetShot()
     {
         Rules = MicrogameRules.WinOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.Crouch | PlayerAction.Sprint;
+        ActionsUsedInGame = PlayerAction.Crouch | PlayerAction.Sprint | PlayerAction.PrimaryAttack | PlayerAction.Reload;
         AcceptableRooms = new[] { MicrogameRoom.Boxes };
         WarmupLength = 3;
         GameLength = 10;
