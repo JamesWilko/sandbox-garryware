@@ -15,8 +15,9 @@ public class TutorialGame
         await ShowInstructions("#tutorial.intro.1");
         await ShowInstructions("#tutorial.intro.2");
         await ShowInstructions("#tutorial.intro.3");
-        
         GarrywareGame.Current.AvailableActions = PlayerAction.Jump;
+        await ShowInstructions("#tutorial.intro.4");
+        
         await ShowInstructions("#microgame.get-ready");
         SoundUtility.PlayNewRound(tutorialRoundTimer);
         GameEvents.NewInstructions("#tutorial.get-on-a-box", 3);
@@ -29,11 +30,17 @@ public class TutorialGame
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                bool onBox = player.IsOnABox();
-                GameEvents.PlayerLockedInResult(client, onBox ? RoundResult.Won : RoundResult.Lost);
+                if (player.IsOnABox())
+                {
+                    player.FlagAsRoundWinner();
+                }
+                else
+                {
+                    player.FlagAsRoundLoser();
+                }
             }
         }
-        await GameTask.DelaySeconds(1.5f);
+        await GameTask.DelaySeconds(0.5f);
         foreach (var client in Client.All)
         {
             if (client.Pawn is GarrywarePlayer player)
