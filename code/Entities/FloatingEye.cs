@@ -20,6 +20,9 @@ public class FloatingEye : FloatingTarget
     [Event.Tick.Client]
     private void TickCheckIfClientLookedAt()
     {
+        if(!IsValid)
+            return;
+        
         var positionOnScreen = Position.ToScreen(Screen.Size);
         if(!positionOnScreen.HasValue)
             return;
@@ -38,7 +41,7 @@ public class FloatingEye : FloatingTarget
     {
         var player = ConsoleSystem.Caller.Pawn as GarrywarePlayer;
         var eye = Entity.FindByIndex(entityId) as FloatingEye;
-        if (player == null || (!eye?.IsValid ?? false))
+        if (player == null || eye == null || !eye.IsValid)
             return;
         
         eye.PlayerLookedAt?.Invoke(player);
