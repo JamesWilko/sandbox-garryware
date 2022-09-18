@@ -17,10 +17,11 @@
   
   "stats.everybody-won": "Everybody won that round!",
   "stats.everybody-lost": "Everybody failed that round!",
+  "stats.hit-target-times": "You hit it {0} times!",
   
   "action.none": "None",
   "action.attack.primary": "Fire",
-  "action.attack.secondary": "Secondary Fire",
+  "action.attack.secondary": "Pick Up",
   "action.drop": "Drop",
   "action.use": "Use",
   "action.jump": "Jump",
@@ -93,7 +94,5 @@
   "microgame.instructions.repeat-pattern": "Repeat the pattern!",
   "microgame.instructions.repeat-pattern-backwards": "Repeat the pattern backwards!",
   "microgame.instructions.hit-the-target-physics": "Hit the target with something!",
-  "microgame.instructions.avoid-fireballs": "Don't let the fire demons get you!",
-
-  "microgame.stat.hit-target-times": "You hit it {0} times!"
+  "microgame.instructions.avoid-fireballs": "Don't let the fire demons get you!"
 }
