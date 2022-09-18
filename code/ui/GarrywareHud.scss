@@ -43,35 +43,43 @@ InstructionsPopup
 {
 	position: absolute;
 	bottom: 200px;
-	left: 50%;
-	transform: translate( -50% -50% );
+	left: 0;
+	width: 100%;
 
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: center;
-	z-index: -1;
-
-	font-family: Poppins;
-	font-weight: bold;
-	font-size: 32px;
-	color: #fff;
-	text-shadow: 2px 2px #000;
-
-	background-color: rgba(black, 0.8);
-	backdrop-filter: blur(20px);
-	border-radius: 20px;
-	padding: 10px 20px 10px 20px;
+	text-align: center;
+	
+	> .container
+	{
+		max-width: 50%;
+		
+		background-color: rgba(black, 0.8);
+		backdrop-filter: blur(20px);
+		border-radius: 20px;
+		padding: 10px 20px 10px 20px;
+				
+		> .text
+		{
+			font-family: Poppins;
+			font-weight: bold;
+			font-size: 32px;
+			color: #fff;
+			text-shadow: 2px 2px #000;
+		}
+	}
 
 	transition: all 0.3s ease-out;
 	&:intro
 	{
-		transform: translate( -50% +100% );
+		transform: translate( 0% +100% );
 		opacity: 0;
 	}
-
+	
 	&:outro
 	{
 		transition: all 0.3s ease-in;
-		transform: translate( -50% -100% );
+		transform: translate( 0% -100% );
 		opacity: 0;
 	}
 }

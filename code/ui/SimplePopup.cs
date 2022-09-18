@@ -6,6 +6,7 @@ namespace Garryware.UI;
 
 public class SimplePopup : Panel
 {
+    private readonly Panel container;
     private readonly Label label;
 
     private bool hasLifetime;
@@ -28,7 +29,8 @@ public class SimplePopup : Panel
 
     public SimplePopup()
     {
-        label = Add.Label();
+        container = AddChild<Panel>("container");
+        label = container.AddChild<Label>("text");
     }
 
     public override void Tick()
