@@ -13,7 +13,7 @@ public class CatchWhiteBall : Microgame
     public CatchWhiteBall()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
+        ActionsUsedInGame = PlayerAction.Punt | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 5;
     }

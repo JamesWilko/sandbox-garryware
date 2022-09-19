@@ -10,7 +10,7 @@ public class HitTheTargetPhysics : Microgame
     public HitTheTargetPhysics()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
+        ActionsUsedInGame = PlayerAction.Punt | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 6f;
     }

@@ -15,7 +15,7 @@ public class TidyUp : Microgame
     public TidyUp()
     {
         Rules = MicrogameRules.LoseOnTimeout;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
+        ActionsUsedInGame = PlayerAction.Punt | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
         GameLength = 8;
     }
