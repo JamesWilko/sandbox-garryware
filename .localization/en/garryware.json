@@ -29,6 +29,7 @@
   "action.crouch": "Crouch",
   "action.ready-up": "Ready Up",
   "action.reload": "Reload",
+  "action.punt": "Punt",
 
   "tutorial.intro.1": "Lets get this show on the road!",
   "tutorial.intro.2": "Playing is easy, just do what it tells you to!",
@@ -88,7 +89,7 @@
   "microgame.instructions.avoid-lasers": "Avoid the lasers!",
   "microgame.instructions.just-dont-look": "Don't stare!",
   "microgame.instructions.build-to-the-top": "Climb your way to the platforms!",
-  "microgame.instructions.build-to-the-top.hint": "Hold and release a box to freeze it in place!",
+  "microgame.instructions.build-to-the-top.hint": "Punt a box to freeze it in place!",
   "microgame.instructions.dark-room-shoot-all-boxes": "Find and shoot every box!",
   "microgame.instructions.stay-in-the-air": "Stay in the air!",
   "microgame.instructions.dont-get-shot": "Don't get shot!",

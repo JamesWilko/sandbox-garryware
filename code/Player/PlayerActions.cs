@@ -16,6 +16,7 @@ public enum PlayerAction
     Crouch = 1 << 6,
     ReadyUp = 1 << 7,
     Reload = 1 << 8,
+    Punt = 1 << 9, // @note: this should probably be a name override on the weapon, but we've only got one override for now
 }
 
 public static class PlayerActionsExtension
@@ -33,6 +34,7 @@ public static class PlayerActionsExtension
         PlayerAction.Crouch => "#action.crouch",
         PlayerAction.ReadyUp => "#action.ready-up",
         PlayerAction.Reload => "#action.reload",
+        PlayerAction.Punt => "#action.punt",
         _ => "Unknown Action"
     };
 
@@ -48,6 +50,7 @@ public static class PlayerActionsExtension
         PlayerAction.Crouch => InputButton.Duck,
         PlayerAction.ReadyUp => InputButton.Flashlight,
         PlayerAction.Reload => InputButton.Reload,
+        PlayerAction.Punt => InputButton.PrimaryAttack,
         _ => 0
     };
     

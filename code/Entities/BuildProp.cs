@@ -4,25 +4,40 @@ namespace Garryware.Entities;
 
 public class BuildProp : BreakableProp
 {
+    private bool IsGrabbed { get; set; }
+    
     public override void OnGravityGunPickedUp(GravityGunInfo info)
     {
         base.OnGravityGunPickedUp(info);
-
-        PhysicsEnabled = true;
+        IsGrabbed = true;
     }
 
     public override void OnGravityGunDropped(GravityGunInfo info)
     {
         base.OnGravityGunDropped(info);
         
-        PhysicsEnabled = false;
+        IsGrabbed = false;
     }
-    
+
+    public override void OnGravityGunPunted(GravityGunInfo info)
+    {
+        base.OnGravityGunPunted(info);
+        
+        RenderColor = Color.Blue;
+        PhysicsEnabled = false;
+        IsGrabbed = false;
+    }
+
     [Event.Physics.PostStep]
     protected void StayLevel()
     {
-        if(IsServer)
-            Rotation = Rotation.Angles().WithPitch(0.0f).WithRoll(0.0f).ToRotation();
+        if (IsServer && IsGrabbed)
+        {
+            var desiredRotation = Rotation.Angles().WithPitch(0.0f).WithRoll(0.0f).ToRotation();
+            Rotation = Rotation.Lerp(Rotation, desiredRotation, Time.Delta * 20f);
+            PhysicsBody.Velocity = Vector3.Zero;
+            PhysicsBody.AngularVelocity = Vector3.Zero;
+        }
     }
     
 }

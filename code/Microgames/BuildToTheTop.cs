@@ -9,11 +9,11 @@ public class BuildToTheTop : Microgame
     public BuildToTheTop()
     {
         Rules = MicrogameRules.LoseOnTimeout;
-        ActionsUsedInGame = PlayerAction.PrimaryAttack | PlayerAction.SecondaryAttack;
+        ActionsUsedInGame = PlayerAction.Punt | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         WarmupLength = 3;
         GameLength = 20;
-        MinimumPlayers = 2;
+        // MinimumPlayers = 2;
     }
     
     public override void Setup()
@@ -40,6 +40,7 @@ public class BuildToTheTop : Microgame
             {
                 Position = Room.AboveBoxSpawnsDeck.Next().Position,
                 Model = CommonEntities.Crate,
+                Indestructible = true
             };
             prop.ApplyAbsoluteImpulse(Vector3.Random.Normal * Rand.Float(200f, 500f));
             AutoCleanup(prop);
