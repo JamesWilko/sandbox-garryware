@@ -17,9 +17,6 @@
 		<None Update="**\*.sass" DependentUpon="%(Filename).cs" />
 		<None Update="**\*.html" DependentUpon="%(Filename).cs" />
 		<None Update="**\*.htm" DependentUpon="%(Filename).cs" />
-		<None Update="ui\Scoreboard\FullScoreboard.html">
-		  <DependentUpon>FullScoreboard.cs</DependentUpon>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,7 +31,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll" />
+		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll"/>
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.System.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Engine.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Game.dll" />

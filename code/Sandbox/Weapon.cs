@@ -225,24 +225,26 @@ public partial class Weapon : BaseWeapon, IUse
 	/// </summary>
 	public virtual void ShootBullet( Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize )
 	{
+		const float maxDistance = 5000f;
+		
 		var forward = dir;
 		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
 		forward = forward.Normal;
-
-		//
+		
 		// ShootBullet is coded in a way where we can have bullets pass through shit
 		// or bounce off shit, in which case it'll return multiple results
-		//
-		foreach ( var tr in TraceBullet( pos, pos + forward * 5000, bulletSize ) )
+		bool hitAnything = false;
+		foreach ( var tr in TraceBullet( pos, pos + forward * maxDistance, bulletSize ) )
 		{
+			hitAnything = true;
 			tr.Surface.DoBulletImpact( tr );
 			
 			if(FiresTracers)
-				ShootTracer(tr.HitPosition);
+				ShootTracer(tr.EndPosition);
 
 			if ( !IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;
-
+			
 			//
 			// We turn predictiuon off for this, so any exploding effects don't get culled etc
 			//
@@ -255,6 +257,12 @@ public partial class Weapon : BaseWeapon, IUse
 
 				tr.Entity.TakeDamage( damageInfo );
 			}
+		}
+		
+		// Fire a tracer that just goes to the max distance if we didn't hit anything
+		if (!hitAnything && FiresTracers)
+		{
+			ShootTracer(pos + forward * maxDistance);
 		}
 	}
 
