@@ -418,14 +418,15 @@ public partial class GravityGun : Carriable
             HeldBody.ApplyAngularImpulse(Vector3.Random * (HeldBody.Mass * ThrowForce));
         }
 
+        var entity = HeldEntity;
         ShootPuntTracer(HeldEntity.WorldSpaceBounds.Center);
         GrabEnd(fromPunt: true);
 
-        if (HeldEntity is IGravityGunCallback callbacks)
+        if (entity is IGravityGunCallback callbacks)
         {
             callbacks.OnGravityGunPunted(new GravityGunInfo()
             {
-                Target = HeldEntity,
+                Target = entity,
                 Weapon = this,
                 Pawn = Owner,
                 Instigator = Owner.Client
