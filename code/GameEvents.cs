@@ -4,7 +4,6 @@ namespace Garryware;
 
 public partial class GameEvents : BaseNetworkable
 {
-    
     public delegate void InstructionsDelegate(string text, float displayTime);
     public static event InstructionsDelegate OnNewInstructions;
     public static event InstructionsDelegate OnClearInstructions;
@@ -22,6 +21,8 @@ public partial class GameEvents : BaseNetworkable
     public static event MicrogameUiClassDelegate ClearMicrogameUi;
 
     public static event System.Action GameOver;
+    
+    public static event System.Action<TimeUntil> CountdownSet;
     
     [ClientRpc]
     public static void NewInstructions(string text, float displayTime)
@@ -80,6 +81,11 @@ public partial class GameEvents : BaseNetworkable
     {
         SoundUtility.PlayGameOver();
         GameOver?.Invoke();
+    }
+
+    public static void TriggerCountdownSet(TimeUntil timeUntilCountdownFinishes)
+    {
+        CountdownSet?.Invoke(timeUntilCountdownFinishes);
     }
     
 }

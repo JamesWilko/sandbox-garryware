@@ -17,7 +17,7 @@ public partial class GarrywareGame : Sandbox.Game
     [Net] public int NumberOfLosers { get; set; }
     
     [Net] public bool IsCountdownTimerEnabled { get; private set; }
-    [Net] public TimeUntil TimeUntilCountdownExpires { get; private set; }
+    [Net, Change(nameof(OnCountdownTimerChanged))] public TimeUntil TimeUntilCountdownExpires { get; private set; }
     private TimeUntil TimeUntilGameStarts { get; set; }
     
     [Net] public int CurrentRound { get; private set; }
@@ -70,6 +70,11 @@ public partial class GarrywareGame : Sandbox.Game
     public void ClearCountdownTimer()
     {
         IsCountdownTimerEnabled = false;
+    }
+
+    private void OnCountdownTimerChanged(TimeUntil oldCountdown, TimeUntil newCountdown)
+    {
+        GameEvents.TriggerCountdownSet(newCountdown);
     }
     
     public override void PostLevelLoaded()

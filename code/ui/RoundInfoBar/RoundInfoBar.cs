@@ -24,19 +24,22 @@ public class RoundInfoBar : Panel
     private RealTimeSince lastLoserAdded;
 
     private int lastSeconds;
+    private bool useDoubleTimeCountdown;
     
     public RoundInfoBar()
     {
         StyleSheet.Load("/ui/RoundInfoBar/RoundInfoBar.scss");
         
         GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
+        GameEvents.CountdownSet += OnCountdownSet;
     }
-
+    
     public override void OnDeleted()
     {
         base.OnDeleted();
         
         GameEvents.OnPlayerLockedInResult -= OnPlayerLockedInResult;
+        GameEvents.CountdownSet -= OnCountdownSet;
     }
 
     public override void Tick()
@@ -102,12 +105,13 @@ public class RoundInfoBar : Panel
                 SubCountdownLabel.SetClass("critical", seconds <= 5);
             }
             
-            if (seconds != lastSeconds)
+            var countdownSeconds = (int) Math.Max(0, Math.Ceiling(GarrywareGame.Current.TimeUntilCountdownExpires * (useDoubleTimeCountdown ? 2f : 1f)));
+            if (countdownSeconds != lastSeconds)
             {
-                SoundUtility.PlayCountdown(seconds);
-                SoundUtility.PlayClockTick(seconds);
+                SoundUtility.PlayCountdown(countdownSeconds);
+                SoundUtility.PlayClockTick(countdownSeconds);
             }
-            lastSeconds = seconds;
+            lastSeconds = countdownSeconds;
         }
         else
         {
@@ -125,6 +129,13 @@ public class RoundInfoBar : Panel
             losersQueue.Enqueue(player);
     }
     
+    private void OnCountdownSet(TimeUntil timeUntilCountdownFinishes)
+    {
+        // If the gamemode has a really quick countdown then don't countdown with the actual seconds
+        // but countdown with the seconds in "double time" so it gives a better sense of urgency
+        useDoubleTimeCountdown = timeUntilCountdownFinishes < 4f;
+    }
+    
     private void AddKillfeedEntry(Client player, RoundResult result)
     {
         var feed = result == RoundResult.Won ? WinnersFeed : LosersFeed;
@@ -133,11 +144,12 @@ public class RoundInfoBar : Panel
         e.SetResult(result);
         e.Style.Order = feed.ChildrenCount * -1;
     }
-
+    
     public override void OnHotloaded()
     {
         base.OnHotloaded();
         WinnersFeed.DeleteChildren();
         LosersFeed.DeleteChildren();
     }
+    
 }
