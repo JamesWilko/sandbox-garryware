@@ -33,8 +33,9 @@
         "ConVarName": "gw_max_rounds",
         "DisplayName": "Rounds",
         "DefaultValue": "40",
+        "Description": "How many microgames should be played before the game ends?",
         "Minimum": 10,
-        "Maximum": 60
+        "Maximum": 80
       }
     },
     "ControlModes": {
