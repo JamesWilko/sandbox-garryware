@@ -8,22 +8,34 @@ namespace Garryware.Microgames;
 /// </summary>
 public class MusicalChairs : Microgame
 {
+    private bool dontStopSprinting;
+
     public MusicalChairs()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
         ActionsUsedInGame = PlayerAction.Sprint;
         ShowActionsToPlayer = ShowGameActions.AfterSetup;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
-        GameLength = 6;
+        WarmupLength = 2;
+        GameLength = 7;
     }
 
     public override void Setup()
     {
-        ShowInstructions("#microgame.instructions.dont-stop-running");
+        ShowInstructions("#microgame.instructions.musical-chairs.phase-1");
     }
 
     public override void Start()
     {
+        RunGamePhases();
+    }
+
+    private async void RunGamePhases()
+    {
+        dontStopSprinting = true;
+        await GameTask.DelaySeconds(3f);
+        dontStopSprinting = false;
+        
         int chairsToSpawn = GetRandomAdjustedClientCount(0.25f, 0.75f, 1, Room.OnFloorSpawns.Count);
         for (int i = 0; i < chairsToSpawn; ++i)
         {
@@ -35,17 +47,19 @@ public class MusicalChairs : Microgame
             };
             AutoCleanup(chair);
         }
-        ShowInstructions("#microgame.instructions.sit-in-a-chair");
+        ShowInstructions("#microgame.instructions.musical-chairs.phase-2");
     }
-
+    
     public override void Tick()
     {
-        foreach (var client in Client.All)
+        if (dontStopSprinting)
         {
-            // TODO: Should only need to be sprinting in the initial phase
-            if (client.Pawn is GarrywarePlayer player && !player.IsMovingAtSprintSpeed && !player.IsInAChair)
+            foreach (var client in Client.All)
             {
-                player.FlagAsRoundLoser();
+                if (client.Pawn is GarrywarePlayer player && !player.IsMovingAtSprintSpeed && !player.IsInAChair)
+                {
+                    player.FlagAsRoundLoser();
+                }
             }
         }
     }
