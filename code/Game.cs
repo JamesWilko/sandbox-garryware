@@ -334,15 +334,18 @@ public partial class GarrywareGame : Sandbox.Game
         {
             if (ent is BreakableProp prop && prop.ShowWorldText)
             {
+                // Create the initial rect where we're going to draw the text and background
                 float distance = Local.Pawn.EyePosition.Distance(prop.Position);
                 float size = sizeAtDistanceCurve.Evaluate(distance) * Screen.Height;
-                
                 var screenPosition = prop.WorldSpaceBounds.Center.ToScreen();
                 var rect = new Rect(screenPosition.x * Screen.Width - size * 0.5f, screenPosition.y * Screen.Height - size * 0.5f, size, size);
+                
+                // Scale the font size based on designed size
+                draw.FontSize = fontSizeAtDistanceCurve.Evaluate(distance) * (Screen.Height / 1080f);
+                
+                // Draw the background and text
                 draw.Color = Color.Black.WithAlpha(0.8f);
                 draw.Box(rect);
-
-                draw.FontSize = fontSizeAtDistanceCurve.Evaluate(distance);
                 draw.Color = Color.White;
                 draw.DrawText(rect, prop.WorldText);
             }
