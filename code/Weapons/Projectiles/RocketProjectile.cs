@@ -1,10 +1,34 @@
-﻿namespace Garryware;
+﻿using Sandbox;
+
+namespace Garryware;
 
 public class RocketProjectile : Projectile
 {
+    public override Model ProjectileModel => Model.Load("models/weapons/weapon.rpg.rocket.vmdl");
+    public override Rotation RotationOffset => new Angles(90f, 0, 0).ToRotation();
+
+    private Particles trail;
+    
+    public override void ClientSpawn()
+    {
+        base.ClientSpawn();
+        
+        trail = Particles.Create("particles/weapon.rpg.rocket.trail.vpcf");
+        trail.SetEntity(0, this, true);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        trail?.Destroy();
+    } 
+    
     protected override void OnDetonate()
     {
         base.OnDetonate();
+        
+        trail?.Destroy();
+        trail = null;
         
         var boom = new ExplosionEntity()
         {

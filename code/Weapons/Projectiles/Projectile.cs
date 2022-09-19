@@ -4,6 +4,9 @@ namespace Garryware;
 
 public partial class Projectile : ModelEntity
 {
+    public virtual Model ProjectileModel => CommonEntities.Ball;
+    public virtual Rotation RotationOffset => Rotation.Identity;
+    
     /// <summary>
     /// How long does this projectile live for?
     /// </summary>
@@ -13,11 +16,11 @@ public partial class Projectile : ModelEntity
     /// How big is the collision radius on this projectile?
     /// </summary>
     public float Radius { get; set; } = 5.0f;
-    
+
     /// <summary>
     /// Should the entity be rotated to face the direction it is travelling in
     /// </summary>
-    public bool FaceDirectionOfVelocity { get; set; }
+    public bool FaceDirectionOfVelocity { get; set; } = true;
     
     [Predicted] protected TimeSince TimeSinceSpawned { get; set; }
     
@@ -27,7 +30,7 @@ public partial class Projectile : ModelEntity
     {
         base.Spawn();
 
-        Model = CommonEntities.Ball;
+        Model = ProjectileModel;
         PhysicsEnabled = false;
         UsePhysicsCollision = false;
         SetupPhysicsFromModel(PhysicsMotionType.Keyframed);
@@ -46,6 +49,11 @@ public partial class Projectile : ModelEntity
             .UseHitboxes()
             .WithAnyTags("solid", "player", "npc", "glass")
             .Run();
+
+        if (FaceDirectionOfVelocity)
+        {
+            Rotation = Rotation.LookAt(Velocity.Normal) * RotationOffset;
+        }
 
         if (tr.Hit && tr.Entity.IsValid)
         {
