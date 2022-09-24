@@ -84,7 +84,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
 
     private void OnPlayerLockedInResult(Client player, RoundResult result)
     {
-        if (player.IsOwnedByLocalClient)
+        if (player != null && player.IsOwnedByLocalClient)
         {
             var resultPopup = RootPanel.AddChild<WinLoseRoundPopup>();
             resultPopup.SetResult(result);
