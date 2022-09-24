@@ -5,7 +5,7 @@
 	m_BoundingBoxMax = [ 32.0, 32.0, 32.0 ]
 	m_flMaximumSimTime = 0.001
 	m_flMinimumSimTime = 0.001
-	m_nMaxParticles = 90
+	m_nMaxParticles = 10
 	m_nBehaviorVersion = 10
 	m_bInfiniteBounds = true
 	m_controlPointConfigurations = 

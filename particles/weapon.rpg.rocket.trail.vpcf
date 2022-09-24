@@ -2,7 +2,7 @@
 {
 	_class = "CParticleSystemDefinition"
 	m_nBehaviorVersion = 10
-	m_nMaxParticles = 100
+	m_nMaxParticles = 55
 	m_controlPointConfigurations = 
 	[
 		{
