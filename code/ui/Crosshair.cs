@@ -4,5 +4,4 @@ namespace Garryware.UI;
 
 public class Crosshair : Panel
 {
-    
 }

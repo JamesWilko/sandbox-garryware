@@ -20,14 +20,14 @@ public class AmmoCounter : Panel
         if (Local.Pawn is GarrywarePlayer player
             && player.Inventory.Active is AmmoWeapon weapon)
         {
-            Style.Opacity = 1;
+            Style.Display = DisplayMode.Flex;
             ammoCountLabel.Text = weapon.AmmoInMagazine.ToString("N0");
             ammoCountLabel.SetClass("low-ammo", weapon.AmmoInMagazine > 0 && weapon.AmmoInMagazine < weapon.MagazineCapacity * 0.5f);
             ammoCountLabel.SetClass("out-of-ammo", weapon.AmmoInMagazine <= 0);
         }
         else
         {
-            Style.Opacity = 0;
+            Style.Display = DisplayMode.None;
         }
     }
 }

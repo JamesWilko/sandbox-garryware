@@ -23,17 +23,17 @@ public class WaitingForPlayers : Panel
         switch (GarrywareGame.Current.State)
         {
             case GameState.WaitingForPlayers:
-                Style.Opacity = 1.0f;
+                Style.Display = DisplayMode.Flex;
                 waiting.SetText("#ui.waiting-for-players");
                 playersConnected.SetText(string.Format("{0}/{1}", GarrywareGame.Current.NumberOfReadyPlayers, GarrywareGame.Current.NumberOfReadiesNeededToStart)); // @localization
                 break;
             case GameState.StartingSoon:
-                Style.Opacity = 1.0f;
+                Style.Display = DisplayMode.Flex;
                 waiting.SetText("#ui.starting-soon");
                 playersConnected.SetText(string.Empty);
                 break;
             default:
-                Style.Opacity = 0.0f;
+                Style.Display = DisplayMode.None;
                 break;
         }
     }

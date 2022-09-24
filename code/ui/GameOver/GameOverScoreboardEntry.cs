@@ -67,7 +67,7 @@ public partial class GameOverScoreboardEntry : Panel
         this.points.Text = clientPoints.ToString();
         
         currentStreak.Text = clientStreak.ToString();
-        streakFire.Style.Opacity = clientStreak > 2 ? 1.0f : 0.0f;
+        streakFire.Style.Display = clientStreak > 2 ? DisplayMode.Flex : DisplayMode.None;
         
         SetClass("gold", clientPlace == 1);
         SetClass("silver", clientPlace == 2);

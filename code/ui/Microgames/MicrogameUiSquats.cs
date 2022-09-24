@@ -27,8 +27,8 @@ public class MicrogameUiSquats : Panel
 
         if (Local.Pawn is GarrywarePlayer player)
         {
-            Up.Style.Opacity = player.IsSquatting ? 0 : 1;
-            Down.Style.Opacity = player.IsSquatting ? 1 : 0;
+            Up.Style.Display = player.IsSquatting ? DisplayMode.None : DisplayMode.Flex;
+            Down.Style.Display = player.IsSquatting ? DisplayMode.Flex : DisplayMode.None;
 
             if (player.IsSquatting && !hasSquatted)
             {
