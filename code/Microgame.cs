@@ -65,6 +65,7 @@ public abstract class Microgame
     private TimeSince timeSinceGameStarted;
     private bool hasGameFinishedEarly;
     private TimeSince timeSinceEarlyFinish;
+    private int actualNumberOfPlayersInRound;
     private bool didEverybodyWin;
     private bool didEverybodyLose;
     
@@ -196,7 +197,7 @@ public abstract class Microgame
         
         foreach (var client in Client.All)
         {
-            if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
+            if (client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart && !player.HasLockedInResult)
             {
                 return false;
             }
@@ -254,7 +255,7 @@ public abstract class Microgame
         var weapons = new List<T>();
         foreach (var client in giveToWho)
         {
-            if (client.Pawn is GarrywarePlayer player)
+            if (client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart)
             {
                 var weapon = new T();
                 weapons.Add(weapon);
@@ -354,9 +355,10 @@ public abstract class Microgame
         }
 
         // Update our counts on who won and who lost
+        actualNumberOfPlayersInRound = Client.All.Count(client => client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart);
         GarrywareGame.Current.UpdateWinLoseCounts();
-        didEverybodyWin = GarrywareGame.Current.NumConnectedClients > 2 && GarrywareGame.Current.NumberOfWinners == GarrywareGame.Current.NumConnectedClients;
-        didEverybodyLose = GarrywareGame.Current.NumberOfLosers == GarrywareGame.Current.NumConnectedClients;
+        didEverybodyWin = GarrywareGame.Current.NumConnectedClients > 2 && GarrywareGame.Current.NumberOfWinners == actualNumberOfPlayersInRound;
+        didEverybodyLose = GarrywareGame.Current.NumberOfLosers == actualNumberOfPlayersInRound;
     }
 
     private void PlayEndOfGameSoundEvents()
@@ -462,7 +464,7 @@ public abstract class Microgame
             return;
         
         // Send the excessive ratio stats if a lot of people won or lost 
-        float winnerPopulation = (float)GarrywareGame.Current.NumberOfWinners / GarrywareGame.Current.NumConnectedClients;
+        float winnerPopulation = (float)GarrywareGame.Current.NumberOfWinners / actualNumberOfPlayersInRound;
         if (winnerPopulation >= highWinnerPopulationCutoff)
         {
             GameEvents.SendIntegerStat(RoundStat.HighPercentPeopleWon,  (int)Math.Round(winnerPopulation * 100));

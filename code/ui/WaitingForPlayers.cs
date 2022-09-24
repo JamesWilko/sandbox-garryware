@@ -32,6 +32,18 @@ public class WaitingForPlayers : Panel
                 waiting.SetText("#ui.starting-soon");
                 playersConnected.SetText(string.Empty);
                 break;
+            case GameState.Playing:
+                if (Local.Client.Pawn is GarrywarePlayer player && !player.WasHereForRoundStart)
+                {
+                    Style.Display = DisplayMode.Flex;
+                    waiting.SetText("#ui.joined-in-progress");
+                    playersConnected.SetText(string.Empty);
+                }
+                else
+                {
+                    Style.Display = DisplayMode.None;
+                }
+                break;
             default:
                 Style.Display = DisplayMode.None;
                 break;

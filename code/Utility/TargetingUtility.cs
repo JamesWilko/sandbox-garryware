@@ -15,7 +15,7 @@ public static class TargetingUtility
         
         foreach (var client in Client.All)
         {
-            if (client.Pawn is GarrywarePlayer player)
+            if (client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart)
             {
                 allPlayers.Add(player);
                 if (!player.HasLockedInResult)

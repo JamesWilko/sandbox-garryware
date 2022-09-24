@@ -26,6 +26,8 @@ public partial class GarrywarePlayer : Player
     public bool HasWonRound => RoundResult == RoundResult.Won;
     public bool HasLostRound => RoundResult == RoundResult.Lost;
 
+    [Net] public bool WasHereForRoundStart { get; set; }
+
     public bool IsDucking => Controller.HasTag("ducked");
     private bool WasDucking { get; set; }
     private TimeSince TimeSinceSwitchingStance { get; set; }
@@ -347,11 +349,13 @@ public partial class GarrywarePlayer : Player
     {
         RoundResult = RoundResult.Undecided;
         LockedInResultOnTick = -1;
+        WasHereForRoundStart = true;
     }
     
     public void FlagAsRoundWinner()
     {
-        if(HasLockedInResult) return;
+        if(!WasHereForRoundStart || HasLockedInResult)
+            return;
         
         RoundResult = RoundResult.Won;
         LockedInResultOnTick = Time.Tick;
@@ -360,7 +364,8 @@ public partial class GarrywarePlayer : Player
 
     public void FlagAsRoundLoser()
     {
-        if(HasLockedInResult) return;
+        if(!WasHereForRoundStart || HasLockedInResult)
+            return;
         
         RoundResult = RoundResult.Lost;
         LockedInResultOnTick = Time.Tick;
