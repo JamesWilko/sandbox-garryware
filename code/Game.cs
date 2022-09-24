@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.StateMachine;
 using Garryware.Entities;
@@ -210,13 +211,27 @@ public partial class GarrywareGame : Sandbox.Game
 
     public override void MoveToSpawnpoint(Entity pawn)
     {
-        var spawnpoint = CurrentRoom.SpawnPointsDeck.Next();
-        if (spawnpoint == null)
+        SpawnPoint spawnPoint = null;
+        bool hasValidRoom = CurrentRoom != null && CurrentRoom.IsValid;
+        if (hasValidRoom)
         {
-            Log.Warning($"Couldn't find spawnpoint for {pawn}!");
-            return;
+            spawnPoint = CurrentRoom.SpawnPointsDeck.Next();
         }
-        pawn.Transform = spawnpoint.Transform;
+        else
+        {
+            Log.Error("There was no active game room set! Falling back to picking a completely random spawn point!");
+            spawnPoint = Entity.All.OfType<SpawnPoint>().MinBy(x => System.Guid.NewGuid());
+        }
+        
+        if (spawnPoint == null)
+        {
+            if (hasValidRoom)
+                throw new Exception($"Attempted to move player to a null spawn point, but had a game room set! (map: {Global.MapName}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
+            else
+                throw new Exception($"Attempted to move player to a null spawn point when no game room was set! (map: {Global.MapName}, state: {CurrentState}, round: {CurrentRound})");
+        }
+        
+        pawn.Transform = spawnPoint.Transform;
     }
 
     public override void ClientDisconnect(Client cl, NetworkDisconnectionReason reason)
