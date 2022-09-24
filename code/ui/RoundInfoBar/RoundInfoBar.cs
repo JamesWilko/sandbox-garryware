@@ -138,6 +138,9 @@ public class RoundInfoBar : Panel
     
     private void AddKillfeedEntry(Client player, RoundResult result)
     {
+        if(player == null)
+            return;
+        
         var feed = result == RoundResult.Won ? WinnersFeed : LosersFeed;
         var e = feed.AddChild<KillFeedEntry>();
         e.SetPlayer(player.PlayerId, player.Name);
