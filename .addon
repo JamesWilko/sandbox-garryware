@@ -3,6 +3,7 @@
   "Type": "game",
   "Org": "dhi",
   "Ident": "garryware",
+  "Tags": "",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
@@ -40,6 +41,10 @@
     },
     "ControlModes": {
       "Keyboard": true
-    }
+    },
+    "ParentPackage": "",
+    "GeneralExtensions": false,
+    "TargettedExtensions": true,
+    "ExtensionApiVersion": 1001
   }
 }
