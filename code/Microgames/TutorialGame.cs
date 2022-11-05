@@ -20,6 +20,14 @@ public class TutorialGame
         
         await ShowInstructions("#microgame.get-ready");
         SoundUtility.PlayNewRound(tutorialRoundTimer);
+        foreach (var client in Client.All)
+        {
+            if (client.Pawn is GarrywarePlayer player)
+            {
+                player.ResetRound();
+            }
+        }
+        
         GameEvents.NewInstructions("#tutorial.get-on-a-box", 3);
         GarrywareGame.Current.SetCountdownTimer(tutorialRoundTimer);
         await GameTask.DelaySeconds(tutorialRoundTimer);
