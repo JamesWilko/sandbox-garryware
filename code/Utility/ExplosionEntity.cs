@@ -1,6 +1,6 @@
 ﻿using Sandbox;
-using SandboxEditor;
 using System;
+using Editor;
 
 namespace Garryware;
 
@@ -103,7 +103,7 @@ public partial class ExplosionEntity : Entity
             var force = (ForceScale * forceDistanceMul) * ent.PhysicsBody.Mass;
             var forceDir = (targetPos - forcePos).Normal;
 
-            ent.TakeDamage(DamageInfo.Explosion(Position, forceDir * force, damage)
+            ent.TakeDamage(DamageInfo.FromExplosion(Position, forceDir * force, damage)
                 .WithAttacker(activator));
         }
 

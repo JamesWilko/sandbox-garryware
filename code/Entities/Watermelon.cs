@@ -25,7 +25,7 @@ public class Watermelon : BreakableProp
 
     private void UpdateIndestructibility()
     {
-        if(!IsClient)
+        if(!Game.IsClient)
             return;
         
         RenderColor = Indestructible ? new Color(0.75f, 0.75f, 0.75f) : Color.White;

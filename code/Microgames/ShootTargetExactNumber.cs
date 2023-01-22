@@ -28,7 +28,7 @@ public class ShootTargetExactNumber : Microgame
     public override void Setup()
     {
         // Determine how many times we need to hit the target
-        targetHits = Rand.Int(5, 20);
+        targetHits = Game.Random.Int(5, 20);
         
         // Spawn the targets to shoot at
         int targetsToSpawn = Room.Size == RoomSize.Large ? 2 : 1;

@@ -33,7 +33,7 @@ public class WaitingForPlayers : Panel
                 playersConnected.SetText(string.Empty);
                 break;
             case GameState.Playing:
-                if (Local.Client.Pawn is GarrywarePlayer player && !player.WasHereForRoundStart)
+                if (Game.LocalPawn is GarrywarePlayer player && !player.WasHereForRoundStart)
                 {
                     Style.Display = DisplayMode.Flex;
                     waiting.SetText("#ui.joined-in-progress");

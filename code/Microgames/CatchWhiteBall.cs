@@ -26,7 +26,7 @@ public class CatchWhiteBall : Microgame
     public override void Start()
     {
         int whiteBalls = GetRandomAdjustedClientCount(0.5f, 0.7f);
-        int decoyBalls = (int) Math.Ceiling(whiteBalls * Rand.Float(2f, 3f));
+        int decoyBalls = (int) Math.Ceiling(whiteBalls * Game.Random.Float(2f, 3f));
 
         // Spawn the target balls
         for (int i = 0; i < whiteBalls; ++i)

@@ -27,7 +27,7 @@ public class AvoidLasers : Microgame
 
         hasStarted = false;
 
-        int numLasers = Rand.Float() > 0.2f ? 2 : 3;
+        int numLasers = Game.Random.Float() > 0.2f ? 2 : 3;
         for (int i = 0; i < numLasers; ++i)
         {
             var laser = new Laser()

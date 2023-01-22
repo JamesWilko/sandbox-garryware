@@ -36,7 +36,7 @@ public class HideTheEvidence : Microgame
         ShowInstructions("#microgame.instructions.hide-evidence");
         weapons = GiveWeapon<Pistol>(To.Everyone);
 
-        int hidingSpotsToSpawn = Client.All.Count switch
+        int hidingSpotsToSpawn = Game.Clients.Count switch
         {
             < 5 => 1,
             < 10 => 2,
@@ -49,7 +49,7 @@ public class HideTheEvidence : Microgame
             var binProp = new BreakableProp()
             {
                 Position = spawn.Position,
-                Rotation = Rotation.FromYaw(Rand.Float() * 360.0f),
+                Rotation = Rotation.FromYaw(Game.Random.Float() * 360.0f),
                 Model = binModels.Next(),
                 Indestructible = true,
                 Static = true,

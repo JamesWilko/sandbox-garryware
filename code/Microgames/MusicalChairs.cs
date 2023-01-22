@@ -43,7 +43,7 @@ public class MusicalChairs : Microgame
             var chair = new Chair()
             {
                 Position = spawn.Position,
-                Rotation = Rotation.From(0, Rand.Float(-359f, 359f), 0)
+                Rotation = Rotation.From(0, Game.Random.Float(-359f, 359f), 0)
             };
             AutoCleanup(chair);
         }
@@ -54,7 +54,7 @@ public class MusicalChairs : Microgame
     {
         if (dontStopSprinting)
         {
-            foreach (var client in Client.All)
+            foreach (var client in Game.Clients)
             {
                 if (client.Pawn is GarrywarePlayer player && !player.IsMovingAtSprintSpeed && !player.IsInAChair)
                 {
@@ -66,7 +66,7 @@ public class MusicalChairs : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

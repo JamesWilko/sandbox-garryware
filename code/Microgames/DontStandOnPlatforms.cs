@@ -19,7 +19,7 @@ public class DontStandOnPlatforms : Microgame
     {
         ShowInstructions("#microgame.instructions.dont-stand-on-platform");
 
-        int numPlatforms = (int)(Room.OnFloorSpawns.Count * Rand.Float(0.7f, 0.8f) + 0.5f);
+        int numPlatforms = (int)(Room.OnFloorSpawns.Count * Game.Random.Float(0.7f, 0.8f) + 0.5f);
         for (int i = 0; i < numPlatforms; ++i)
         {
             var platform = new BiggerPlatform()
@@ -40,7 +40,7 @@ public class DontStandOnPlatforms : Microgame
     {
         base.Tick();
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player
                 && !player.HasLockedInResult

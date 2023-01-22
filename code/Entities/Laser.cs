@@ -37,9 +37,9 @@ public partial class Laser : ModelEntity
         
         Model = CommonEntities.Watermelon;
 
-        currentTime = Rand.Float(0f, 60f);
+        currentTime = Game.Random.Float(0f, 60f);
         speed = speedMultiplierDeck.Next();
-        direction = Rand.Float() > 0.5f ? 1 : -1;
+        direction = Game.Random.Float() > 0.5f ? 1 : -1;
     }
 
     protected override void OnDestroy()
@@ -53,7 +53,7 @@ public partial class Laser : ModelEntity
     protected void UpdateRotation()
     {
         // Rotate and move about
-        currentTime += Global.TickInterval * speed;
+        currentTime += Game.TickInterval * speed;
         
         currentRotation = currentTime * 30f * direction;
         Rotation = new Angles(0f, currentRotation, 0f).ToRotation();

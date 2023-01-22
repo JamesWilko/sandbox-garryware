@@ -47,16 +47,16 @@ public class ShootInOrder : Microgame
         targetValues.Clear();
         for (int i = 0; i < numTargets; ++i)
         {
-            int value = Rand.Int(10, 999);
+            int value = Game.Random.Int(10, 999);
             while (targetValues.Contains(value))
             {
-                value = Rand.Int(10, 999);
+                value = Game.Random.Int(10, 999);
             }
             targetValues.Add(value);
         }
         
         // Determine what order we need to shoot them in
-        ascending = Rand.Float() >= 0.5f;
+        ascending = Game.Random.Float() >= 0.5f;
         if (ascending)
         {
             targetValues.Sort();

@@ -32,7 +32,7 @@ public partial class FloatingSpotlight : SpotLightEntity
     [Event.Physics.PostStep]
     protected void KeepRotationAndHeight()
     {
-        if (!this.IsValid() || IsClient)
+        if (!this.IsValid() || Game.IsClient)
             return;
 
         var body = PhysicsBody;

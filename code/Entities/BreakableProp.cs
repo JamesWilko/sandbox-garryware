@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using System;
 using System.Threading.Tasks;
+using Sandbox.ModelEditor.Nodes;
 
 namespace Garryware.Entities;
 
@@ -104,8 +105,6 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
     /// What text should be shown on the 3d text panel?
     /// </summary>
     [Net] public string WorldText { get; set; }
-
-    private EntityWorldTextPanel WorldTextPanel { get; set; }
         
     public delegate void AttackerDelegate(BreakableProp self, Entity attacker);
     public event AttackerDelegate Damaged;
@@ -187,7 +186,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
 
         base.OnNewModel(model);
 
-        if (IsServer)
+        if (Game.IsServer)
         {
             UpdatePropData(model);
         }
@@ -196,7 +195,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
 
     protected virtual void UpdatePropData(Model model)
     {
-        Host.AssertServer();
+        Game.AssertServer();
 
         if (model.TryGetData(out ModelPropData propInfo))
         {
@@ -226,12 +225,12 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         LastAttacker = info.Attacker;
         LastAttackerWeapon = info.Weapon;
 
-        if (IsClient && RaisesClientAuthDamageEvent)
+        if (Game.IsClient && RaisesClientAuthDamageEvent)
         {
             TakeClientDamage(info);
         }
         
-        if (!IsServer || LifeState != LifeState.Alive)
+        if (!Game.IsServer || LifeState != LifeState.Alive)
             return;
 
         if (!Indestructible)
@@ -260,20 +259,19 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
 
         LifeState = LifeState.Dead;
 
-        if (LastDamage.Flags.HasFlag(DamageFlags.PhysicsImpact))
+        if (LastDamage.HasTag(Garryware.Tags.PhysicsImpact))
         {
             Velocity = lastCollision.This.PreVelocity;
         }
-
+        
         if (HasExplosionBehavior())
         {
-            if (LastDamage.Flags.HasFlag(DamageFlags.Blast))
+            if (LastDamage.HasTag(Garryware.Tags.BlastDamage))
             {
                 LifeState = LifeState.Dying;
 
                 // Don't explode right away and cause a stack overflow
-                var rand = new Random();
-                _ = ExplodeAsync(RandomExtension.Float(rand, 0.05f, 0.25f));
+                _ = ExplodeAsync(Game.Random.Float(0.05f, 0.25f));
 
                 return;
             }
@@ -340,7 +338,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
                 if (!body.IsValid())
                     continue;
 
-                body.ApplyImpulseAt(WorldSpaceBounds.Center, (prop.Position - WorldSpaceBounds.Center) * Rand.Float(50f, 250f));
+                body.ApplyImpulseAt(WorldSpaceBounds.Center, (prop.Position - WorldSpaceBounds.Center) * Game.Random.Float(50f, 250f));
             }
         }
 
@@ -394,7 +392,8 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
 
     private void UpdateGameColorMaterialOverride()
     {
-        if (IsServer) return;
+        if (Game.IsServer)
+            return;
         
         if (!HideGameColor && GameColor != GameColor.White)
         {
@@ -412,7 +411,7 @@ public partial class BreakableProp : BasePhysics, IGravityGunCallback
         UpdateGameColorMaterialOverride();
     }
     
-    [Net] public Client ClientLastPickedUpBy { get; set; }
+    [Net] public IClient ClientLastPickedUpBy { get; set; }
 
     public virtual void OnGravityGunPickedUp(GravityGunInfo info)
     {

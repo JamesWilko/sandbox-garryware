@@ -17,7 +17,7 @@ public class AmmoCounter : Panel
     {
         base.Tick();
 
-        if (Local.Pawn is GarrywarePlayer player
+        if (Game.LocalPawn is GarrywarePlayer player
             && player.Inventory.Active is AmmoWeapon weapon)
         {
             Style.Display = DisplayMode.Flex;

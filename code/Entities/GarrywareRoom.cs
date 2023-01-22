@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
-using SandboxEditor;
 
 namespace Garryware.Entities;
 
@@ -12,15 +11,15 @@ public enum RoomSize
     Large // 13+ players
 }
 
-[Library("gw_trigger_room"), HammerEntity]
+[Library("gw_trigger_room")]
 [Title("Garryware Room Extents")]
 public class GarrywareRoom : Trigger
 {
-    [Property, DefaultValue(RoomSize.Small)]
-    public RoomSize Size { get; set; }
-    
-    [Property, DefaultValue(MicrogameRoom.Empty)]
-    public MicrogameRoom Contents { get; set; }
+    [Property]
+    public RoomSize Size { get; set; } = RoomSize.Small;
+
+    [Property]
+    public MicrogameRoom Contents { get; set; } = MicrogameRoom.Empty;
     
     public List<SpawnPoint> SpawnPoints { get; private set; }
     public List<OnBoxTrigger> OnBoxTriggers { get; private set; } 

@@ -9,7 +9,7 @@ namespace Garryware.UI;
 public partial class FullScoreboard : Panel
 {
     public Panel Canvas { get; protected set; }
-    Dictionary<Client, FullScoreboardEntry> Rows = new();
+    Dictionary<IClient, FullScoreboardEntry> Rows = new();
 
     public Panel Header { get; protected set; }
 
@@ -44,13 +44,13 @@ public partial class FullScoreboard : Panel
             return;
 
         // Clients that were added
-        foreach (var client in Client.All.Except(Rows.Keys))
+        foreach (var client in Game.Clients.Except(Rows.Keys))
         {
             var entry = AddClient(client);
             Rows[client] = entry;
         }
 
-        foreach (var client in Rows.Keys.Except(Client.All))
+        foreach (var client in Rows.Keys.Except(Game.Clients))
         {
             if (Rows.TryGetValue(client, out var row))
             {
@@ -74,7 +74,7 @@ public partial class FullScoreboard : Panel
         Header.Add.Label("Ping", "ping");
     }
 
-    protected virtual FullScoreboardEntry AddClient(Client entry)
+    protected virtual FullScoreboardEntry AddClient(IClient entry)
     {
         var p = Canvas.AddChild<FullScoreboardEntry>();
         p.Client = entry;
@@ -84,7 +84,7 @@ public partial class FullScoreboard : Panel
 
 public partial class FullScoreboardEntry : Panel
 {
-    public Client Client;
+    public IClient Client;
 
     public Label PlayerName;
     public Label Points;
@@ -130,7 +130,7 @@ public partial class FullScoreboardEntry : Panel
         Points.Text = Client.GetInt(Tags.Points).ToString();
         Streak.Text = Client.GetInt(Tags.Streak).ToString();
         Ping.Text = Client.Ping.ToString();
-        SetClass("me", Client == Local.Client);
+        SetClass("me", Client == Game.LocalClient);
         Style.Order = place;
 
         switch (GarrywareGame.Current.State)
@@ -148,7 +148,7 @@ public partial class FullScoreboardEntry : Panel
         }
     }
 
-    public virtual void UpdateFrom(Client client)
+    public virtual void UpdateFrom(IClient client)
     {
         Client = client;
         UpdateData();

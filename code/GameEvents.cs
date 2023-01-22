@@ -8,12 +8,12 @@ public partial class GameEvents : BaseNetworkable
     public static event InstructionsDelegate OnNewInstructions;
     public static event InstructionsDelegate OnClearInstructions;
 
-    public delegate void RoundResultDelegate(Client player, RoundResult result);
+    public delegate void RoundResultDelegate(IClient player, RoundResult result);
     public static event RoundResultDelegate OnPlayerLockedInResult;
     public static event RoundResultDelegate OnPlayerWon;
     public static event RoundResultDelegate OnPlayerLost;
 
-    public static event System.Action<RoundStat, Client> ClientStatReceived;
+    public static event System.Action<RoundStat, IClient> ClientStatReceived;
     public static event System.Action<RoundStat, int> IntegerStatReceived;
 
     public delegate void MicrogameUiClassDelegate(string className);
@@ -37,7 +37,7 @@ public partial class GameEvents : BaseNetworkable
     }
 
     [ClientRpc]
-    public static void PlayerLockedInResult(Client player, RoundResult result)
+    public static void PlayerLockedInResult(IClient player, RoundResult result)
     {
         switch (result)
         {
@@ -53,7 +53,7 @@ public partial class GameEvents : BaseNetworkable
     }
 
     [ClientRpc]
-    public static void SendClientStat(RoundStat stat, Client subject)
+    public static void SendClientStat(RoundStat stat, IClient subject)
     {
         ClientStatReceived?.Invoke(stat, subject);
     }

@@ -17,7 +17,7 @@ public static class ListExtensions
         while (n > 1)
         {
             n--;
-            int k = Rand.Int(n);
+            int k = Game.Random.Int(n);
             (list[k], list[n]) = (list[n], list[k]);
         }
     }

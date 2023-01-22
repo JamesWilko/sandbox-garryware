@@ -40,7 +40,7 @@ public class StayInCenterPlatform : Microgame
     public override void Finish()
     {
         // Check if people are still in the center and make them win if they are
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
             {

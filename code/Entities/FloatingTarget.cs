@@ -1,4 +1,6 @@
-﻿using Sandbox;
+﻿using System;
+using System.Collections.Generic;
+using Sandbox;
 
 namespace Garryware.Entities;
 
@@ -36,7 +38,7 @@ public class FloatingTarget : BreakableProp
     public override void ClientSpawn()
     {
         base.ClientSpawn();
-        if (IsClient)
+        if (Game.IsClient)
         {
             CreateSceneObject();
         }
@@ -57,7 +59,7 @@ public class FloatingTarget : BreakableProp
         };
     }
 
-    [Event.Frame]
+    [Event.Client.Frame]
     protected virtual void Think()
     {
         if (so != null)
@@ -68,27 +70,18 @@ public class FloatingTarget : BreakableProp
 
     public virtual void UpdateSceneObject(SceneObject obj)
     {
-        so.Transform = new Transform(WorldSpaceBounds.Center, Rotation, Scale);
+        var rot = Rotation.LookAt((Position - Camera.Position).Normal) * Rotation.FromPitch(-90f);
+        so.Transform = new Transform(WorldSpaceBounds.Center, rot, Scale);
         so.Bounds = WorldSpaceBounds;
     }
-
+    
     public virtual void DoRender(SceneObject obj)
     {
-        Render.SetupLighting(obj);
+        Graphics.SetupLighting(obj);
         
-        // Create the vertex buffer for the sprite
-        var vb = Render.GetDynamicVB();
-
-        // Vertex buffers are in local space, so we need the camera position in local space too
-        var normal = obj.Transform.PointToLocal(CurrentView.Position).Normal;
-        var w = normal.Cross(Vector3.Down).Normal;
-        var h = normal.Cross(w).Normal;
-        float halfSpriteSize = SpriteScale / 2;
-
-        // Add a single quad to our vertex buffer
-        vb.AddQuad(new Ray(default, normal), w * halfSpriteSize, h * halfSpriteSize);
-
-        // Draw the sprite
-        vb.Draw(SpriteMaterial);
+        float halfSpriteSize = SpriteScale * 0.5f;
+        var positionOnScreen = Position.ToScreen();
+        var rect = new Rect(positionOnScreen.x - halfSpriteSize, positionOnScreen.y - halfSpriteSize, SpriteScale, SpriteScale);
+        Graphics.DrawQuad(rect, SpriteMaterial, Color.White);
     }
 }

@@ -52,7 +52,7 @@ public class StayInTheAir : Microgame
         base.Tick();
 
         // Anyone who lands on the ground should lose
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player
                 && !player.HasLockedInResult

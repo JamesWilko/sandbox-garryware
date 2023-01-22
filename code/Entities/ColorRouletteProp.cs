@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
+using Sandbox.Diagnostics;
 
 namespace Garryware.Entities;
 
@@ -36,7 +37,7 @@ public partial class ColorRouletteProp : BreakableProp
 
     public GameColor GetRandomColorInRotation()
     {
-        return Rand.FromList(ColorRotation);
+        return Game.Random.FromList(ColorRotation);
     }
     
     public void StartRoulette()

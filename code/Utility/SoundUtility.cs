@@ -119,14 +119,14 @@ public static partial class SoundUtility
         Sound.FromScreen("microgame.hit.small");
     }
     
-    private static void OnPlayerWon(Client player, RoundResult result)
+    private static void OnPlayerWon(IClient player, RoundResult result)
     {
-        Sound.FromEntity($"microgame.lock-in-win.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn);
+        Sound.FromEntity($"microgame.lock-in-win.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn as Entity);
     }
     
-    private static void OnPlayerLost(Client player, RoundResult result)
+    private static void OnPlayerLost(IClient player, RoundResult result)
     {
-        Sound.FromEntity($"microgame.lock-in-lose.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn);
+        Sound.FromEntity($"microgame.lock-in-lose.{(player.IsOwnedByLocalClient ? "local" : "other")}", player.Pawn as Entity);
     }
 
     private static void StopBGM()

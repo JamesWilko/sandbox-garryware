@@ -7,7 +7,7 @@ public struct GravityGunInfo
     public Entity Target;
     public Entity Weapon;
     public Entity Pawn;
-    public Client Instigator;
+    public IClient Instigator;
 }
 
 public interface IGravityGunCallback

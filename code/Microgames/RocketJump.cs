@@ -37,7 +37,7 @@ public class RocketJump : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && IsPlayerOnPlatform(player))
             {

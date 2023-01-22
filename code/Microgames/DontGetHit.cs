@@ -23,7 +23,7 @@ public class DontGetHit : Microgame
         GiveWeapon<Fists>(To.Everyone);
         ShowInstructions("#microgame.instructions.hit-someone");
 
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -51,7 +51,7 @@ public class DontGetHit : Microgame
     {
         RemoveAllWeapons();
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

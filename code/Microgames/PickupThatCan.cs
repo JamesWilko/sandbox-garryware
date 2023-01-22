@@ -28,7 +28,7 @@ public class PickupThatCan : Microgame
         GiveWeapon<GravityGun>(To.Everyone);
 
         // Spawn some bins
-        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Rand.Float(0.25f, 0.5f), 1, 5);
+        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Game.Random.Float(0.25f, 0.5f), 1, 5);
         for (int i = 0; i < numBins; ++i)
         {
             var binProp = new BreakableProp
@@ -45,7 +45,7 @@ public class PickupThatCan : Microgame
 
         // Spawn a load of cans
         // @note: since the cans are small and hard to lose, we want to spawn a lot of them
-        int numCans = (int) (Client.All.Count * Rand.Float(2.0f, 5.0f));
+        int numCans = (int) (Game.Clients.Count * Game.Random.Float(2.0f, 5.0f));
         for (int i = 0; i < numCans; ++i)
         {
             var can = new BreakableProp

@@ -16,7 +16,7 @@ public partial class BouncyBall : BreakableProp
     public override void Spawn()
     {
         Model = CommonEntities.BeachBall;
-        Scale = Rand.Float(1.5f, 2.0f);
+        Scale = Game.Random.Float(1.5f, 2.0f);
         Indestructible = true;
         base.Spawn();
     }

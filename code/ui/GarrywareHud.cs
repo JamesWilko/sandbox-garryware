@@ -12,7 +12,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
     
     public GarrywareHud()
     {
-        if (!IsClient)
+        if (!Game.IsClient)
             return;
         
         RootPanel.StyleSheet.Load("/ui/GarrywareHud.scss");
@@ -82,7 +82,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         }
     }
 
-    private void OnPlayerLockedInResult(Client player, RoundResult result)
+    private void OnPlayerLockedInResult(IClient player, RoundResult result)
     {
         if (player != null && player.IsOwnedByLocalClient)
         {
@@ -91,7 +91,7 @@ public partial class GarrywareHud : HudEntity<RootPanel>
         }
     }
     
-    private void OnClientStatReceived(RoundStat stat, Client subject)
+    private void OnClientStatReceived(RoundStat stat, IClient subject)
     {
         var statPopup = RootPanel.AddChild<RoundStatPopup>();
         statPopup.SetDetails(stat, subject);

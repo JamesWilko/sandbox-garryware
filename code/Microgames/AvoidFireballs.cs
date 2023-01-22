@@ -24,7 +24,7 @@ public class AvoidFireballs : Microgame
 
     public override void Start()
     {
-        int numberOfFireballs = Client.All.Count switch
+        int numberOfFireballs = Game.Clients.Count switch
         {
             < 3 => 2,
             < 6 => 3,

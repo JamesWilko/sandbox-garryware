@@ -59,7 +59,7 @@ public class CrateColorNumberMemory : Microgame
     
     public override void Start()
     {
-        targetingColor = Rand.Float() > 0.5f;
+        targetingColor = Game.Random.Float() > 0.5f;
         targetColor = GetRandomColorAlreadyInUse();
         targetValue = randomValues.GetRandomUsedElement().ToString("N0");
         

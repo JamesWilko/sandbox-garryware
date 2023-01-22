@@ -13,7 +13,7 @@ public static class UiUtility
         return index >= 0 && index < PlaceEmojis.Length ? PlaceEmojis[index] : string.Empty;
     }
 
-    public static string GetEmojiForLockedInResult(Client client)
+    public static string GetEmojiForLockedInResult(IClient client)
     {
         if (client.Pawn is GarrywarePlayer player && player.HasLockedInResult)
         {

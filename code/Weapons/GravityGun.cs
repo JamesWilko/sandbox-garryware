@@ -55,7 +55,7 @@ public partial class GravityGun : Carriable
         SetModel("weapons/rust_pistol/rust_pistol.vmdl");
     }
 
-    public override void Simulate(Client client)
+    public override void Simulate(IClient client)
     {
         if (Owner is not Player owner)
             return;
@@ -74,7 +74,7 @@ public partial class GravityGun : Carriable
         }
         SetGrabParticlesVisible(IsAttemptingToPullEntity || HasValidGrab);
 
-        if (!IsServer)
+        if (!Game.IsServer)
             return;
 
         using (Prediction.Off())
@@ -263,7 +263,7 @@ public partial class GravityGun : Carriable
     {
         base.ActiveStart(ent);
 
-        if (IsServer)
+        if (Game.IsServer)
         {
             Activate();
         }
@@ -273,7 +273,7 @@ public partial class GravityGun : Carriable
     {
         base.ActiveEnd(ent, dropped);
 
-        if (IsServer)
+        if (Game.IsServer)
         {
             Deactivate();
         }
@@ -283,7 +283,7 @@ public partial class GravityGun : Carriable
     {
         base.OnDestroy();
 
-        if (IsServer)
+        if (Game.IsServer)
         {
             Deactivate();
         }
@@ -296,7 +296,7 @@ public partial class GravityGun : Carriable
     [Event.Physics.PreStep]
     public void OnPrePhysicsStep()
     {
-        if (!IsServer)
+        if (!Game.IsServer)
             return;
 
         if (!HeldBody.IsValid())
@@ -404,7 +404,7 @@ public partial class GravityGun : Carriable
 
     private void PuntGrabbedEntity()
     {
-        var eyeDir = Owner.EyeRotation.Forward;
+        var eyeDir = Owner.AimRay.Forward;
         
         if (HeldBody.PhysicsGroup.BodyCount > 1)
         {
@@ -436,7 +436,7 @@ public partial class GravityGun : Carriable
 
     private void PuntTracedEntity(TraceResult tr)
     {
-        var eyeDir = Owner.EyeRotation.Forward;
+        var eyeDir = Owner.AimRay.Forward;
         
         var pushScale = 1.0f - Math.Clamp(tr.Distance / MaxPushDistance, 0.0f, 1.0f);
         tr.Body.ApplyImpulseAt(tr.EndPosition, eyeDir * (tr.Body.Mass * (PushForce * pushScale)));

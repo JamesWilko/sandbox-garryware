@@ -20,7 +20,7 @@ public class TutorialGame
         
         await ShowInstructions("#microgame.get-ready");
         SoundUtility.PlayNewRound(tutorialRoundTimer);
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -34,7 +34,7 @@ public class TutorialGame
         GarrywareGame.Current.ClearCountdownTimer();
         GarrywareGame.Current.AvailableActions = PlayerAction.None;
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -49,7 +49,7 @@ public class TutorialGame
             }
         }
         await GameTask.DelaySeconds(0.5f);
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

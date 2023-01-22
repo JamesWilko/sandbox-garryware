@@ -25,7 +25,7 @@ public partial class KnockbackBall : BreakableProp
 
     protected override void OnDestroy()
     {
-        if (IsClient)
+        if (Game.IsClient)
         {
             Particles.Create("particles/impact.smokepuff.vpcf", Position).Destroy();
             Sound.FromWorld("sounds/balloon_pop_cute.sound", Position);

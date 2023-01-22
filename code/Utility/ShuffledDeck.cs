@@ -91,7 +91,7 @@ public class ShuffledDeck<T>
 
     public T GetRandomUsedElement()
     {
-        return Rand.FromList(usedElements);
+        return Game.Random.FromList(usedElements);
     }
 
 }

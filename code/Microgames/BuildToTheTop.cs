@@ -42,7 +42,7 @@ public class BuildToTheTop : Microgame
                 Model = CommonEntities.Crate,
                 Indestructible = true
             };
-            prop.ApplyAbsoluteImpulse(Vector3.Random.Normal * Rand.Float(200f, 500f));
+            prop.ApplyAbsoluteImpulse(Vector3.Random.Normal * Game.Random.Float(200f, 500f));
             AutoCleanup(prop);
         }
 
@@ -56,7 +56,7 @@ public class BuildToTheTop : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && IsPlayerOnPlatform(player))
             {

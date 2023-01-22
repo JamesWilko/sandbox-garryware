@@ -55,7 +55,7 @@ public class GetOnColoredPlatform : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player
                 && player.GroundEntity != null

@@ -17,10 +17,10 @@ public class RoundInfoBar : Panel
     public Panel WinnersFeed { get; set; }
     public Panel LosersFeed { get; set; }
 
-    private Queue<Client> winnersQueue = new();
+    private Queue<IClient> winnersQueue = new();
     private RealTimeSince lastWinnerAdded;
     
-    private Queue<Client> losersQueue = new();
+    private Queue<IClient> losersQueue = new();
     private RealTimeSince lastLoserAdded;
 
     private int lastSeconds;
@@ -121,7 +121,7 @@ public class RoundInfoBar : Panel
         }
     }
 
-    private void OnPlayerLockedInResult(Client player, RoundResult result)
+    private void OnPlayerLockedInResult(IClient player, RoundResult result)
     {
         if(result == RoundResult.Won)
             winnersQueue.Enqueue(player);
@@ -136,14 +136,14 @@ public class RoundInfoBar : Panel
         useDoubleTimeCountdown = timeUntilCountdownFinishes < 4f;
     }
     
-    private void AddKillfeedEntry(Client player, RoundResult result)
+    private void AddKillfeedEntry(IClient player, RoundResult result)
     {
         if(player == null)
             return;
         
         var feed = result == RoundResult.Won ? WinnersFeed : LosersFeed;
         var e = feed.AddChild<KillFeedEntry>();
-        e.SetPlayer(player.PlayerId, player.Name);
+        e.SetPlayer(player.SteamId, player.Name);
         e.SetResult(result);
         e.Style.Order = feed.ChildrenCount * -1;
     }

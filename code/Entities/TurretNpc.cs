@@ -4,12 +4,42 @@ using Sandbox;
 
 namespace Garryware.Entities;
 
-public class TurretNpc : AnimatedEntity
+public partial class TurretNpc : AnimatedEntity
 {
     private ClothingContainer Clothing { get; set; } = new();
     private Inventory Inventory { get; set; }
     private NpcWeapon ActiveWeapon { get; set; }
 
+    /// <summary>
+    /// Position a player should be looking from in world space.
+    /// </summary>
+    public Vector3 EyePosition
+    {
+        get => Transform.PointToWorld(EyeLocalPosition);
+        set => EyeLocalPosition = Transform.PointToLocal(value);
+    }
+
+    /// <summary>
+    /// Position a player should be looking from in local to the entity coordinates.
+    /// </summary>
+    [Net, Predicted]
+    public Vector3 EyeLocalPosition { get; set; }
+
+    /// <summary>
+    /// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity.
+    /// </summary>
+    public Rotation EyeRotation
+    {
+        get => Transform.RotationToWorld(EyeLocalRotation);
+        set => EyeLocalRotation = Transform.RotationToLocal(value);
+    }
+
+    /// <summary>
+    /// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity. In local to the entity coordinates.
+    /// </summary>
+    [Net, Predicted]
+    public Rotation EyeLocalRotation { get; set; }
+    
     public bool CanFire { get; set; }
     public TimeUntil TeagbagTime { get; set; }
     private TimeUntil TimeUntilPickANewTarget { get; set; }
@@ -53,7 +83,7 @@ public class TurretNpc : AnimatedEntity
     /// </summary>
     private void LoadClothing(string parentPath, params string[] items)
     {
-        var item = Rand.FromArray(items);
+        var item = Game.Random.FromArray(items);
         var path = $"{parentPath}{item}.clothing";
         if (ResourceLibrary.TryGet<Clothing>(path, out var clothingAsset))
         {
@@ -107,7 +137,7 @@ public class TurretNpc : AnimatedEntity
         var idealRotation = Rotation.LookAt(directionToTarget.WithZ(0), Vector3.Up);
         Rotation = Rotation.Slerp(Rotation, idealRotation, Time.Delta * turnSpeed);
         Rotation = Rotation.Clamp(idealRotation, 45.0f, out var shuffle);
-
+        
         EyePosition = Position + Vector3.Up * 60f;
         EyeRotation = directionToTarget.EulerAngles.ToRotation();
 

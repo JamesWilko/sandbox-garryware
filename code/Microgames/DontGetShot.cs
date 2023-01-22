@@ -22,7 +22,7 @@ public class DontGetShot : Microgame
     {
         ShowInstructions("#microgame.instructions.dont-get-shot");
 
-        int numTurrets = Client.All.Count switch
+        int numTurrets = Game.Clients.Count switch
         {
             < 3 => 1,
             < 5 => 2,
@@ -47,7 +47,7 @@ public class DontGetShot : Microgame
         GiveWeapon<BallLauncher>(To.Everyone);
 
         // Check if a player got shot
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -64,7 +64,7 @@ public class DontGetShot : Microgame
 
     private void PlayerOnHurt(GarrywarePlayer victim, DamageInfo info)
     {
-        if (!victim.HasLockedInResult && info.Flags.HasFlag(DamageFlags.Bullet))
+        if (!victim.HasLockedInResult && info.HasTag(Tags.BulletDamage))
         {
             victim.FlagAsRoundLoser();
             
@@ -84,7 +84,7 @@ public class DontGetShot : Microgame
         }
         
         // Un-listen to the events so we don't accidentally ruin another gamemode
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

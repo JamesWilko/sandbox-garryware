@@ -38,7 +38,7 @@ public partial class Projectile : ModelEntity
         TimeSinceSpawned = 0;
     }
 
-    public override void Simulate(Client cl)
+    public override void Simulate(IClient cl)
     {
         base.Simulate(cl);
 

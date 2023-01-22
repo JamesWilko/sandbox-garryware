@@ -2,6 +2,7 @@ using System;
  using Garryware.Entities;
 using Garryware.UI;
 using Sandbox;
+using Sandbox.Utility;
 
 namespace Garryware;
 
@@ -10,6 +11,15 @@ public enum RoundResult
     Undecided,
     Lost,
     Won
+}
+
+public enum CameraMode
+{
+    FirstPerson,
+    ThirdPerson,
+    FirstPersonInverted,
+    FirstPersonInvertedControls,
+    FirstPersonWobbly,
 }
 
 public partial class GarrywarePlayer : Player
@@ -27,6 +37,11 @@ public partial class GarrywarePlayer : Player
     public bool HasLostRound => RoundResult == RoundResult.Lost;
 
     [Net] public bool WasHereForRoundStart { get; set; }
+    
+    [Net, Predicted]
+    public bool ThirdPersonCamera { get; set; }
+    
+    [Net, Predicted] public CameraMode CameraType { get; set; }
 
     public bool IsDucking => Controller.HasTag("ducked");
     private bool WasDucking { get; set; }
@@ -56,7 +71,7 @@ public partial class GarrywarePlayer : Player
     /// <summary>
     /// Initialize using this client
     /// </summary>
-    public GarrywarePlayer(Client cl) : this()
+    public GarrywarePlayer(IClient cl) : this()
     {
         // Load clothing from client data
         Clothing.LoadFromClient(cl);
@@ -75,25 +90,19 @@ public partial class GarrywarePlayer : Player
 
         Clothing.DressEntity(this);
 
-        Animator = new GarrywarePlayerAnimator();
-
-        CameraMode = new FirstPersonCamera();
-
         base.Respawn();
     }
 
     public override void OnKilled()
     {
         base.OnKilled();
-
-        BecomeRagdollOnClient(Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone(lastDamage.HitboxIndex));
+        
+        BecomeRagdollOnClient(Velocity, lastDamage.Position, lastDamage.Force, lastDamage.BoneIndex, lastDamage.HasTag(Garryware.Tags.BulletDamage), lastDamage.HasTag(Garryware.Tags.BlastDamage));
 
         Controller = null;
 
         EnableAllCollisions = false;
         EnableDrawing = false;
-
-        CameraMode = new SpectateRagdollCamera();
 
         foreach (var child in Children)
         {
@@ -115,7 +124,7 @@ public partial class GarrywarePlayer : Player
         Hurt?.Invoke(this, info);
         
         // Apply knockback from explosions
-        if (info.Flags.HasFlag(DamageFlags.Blast) && Controller is GarrywareWalkController controller)
+        if (info.HasTag(Garryware.Tags.BlastDamage) && Controller is GarrywareWalkController controller)
         {
             var knockbackForce = lastDamage.Force;
             const float rocketJumpVerticalForceMultiplier = 2.2f;
@@ -140,36 +149,21 @@ public partial class GarrywarePlayer : Player
             controller.Knockback(force);
     }
     
-    public override void Simulate(Client cl)
+    public override void Simulate(IClient cl)
     {
         base.Simulate(cl);
-
-        if (Input.ActiveChild != null)
-        {
-            ActiveChild = Input.ActiveChild;
-        }
-
+        
         if (LifeState != LifeState.Alive)
             return;
 
         TickPlayerUse();
         SimulateActiveChild(cl, ActiveChild);
 
-        /*
-        // Swap camera between FPS and TPS
-        if (Input.Pressed(InputButton.View))
+        if (Controller != null)
         {
-            if (CameraMode is ThirdPersonCamera)
-            {
-                CameraMode = new FirstPersonCamera();
-            }
-            else
-            {
-                CameraMode = new ThirdPersonCamera();
-            }
+            SimulateAnimation(Controller);
         }
-        */
-
+        
         // Drop the currently held weapon
         if (Input.Pressed(InputButton.Drop))
         {
@@ -212,6 +206,182 @@ public partial class GarrywarePlayer : Player
         
     }
 
+    public override void FrameSimulate(IClient cl)
+    {
+        base.FrameSimulate(cl);
+        
+        Camera.FieldOfView = Screen.CreateVerticalFieldOfView(Game.Preferences.FieldOfView);
+        Camera.Main.SetViewModelCamera(90f);
+
+        if (LifeState != LifeState.Alive && Corpse.IsValid())
+        {
+            Corpse.EnableDrawing = true;
+
+            var pos = Corpse.GetBoneTransform( 0 ).Position + Vector3.Up * 10;
+            var targetPos = pos + Camera.Rotation.Backward * 100;
+
+            var tr = Trace.Ray( pos, targetPos )
+                .WithAnyTags( "solid" )
+                .Ignore( this )
+                .Radius( 8 )
+                .Run();
+
+            Camera.Rotation = ViewAngles.ToRotation();
+            Camera.Position = tr.EndPosition;
+            Camera.FirstPersonViewer = null;
+        }
+        else
+        {
+            switch (CameraType)
+            {
+                case CameraMode.FirstPerson:
+                case CameraMode.FirstPersonInvertedControls:
+                case CameraMode.FirstPersonWobbly:
+                {
+                    Camera.Rotation = ViewAngles.ToRotation();
+                    Camera.Position = EyePosition;
+                    Camera.FirstPersonViewer = this;
+                    break;
+                }
+                case CameraMode.ThirdPerson:
+                {
+                    Camera.FirstPersonViewer = null;
+
+                    var center = Position + Vector3.Up * 64;
+                    var pos = center;
+                    var rot = Camera.Rotation * Rotation.FromAxis(Vector3.Up, -16);
+
+                    float distance = 130.0f * Scale;
+                    var targetPos = pos + rot.Right * ((CollisionBounds.Mins.x + 32) * Scale);
+                    targetPos += rot.Forward * -distance;
+
+                    var tr = Trace.Ray(pos, targetPos)
+                        .WithAnyTags("solid")
+                        .Ignore(this)
+                        .Radius(8)
+                        .Run();
+
+                    Camera.Rotation = ViewAngles.ToRotation();
+                    Camera.Position = tr.EndPosition;
+                }
+                    break;
+                case CameraMode.FirstPersonInverted:
+                {
+                    Camera.Rotation = ViewAngles.WithRoll(180.0f).ToRotation();
+                    Camera.Position = EyePosition;
+                    Camera.FirstPersonViewer = this;
+                }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(CameraType));
+            }
+        }
+        
+    }
+
+    public override void BuildInput()
+    {
+        InputDirection = Input.AnalogMove;
+
+        if (Input.StopProcessing) 
+            return;
+
+        var look = Input.AnalogLook;
+        if (ViewAngles.pitch > 90f || ViewAngles.pitch < -90f)
+        {
+            look = look.WithYaw(look.yaw * -1f);
+        }
+
+        var viewAngles = ViewAngles;
+        switch (CameraType)
+        {
+            case CameraMode.FirstPerson:
+            case CameraMode.ThirdPerson:
+            case CameraMode.FirstPersonInverted:
+                viewAngles += look;
+                break;
+            case CameraMode.FirstPersonInvertedControls:
+                viewAngles += look * -1f;
+                break;
+            case CameraMode.FirstPersonWobbly:
+            {
+                float wobbleX = (Noise.Perlin(Time.Tick + Position.x) - 0.5f) * 1.3f;
+                float wobbleY = (Noise.Perlin(Time.Tick + Position.y) - 0.5f) * 1.3f;
+                
+                viewAngles += look;
+                viewAngles.pitch += wobbleY;
+                viewAngles.yaw += wobbleX;
+            }
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(CameraType));
+        }
+        
+        viewAngles.pitch = viewAngles.pitch.Clamp(-89f, 89f);
+        viewAngles.roll = 0f;
+        ViewAngles = viewAngles.Normal;
+
+        ActiveChild?.BuildInput();
+        GetActiveController()?.BuildInput();
+    }
+
+    Entity lastWeapon;
+    private void SimulateAnimation(PawnController controller)
+    {
+        if (controller == null)
+            return;
+
+        Rotation rotation;
+
+        // where should we be rotated to
+        var turnSpeed = 0.02f;
+
+        // If we're a bot, spin us around 180 degrees.
+        if (Client.IsBot)
+        {
+            rotation = ViewAngles.WithYaw(ViewAngles.yaw + 180f).ToRotation();
+        }
+        else
+        {
+            rotation = ViewAngles.ToRotation();
+        }
+
+        var idealRotation = Rotation.LookAt(rotation.Forward.WithZ(0), Vector3.Up);
+        Rotation = Rotation.Slerp(Rotation, idealRotation, controller.WishVelocity.Length * Time.Delta * turnSpeed);
+        Rotation = Rotation.Clamp(idealRotation, 45.0f, out var shuffle); // lock facing to within 45 degrees of look direction
+
+        CitizenAnimationHelper animHelper = new CitizenAnimationHelper(this);
+
+        animHelper.WithWishVelocity(controller.WishVelocity);
+        animHelper.WithVelocity(controller.Velocity);
+        animHelper.WithLookAt(EyePosition + EyeRotation.Forward * 100.0f, 1.0f, 1.0f, 0.5f);
+        animHelper.AimAngle = rotation;
+        animHelper.FootShuffle = shuffle;
+        animHelper.DuckLevel = MathX.Lerp(animHelper.DuckLevel, controller.HasTag("ducked") ? 1 : 0, Time.Delta * 10.0f);
+        animHelper.VoiceLevel = (Game.IsClient && Client.IsValid()) ? Client.Voice.LastHeard < 0.5f ? Client.Voice.CurrentLevel : 0.0f : 0.0f;
+        animHelper.IsGrounded = GroundEntity != null;
+        animHelper.IsSitting = controller.HasTag("sitting");
+        animHelper.IsNoclipping = controller.HasTag("noclip");
+        animHelper.IsClimbing = controller.HasTag("climbing");
+        animHelper.IsSwimming = this.GetWaterLevel() >= 0.5f;
+        animHelper.IsWeaponLowered = false;
+
+        if (controller.HasEvent("jump")) animHelper.TriggerJump();
+        if (ActiveChild != lastWeapon) animHelper.TriggerDeploy();
+
+        if (ActiveChild is BaseCarriable carry)
+        {
+            carry.SimulateAnimator(animHelper);
+        }
+        else
+        {
+            animHelper.HoldType = CitizenAnimationHelper.HoldTypes.None;
+            animHelper.AimBodyWeight = 0.5f;
+        }
+
+        lastWeapon = ActiveChild;
+    }
+    
     public override void StartTouch(Entity other)
     {
         if (timeSinceDropped < 1) return;
@@ -279,70 +449,72 @@ public partial class GarrywarePlayer : Player
     }
 
     [ClientRpc]
-    private void BecomeRagdollOnClient(Vector3 velocity, DamageFlags damageFlags, Vector3 forcePos, Vector3 force, int bone)
+    private void BecomeRagdollOnClient( Vector3 velocity, Vector3 forcePos, Vector3 force, int bone, bool impulse, bool blast )
     {
         var ent = new ModelEntity();
-        ent.Tags.Add("ragdoll", "solid", "debris");
+        ent.Tags.Add( "ragdoll", "solid", "debris" );
         ent.Position = Position;
         ent.Rotation = Rotation;
         ent.Scale = Scale;
         ent.UsePhysicsCollision = true;
         ent.EnableAllCollisions = true;
-        ent.SetModel(GetModelName());
-        ent.CopyBonesFrom(this);
-        ent.CopyBodyGroups(this);
-        ent.CopyMaterialGroup(this);
-        ent.CopyMaterialOverrides(this);
-        ent.TakeDecalsFrom(this);
+        ent.SetModel( GetModelName() );
+        ent.CopyBonesFrom( this );
+        ent.CopyBodyGroups( this );
+        ent.CopyMaterialGroup( this );
+        ent.CopyMaterialOverrides( this );
+        ent.TakeDecalsFrom( this );
         ent.EnableAllCollisions = true;
         ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
         ent.RenderColor = RenderColor;
         ent.PhysicsGroup.Velocity = velocity;
         ent.PhysicsEnabled = true;
 
-        foreach (var child in Children)
+        foreach ( var child in Children )
         {
-            if (!child.Tags.Has("clothes")) continue;
-            if (child is not ModelEntity e) continue;
+            if ( !child.Tags.Has( "clothes" ) ) continue;
+            if ( child is not ModelEntity e ) continue;
 
             var model = e.GetModelName();
 
             var clothing = new ModelEntity();
-            clothing.SetModel(model);
-            clothing.SetParent(ent, true);
+            clothing.SetModel( model );
+            clothing.SetParent( ent, true );
             clothing.RenderColor = e.RenderColor;
-            clothing.CopyBodyGroups(e);
-            clothing.CopyMaterialGroup(e);
+            clothing.CopyBodyGroups( e );
+            clothing.CopyMaterialGroup( e );
         }
 
-        if (damageFlags.HasFlag(DamageFlags.Bullet) ||
-            damageFlags.HasFlag(DamageFlags.PhysicsImpact))
+        if ( impulse )
         {
-            PhysicsBody body = bone > 0 ? ent.GetBonePhysicsBody(bone) : null;
+            PhysicsBody body = bone > 0 ? ent.GetBonePhysicsBody( bone ) : null;
 
-            if (body != null)
+            if ( body != null )
             {
-                body.ApplyImpulseAt(forcePos, force * body.Mass);
+                body.ApplyImpulseAt( forcePos, force * body.Mass );
             }
             else
             {
-                ent.PhysicsGroup.ApplyImpulse(force);
+                ent.PhysicsGroup.ApplyImpulse( force );
             }
         }
 
-        if (damageFlags.HasFlag(DamageFlags.Blast))
+        if ( blast )
         {
-            if (ent.PhysicsGroup != null)
+            if ( ent.PhysicsGroup != null )
             {
-                ent.PhysicsGroup.AddVelocity((Position - (forcePos + Vector3.Down * 100.0f)).Normal * (force.Length * 0.2f));
-                var angularDir = (Rotation.FromYaw(90) * force.WithZ(0).Normal).Normal;
-                ent.PhysicsGroup.AddAngularVelocity(angularDir * (force.Length * 0.02f));
+                ent.PhysicsGroup.AddVelocity( (Position - (forcePos + Vector3.Down * 100.0f)).Normal * (force.Length * 0.2f) );
+                var angularDir = (Rotation.FromYaw( 90 ) * force.WithZ( 0 ).Normal).Normal;
+                ent.PhysicsGroup.AddAngularVelocity( angularDir * (force.Length * 0.02f) );
             }
         }
 
         Corpse = ent;
 
-        ent.DeleteAsync(10.0f);
+        if ( IsLocalPawn )
+            Corpse.EnableDrawing = false;
+
+        ent.DeleteAsync( 10.0f );
     }
 
     public void ResetRound()
@@ -444,14 +616,14 @@ public partial class GarrywarePlayer : Player
         }
     }
 
-    public void OverrideCameraType(Type cameraType)
+    public void OverrideCameraMode(CameraMode mode)
     {
-        CameraMode = TypeLibrary.Create<CameraMode>(cameraType);
+        CameraType = mode;
     }
 
     public void RestoreNormalCamera()
     {
-        CameraMode = new FirstPersonCamera();
+        CameraType = CameraMode.FirstPerson;
     }
     
 }

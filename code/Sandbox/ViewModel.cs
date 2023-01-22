@@ -20,32 +20,33 @@ public class ViewModel : BaseViewModel
 	public float YawInertia { get; private set; }
 	public float PitchInertia { get; private set; }
 
-	public override void PostCameraSetup( ref CameraSetup camSetup )
+	public override void PlaceViewmodel()
 	{
-		base.PostCameraSetup( ref camSetup );
-
-		if ( !Local.Pawn.IsValid() )
+		if ( !Game.LocalPawn.IsValid() )
 			return;
+
+		var inPos = Camera.Position;
+		var inRot = Camera.Rotation;
 
 		if ( !activated )
 		{
-			lastPitch = camSetup.Rotation.Pitch();
-			lastYaw = camSetup.Rotation.Yaw();
+			lastPitch = inRot.Pitch();
+			lastYaw = inRot.Yaw();
 
 			YawInertia = 0;
 			PitchInertia = 0;
 
 			activated = true;
 		}
-
-		Position = camSetup.Position;
-		Rotation = camSetup.Rotation;
-
+		
 		var cameraBoneIndex = GetBoneIndex( "camera" );
 		if ( cameraBoneIndex != -1 )
 		{
-			camSetup.Rotation *= (Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation);
+			inRot *= (Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation);
 		}
+
+		Position = inPos;
+		Rotation = inRot;
 
 		var newPitch = Rotation.Pitch();
 		var newYaw = Rotation.Yaw();
@@ -55,9 +56,9 @@ public class ViewModel : BaseViewModel
 
 		if ( EnableSwingAndBob )
 		{
-			var playerVelocity = Local.Pawn.Velocity;
+			var playerVelocity = Game.LocalPawn.Velocity;
 
-			if ( Local.Pawn is Player player )
+			if ( Game.LocalPawn is Player player )
 			{
 				var controller = player.GetActiveController();
 				if ( controller != null && controller.HasTag( "noclip" ) )

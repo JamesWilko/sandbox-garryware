@@ -64,10 +64,10 @@ partial class LauncherPistol : AmmoWeapon
             if(FiresTracers)
                 ShootTracer(tr.HitPosition);
             
-            if (!IsServer) continue;
+            if (!Game.IsServer) continue;
             if (!tr.Entity.IsValid()) continue;
             
-            if (tr.Entity is Player player)
+            if (tr.Entity is GarrywarePlayer player)
             {
                 if (player.Controller is GarrywareWalkController controller)
                 {

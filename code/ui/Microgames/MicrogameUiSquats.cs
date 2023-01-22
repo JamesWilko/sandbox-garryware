@@ -25,7 +25,7 @@ public class MicrogameUiSquats : Panel
     {
         base.Tick();
 
-        if (Local.Pawn is GarrywarePlayer player)
+        if (Game.LocalPawn is GarrywarePlayer player)
         {
             Up.Style.Display = player.IsSquatting ? DisplayMode.None : DisplayMode.Flex;
             Down.Style.Display = player.IsSquatting ? DisplayMode.Flex : DisplayMode.None;

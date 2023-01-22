@@ -71,13 +71,13 @@ public abstract class Microgame
     
     public virtual bool CanBePlayed()
     {
-        return Client.All.Count >= MinimumPlayers;
+        return Game.Clients.Count >= MinimumPlayers;
     }
 
     public async Task Play()
     {
         // Reset player round states for the new game
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -100,7 +100,7 @@ public abstract class Microgame
         // If we're in the platform room and players have already fallen off the edge then put them back so they don't immediately lose the next round
         if (Room.Contents == MicrogameRoom.Platform)
         {
-            foreach (var client in Client.All)
+            foreach (var client in Game.Clients)
             {
                 if (client.Pawn is GarrywarePlayer player && player.Position.z < -1f)
                 {
@@ -195,7 +195,7 @@ public abstract class Microgame
         if (!Rules.HasFlag(MicrogameRules.EndEarlyIfEverybodyLockedIn))
             return false;
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart && !player.HasLockedInResult)
             {
@@ -238,7 +238,7 @@ public abstract class Microgame
         }
         
         // Remove weapons from all players
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -339,7 +339,7 @@ public abstract class Microgame
         // Automatically cause all remaining players who haven't been locked in already to win
         if (Rules.HasFlag(MicrogameRules.WinOnTimeout))
         {
-            foreach (var player in Client.All.Select(client => client.Pawn).OfType<GarrywarePlayer>().Where(player => !player.HasLockedInResult))
+            foreach (var player in Game.Clients.Select(client => client.Pawn).OfType<GarrywarePlayer>().Where(player => !player.HasLockedInResult))
             {
                 player.FlagAsRoundWinner();
             }
@@ -348,14 +348,14 @@ public abstract class Microgame
         // Automatically cause all remaining players who haven't been locked in already to lose
         if (Rules.HasFlag(MicrogameRules.LoseOnTimeout))
         {
-            foreach (var player in Client.All.Select(client => client.Pawn).OfType<GarrywarePlayer>().Where(player => !player.HasLockedInResult))
+            foreach (var player in Game.Clients.Select(client => client.Pawn).OfType<GarrywarePlayer>().Where(player => !player.HasLockedInResult))
             {
                 player.FlagAsRoundLoser();
             }
         }
 
         // Update our counts on who won and who lost
-        actualNumberOfPlayersInRound = Client.All.Count(client => client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart);
+        actualNumberOfPlayersInRound = Game.Clients.Count(client => client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart);
         GarrywareGame.Current.UpdateWinLoseCounts();
         didEverybodyWin = GarrywareGame.Current.NumConnectedClients > 2 && GarrywareGame.Current.NumberOfWinners == actualNumberOfPlayersInRound;
         didEverybodyLose = GarrywareGame.Current.NumberOfLosers == actualNumberOfPlayersInRound;
@@ -363,8 +363,8 @@ public abstract class Microgame
 
     private void PlayEndOfGameSoundEvents()
     {
-        var winners = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
-        var losers = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
+        var winners = Game.Clients.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
+        var losers = Game.Clients.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
         
         if (didEverybodyWin)
         {
@@ -382,11 +382,10 @@ public abstract class Microgame
     }
 
     // @todo: update this later on to immediately give points when the player wins or loses
-    // @todo: fix lots of ugly get and set ints on a magic variable name
     private void UpdateScores()
     {
-        var winners = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
-        var losers = Client.All.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
+        var winners = Game.Clients.Where(client => client.Pawn is GarrywarePlayer player && player.HasWonRound).ToArray();
+        var losers = Game.Clients.Where(client => client.Pawn is GarrywarePlayer player && player.HasLostRound).ToArray();
         var pointsPlacing = new List<int>();
         
         // Give all winners a point and update their streak
@@ -423,7 +422,7 @@ public abstract class Microgame
         // Sort points out into their points order and assign a place to each player based on their points 
         pointsPlacing.Sort();
         pointsPlacing.Reverse();
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             int place = pointsPlacing.IndexOf(client.GetInt(Tags.Points)) + 1;
             client.SetInt(Tags.Place, place);
@@ -460,7 +459,7 @@ public abstract class Microgame
         }
         
         // Check if we should send a stat randomly
-        if(Rand.Float() > chanceToSendStat)
+        if(Game.Random.Float() > chanceToSendStat)
             return;
         
         // Send the excessive ratio stats if a lot of people won or lost 
@@ -473,7 +472,7 @@ public abstract class Microgame
         else if (winnerPopulation <= lowWinnerPopulationCutoff)
         {
             // Pick a random variant to send
-            if(Rand.Float() > 0.5f)
+            if(Game.Random.Float() > 0.5f)
                 GameEvents.SendIntegerStat(RoundStat.LowPercentPeopleWon,  (int)Math.Round(winnerPopulation * 100));
             else
                 GameEvents.SendIntegerStat(RoundStat.OnlyXPeopleWon,  GarrywareGame.Current.NumberOfWinners);
@@ -485,8 +484,8 @@ public abstract class Microgame
         {
             // Find the player who won the quickest
             int fastestLockIn = Int32.MaxValue;
-            Client fastestWinner = null;
-            foreach (var client in Client.All)
+            IClient fastestWinner = null;
+            foreach (var client in Game.Clients)
             {
                 if (client.Pawn is GarrywarePlayer player && player.HasWonRound && player.LockedInResultOnTick < fastestLockIn)
                 {
@@ -498,7 +497,7 @@ public abstract class Microgame
             // Send the stat if there was a winning player
             if (fastestWinner != null)
             {
-                GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, Client.All[0]);
+                GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, fastestWinner);
                 return;
             }
         }
@@ -508,17 +507,17 @@ public abstract class Microgame
     {
         if (maxMultiplier < 1.0f)
         {
-            return Math.Clamp((int)Math.Ceiling(Client.All.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1, Client.All.Count);
+            return Math.Clamp((int)Math.Ceiling(Game.Clients.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1, Game.Clients.Count);
         }
         else
         {
-            return Math.Max((int)Math.Ceiling(Client.All.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1);
+            return Math.Max((int)Math.Ceiling(Game.Clients.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), 1);
         }
     }
     
     protected int GetRandomAdjustedClientCount(float minMultiplier, float maxMultiplier, int clampMin, int clampMax)
     {
-        return Math.Clamp((int)Math.Ceiling(Client.All.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), clampMin, clampMax);
+        return Math.Clamp((int)Math.Ceiling(Game.Clients.Count * Random.Shared.Float(minMultiplier, maxMultiplier)), clampMin, clampMax);
     }
 
 }

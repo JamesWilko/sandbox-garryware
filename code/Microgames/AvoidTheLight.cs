@@ -36,7 +36,7 @@ public class AvoidTheLight : Microgame
     
     public override void Setup()
     {
-        avoidLight = Rand.Float() > 0.5f;
+        avoidLight = Game.Random.Float() > 0.5f;
         ShowInstructions(avoidLight ? "#microgame.instructions.avoid-light" : "#microgame.instructions.stay-in-light");
 
         int numLights = Room.Size switch
@@ -60,11 +60,11 @@ public class AvoidTheLight : Microgame
             
             if (avoidLight)
             {
-                spotlight.ApplyAbsoluteImpulse(directions.Next() * Rand.Float(300f, 500f));
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(300f, 500f));
             }
             else
             {
-                spotlight.ApplyAbsoluteImpulse(directions.Next() * Rand.Float(200f, 400f));
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(200f, 400f));
             }
         }
     }
@@ -91,7 +91,7 @@ public class AvoidTheLight : Microgame
     {
         base.Tick();
 
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
             {

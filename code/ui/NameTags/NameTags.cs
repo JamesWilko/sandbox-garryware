@@ -7,7 +7,7 @@ namespace Garryware.UI;
 
 public class NameTags<T> : Panel where T : NameTag, new()
 {
-    private readonly Dictionary<Client, T> rows = new();
+    private readonly Dictionary<IClient, T> rows = new();
     
     public NameTags()
     {
@@ -18,7 +18,7 @@ public class NameTags<T> : Panel where T : NameTag, new()
         base.Tick();
         
         // Add name tags for clients that joined
-        foreach (var client in Client.All.Except(rows.Keys))
+        foreach (var client in Game.Clients.Except(rows.Keys))
         {
             if (!client.IsOwnedByLocalClient)
             {
@@ -28,7 +28,7 @@ public class NameTags<T> : Panel where T : NameTag, new()
         }
 
         // Remove name tags for clients that left
-        foreach (var client in rows.Keys.Except(Client.All))
+        foreach (var client in rows.Keys.Except(Game.Clients))
         {
             if (rows.TryGetValue(client, out var row))
             {
@@ -44,7 +44,7 @@ public class NameTags<T> : Panel where T : NameTag, new()
         }
     }
     
-    protected virtual T AddClient(Client entry)
+    protected virtual T AddClient(IClient entry)
     {
         var nameTagPanel = new T();
         nameTagPanel.Client = entry;

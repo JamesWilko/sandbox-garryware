@@ -38,8 +38,7 @@ public partial class Chair : BreakableProp, IUse
             }
 
             Sitter.Controller = new GarrywareWalkController();
-            Sitter.CameraMode = new FirstPersonCamera();
-            Sitter.Animator = new GarrywarePlayerAnimator();
+            Sitter.ThirdPersonCamera = false;
         }
 
         Sitter = null;
@@ -65,8 +64,7 @@ public partial class Chair : BreakableProp, IUse
             player.Velocity = Vector3.Zero;
             player.PhysicsBody.Enabled = false;
             player.Controller = new ChairController();
-            player.CameraMode = new ThirdPersonCamera();
-            player.Animator = null;
+            player.ThirdPersonCamera = true;
 
             Sitter = player;
         }

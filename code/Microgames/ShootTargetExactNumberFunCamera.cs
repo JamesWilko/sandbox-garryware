@@ -9,11 +9,11 @@ public class ShootTargetExactNumberFunCamera : ShootTargetExactNumber
         base.Setup();
 
         var cameraType = ShootTargetAtLeastNumberFunCamera.AvailableCameraModes.Next();
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.OverrideCameraType(cameraType);
+                player.OverrideCameraMode(cameraType);
             }
         }
     }
@@ -22,7 +22,7 @@ public class ShootTargetExactNumberFunCamera : ShootTargetExactNumber
     {
         base.Finish();
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

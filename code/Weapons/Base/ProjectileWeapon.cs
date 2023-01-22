@@ -23,7 +23,7 @@ public class ProjectileWeapon<T> : AmmoWeapon where T : Entity, new()
         TakeAmmo(1);
     }
     
-    public override void Simulate(Client owner)
+    public override void Simulate(IClient owner)
     {
         base.Simulate(owner);
 
@@ -42,18 +42,18 @@ public class ProjectileWeapon<T> : AmmoWeapon where T : Entity, new()
     
     protected virtual void ShootProjectile(float spread, float launchSpeed)
     {
-        if(IsClient)
+        if(Game.IsClient)
             return;
         
-        Rand.SetSeed(Time.Tick);
-        var forward = Owner.EyeRotation.Forward;
+        Game.SetRandomSeed(Time.Tick);
+        var forward = Owner.AimRay.Forward;
         forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
         forward = forward.Normal;
 
         using (Prediction.Off())
         {
-            var location = Owner.EyePosition + Owner.EyeRotation.Forward * LaunchDistanceOffset;
-            var rotation = Owner.EyeRotation;
+            var location = Owner.AimRay.Position + Owner.AimRay.Forward * LaunchDistanceOffset;
+            var rotation = Rotation.LookAt(Owner.AimRay.Forward);
             var velocity = forward * launchSpeed;
             OwnedProjectiles.Add(CreateProjectile(location, rotation, velocity));
         }

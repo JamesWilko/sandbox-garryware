@@ -4,10 +4,11 @@ using System.Linq;
 using Core.StateMachine;
 using Garryware.Entities;
 using Sandbox;
+using Sandbox.Diagnostics;
 
 namespace Garryware;
 
-public partial class GarrywareGame : Sandbox.Game
+public partial class GarrywareGame : GameManager
 {
     public new static GarrywareGame Current { get; private set; }
     
@@ -39,7 +40,7 @@ public partial class GarrywareGame : Sandbox.Game
         Current = this;
         CommonEntities.Precache();
         
-        if (IsServer)
+        if (Game.IsServer)
         {
             _ = new GameEvents();
             _ = new GarrywareHud();
@@ -189,26 +190,25 @@ public partial class GarrywareGame : Sandbox.Game
     {
         const float returnToLobbySeconds = 30.0f;
         
-        await GameServices.EndGameAsync();
         GameEvents.TriggerGameOver();
         
         SetCountdownTimer(returnToLobbySeconds);
         await GameTask.DelayRealtimeSeconds(returnToLobbySeconds);
         
         // Kick everybody out of the game
-        Client.All.ToList().ForEach(cl => cl.Kick());
+        Game.Clients.ToList().ForEach(cl => cl.Kick());
     }
-    
-    public override void ClientJoined(Client client)
+
+    public override void ClientJoined(IClient client)
     {
         base.ClientJoined(client);
-
+        
         // Spawn the player in
         var player = new GarrywarePlayer(client);
         player.Respawn();
         client.Pawn = player;
     }
-
+    
     public override void MoveToSpawnpoint(Entity pawn)
     {
         SpawnPoint spawnPoint = null;
@@ -226,27 +226,21 @@ public partial class GarrywareGame : Sandbox.Game
         if (spawnPoint == null)
         {
             if (hasValidRoom)
-                throw new Exception($"Attempted to move player to a null spawn point, but had a game room set! (map: {Global.MapName}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
+                throw new Exception($"Attempted to move player to a null spawn point, but had a game room set! (map: {Game.Server.MapIdent}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
             else
-                throw new Exception($"Attempted to move player to a null spawn point when no game room was set! (map: {Global.MapName}, state: {CurrentState}, round: {CurrentRound})");
+                throw new Exception($"Attempted to move player to a null spawn point when no game room was set! (map: {Game.Server.MapIdent}, state: {CurrentState}, round: {CurrentRound})");
         }
         
         pawn.Transform = spawnPoint.Transform;
     }
 
-    public override void ClientDisconnect(Client cl, NetworkDisconnectionReason reason)
+    public override void ClientDisconnect(IClient cl, NetworkDisconnectionReason reason)
     {
         base.ClientDisconnect(cl, reason);
         NumConnectedClients--;
     }
-
-    public override void DoPlayerSuicide(Client cl)
-    {
-        // Do nothing
-        // Players aren't allowed to suicide in microgames
-    }
-
-    public override void OnClientActive(Client client)
+    
+    public override void OnClientActive(IClient client)
     {
         base.OnClientActive(client);
         NumConnectedClients++;
@@ -262,7 +256,7 @@ public partial class GarrywareGame : Sandbox.Game
     {
         // Check if we're already in one of the desired rooms, if we are then don't bother swapping since this room is good enough
         // Only do this if the player count hasn't changed in case we need to swap to a bigger or smaller room 
-        if (playerCountWhenRoomLastChanged == Client.All.Count)
+        if (playerCountWhenRoomLastChanged == Game.Clients.Count)
         {
             foreach (var roomContent in acceptableRooms)
             {
@@ -287,7 +281,7 @@ public partial class GarrywareGame : Sandbox.Game
         CurrentRoom = newRoom;
 
         // Teleport all players to the new room
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -295,13 +289,13 @@ public partial class GarrywareGame : Sandbox.Game
             }
         }
 
-        playerCountWhenRoomLastChanged = Client.All.Count;
+        playerCountWhenRoomLastChanged = Game.Clients.Count;
         return true;
     }
 
     private RoomSize GetAppropriateRoomSizeForPlayerCount()
     {
-        var playerCount = Client.All.Count;
+        var playerCount = Game.Clients.Count;
         
         if (playerCount >= 12) return RoomSize.Large;
         if (playerCount <= 6) return RoomSize.Small;
@@ -313,7 +307,7 @@ public partial class GarrywareGame : Sandbox.Game
         int winners = 0;
         int losers = 0;
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && player.HasLockedInResult)
             {
@@ -345,9 +339,10 @@ public partial class GarrywareGame : Sandbox.Game
     {
         base.RenderHud();
 
-        var draw = Render.Draw2D;
-        draw.FontFamily = "Poppins";
-        draw.FontWeight = 600;
+        if (Game.LocalPawn == null || !Game.LocalPawn.IsValid)
+            return;
+        
+        var eyePosition = Game.LocalPawn.AimRay.Position;
         
         // @todo: this is really shit, but it works without any fuss so it's fine for now
         foreach (var ent in Entity.All)
@@ -355,19 +350,17 @@ public partial class GarrywareGame : Sandbox.Game
             if (ent is BreakableProp prop && prop.ShowWorldText)
             {
                 // Create the initial rect where we're going to draw the text and background
-                float distance = Local.Pawn.EyePosition.Distance(prop.Position);
+                float distance = eyePosition.Distance(prop.Position);
                 float size = sizeAtDistanceCurve.Evaluate(distance) * Screen.Height;
                 var screenPosition = prop.WorldSpaceBounds.Center.ToScreen();
                 var rect = new Rect(screenPosition.x * Screen.Width - size * 0.5f, screenPosition.y * Screen.Height - size * 0.5f, size, size);
                 
                 // Scale the font size based on designed size
-                draw.FontSize = fontSizeAtDistanceCurve.Evaluate(distance) * (Screen.Height / 1080f);
+                var fontSize = fontSizeAtDistanceCurve.Evaluate(distance) * (Screen.Height / 1080f);
                 
                 // Draw the background and text
-                draw.Color = Color.Black.WithAlpha(0.8f);
-                draw.Box(rect);
-                draw.Color = Color.White;
-                draw.DrawText(rect, prop.WorldText);
+                Graphics.DrawRoundedRectangle(rect, Color.Black.WithAlpha(0.8f));
+                Graphics.DrawText(rect, prop.WorldText, Color.White, "Poppins", fontSize, 600f);
             }
         }
         

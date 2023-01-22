@@ -30,7 +30,7 @@ public class BalloonPop : Microgame
             {
                 Position = Room.OnBoxSpawnsDeck.Next().Position,
                 AutoPop = true,
-                TimeUntilPop = Rand.Float(3.0f, 5.0f)
+                TimeUntilPop = Game.Random.Float(3.0f, 5.0f)
             };
             AutoCleanup(balloon);
             balloon.OnBroken += OnBalloonPopped;

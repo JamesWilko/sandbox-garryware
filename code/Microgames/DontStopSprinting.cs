@@ -28,7 +28,7 @@ public class DontStopSprinting : Microgame
 
     public override void Tick()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && !player.IsMovingAtSprintSpeed)
             {

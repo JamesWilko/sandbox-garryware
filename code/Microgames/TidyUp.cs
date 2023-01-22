@@ -30,7 +30,7 @@ public class TidyUp : Microgame
         GiveWeapon<GravityGun>(To.Everyone);
 
         // Spawn some bins
-        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Rand.Float(0.15f, 0.4f), 1, 5);
+        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Game.Random.Float(0.15f, 0.4f), 1, 5);
         for (int i = 0; i < numBins; ++i)
         {
             var binProp = new BreakableProp
@@ -46,8 +46,8 @@ public class TidyUp : Microgame
         }
 
         // Spawn a load of crap
-        int numPlayers = Client.All.Count;
-        int rubbishSpawned = (int) (numPlayers * Rand.Float(2.0f, 3.0f));
+        int numPlayers = Game.Clients.Count;
+        int rubbishSpawned = (int) (numPlayers * Game.Random.Float(2.0f, 3.0f));
         for (int i = 0; i < rubbishSpawned; ++i)
         {
             var rubbish = new BreakableProp

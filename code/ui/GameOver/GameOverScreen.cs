@@ -17,8 +17,8 @@ public class GameOverScreen : Panel
     {
         StyleSheet.Load("/ui/GameOver/GameOverScreen.scss");
         
-        var place = Local.Client.GetInt(Tags.Place, 99);
-        var points = Local.Client.GetInt(Tags.Points, 0);
+        var place = Game.LocalClient.GetInt(Tags.Place, 99);
+        var points = Game.LocalClient.GetInt(Tags.Points, 0);
         
         // Update player place and results
         MedalLabel.Text = UiUtility.GetEmojiForPlace(place);
@@ -62,7 +62,7 @@ public class GameOverScreen : Panel
     {
         RoundResults.DeleteChildren();
         
-        var perRoundResults = Local.Client.GetValue(Tags.PerRoundResults, string.Empty);
+        var perRoundResults = Game.LocalClient.GetValue(Tags.PerRoundResults, string.Empty);
         for (int i = 0; i < perRoundResults.Length; ++i)
         {
             // @note: we add a separate entry for every character so that we can animate everything individually eventually, even if we're not doing that yet
@@ -75,7 +75,7 @@ public class GameOverScreen : Panel
     {
         ScoreboardContainer.DeleteChildren();
 
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             var entry = ScoreboardContainer.AddChild<GameOverScoreboardEntry>();
             entry.Client = client;

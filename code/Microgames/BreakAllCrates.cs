@@ -30,7 +30,7 @@ public class BreakAllCrates : Microgame
     {
         GiveWeapon<Fists>(To.Everyone);
 
-        cratesRemaining = GetRandomAdjustedClientCount(1.25f, 2.0f, Client.All.Count, Room.OnBoxSpawns.Count);
+        cratesRemaining = GetRandomAdjustedClientCount(1.25f, 2.0f, Game.Clients.Count, Room.OnBoxSpawns.Count);
         for (int i = 0; i < cratesRemaining; ++i)
         {
             var spawn = Room.OnBoxSpawnsDeck.Next();

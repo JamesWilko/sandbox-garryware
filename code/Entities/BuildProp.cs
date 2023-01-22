@@ -31,7 +31,7 @@ public class BuildProp : BreakableProp
     [Event.Physics.PostStep]
     protected void StayLevel()
     {
-        if (IsServer && IsGrabbed)
+        if (Game.IsServer && IsGrabbed)
         {
             var desiredRotation = Rotation.Angles().WithPitch(0.0f).WithRoll(0.0f).ToRotation();
             Rotation = Rotation.Lerp(Rotation, desiredRotation, Time.Delta * 20f);

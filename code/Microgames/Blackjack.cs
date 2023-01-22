@@ -55,7 +55,7 @@ public class Blackjack : Microgame
         
         // Determine which set we should pull from
         var cardSet = GetRandomCardSet();
-        var targetCards = Rand.FromArray(cardSet);
+        var targetCards = Game.Random.FromArray(cardSet);
 
         // Create a target for each card
         for (int i = 0; i < targetCards.CardValues.Length; ++i)

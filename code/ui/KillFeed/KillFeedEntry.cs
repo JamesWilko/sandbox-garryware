@@ -23,13 +23,13 @@ public partial class KillFeedEntry : Panel
     public void SetPlayer(long lsteamid, string name)
     {
         Name.Text = name;
-        Name.SetClass("me", lsteamid == (Local.Client?.PlayerId));
+        Name.SetClass("me", lsteamid == (Game.LocalClient?.SteamId));
     }
     
     public void SetResult(RoundResult result)
     {
         AddClass(result == RoundResult.Won ? "won" : "lost");
-        Result.Text = Rand.FromArray(result == RoundResult.Won ? WinnerEmojis : LoserEmojis);
+        Result.Text = Game.Random.FromArray(result == RoundResult.Won ? WinnerEmojis : LoserEmojis);
     }
 
     public override void Tick()

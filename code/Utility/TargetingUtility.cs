@@ -13,7 +13,7 @@ public static class TargetingUtility
         allPlayers.Clear();
         playersNotLockedIn.Clear();
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && player.WasHereForRoundStart)
             {
@@ -29,7 +29,7 @@ public static class TargetingUtility
     public static GarrywarePlayer GetRandomPlayer()
     {
         UpdateTargetLists();
-        return Rand.FromList(allPlayers);
+        return Game.Random.FromList(allPlayers);
     }
 
     public static GarrywarePlayer GetRandomPlayer(GarrywarePlayer notThisPlayer)
@@ -42,10 +42,10 @@ public static class TargetingUtility
         
         // Otherwise keep trying for a little while to get a random player who's not been passed in
         int iteration = 0;
-        var player = Rand.FromList(allPlayers);
+        var player = Game.Random.FromList(allPlayers);
         while (player == notThisPlayer && iteration < 16)
         {
-            player = Rand.FromList(allPlayers);
+            player = Game.Random.FromList(allPlayers);
             ++iteration;
         }
         return player;
@@ -58,7 +58,7 @@ public static class TargetingUtility
         if (playersNotLockedIn.Count == 0)
             return null;
         
-        return Rand.FromList(playersNotLockedIn); 
+        return Game.Random.FromList(playersNotLockedIn); 
     }
 
 }

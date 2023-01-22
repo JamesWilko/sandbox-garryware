@@ -21,22 +21,22 @@ public class InvertedClimb : Microgame
     {
         ShowInstructions("#microgame.instructions.inverted-climb");
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.CameraMode = new InvertedFirstPersonCamera();
+                player.OverrideCameraMode(CameraMode.FirstPersonInverted);
             }
         }
     }
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.CameraMode = new FirstPersonCamera();
+                player.RestoreNormalCamera();
                 
                 if (player.IsOnABox())
                 {

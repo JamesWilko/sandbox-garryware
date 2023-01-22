@@ -42,7 +42,7 @@ public class DontFallOffPlatform : Microgame
         base.Tick();
         
         // Check if somebody fell off the edge
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult && player.Position.z < -24.0f)
             {
@@ -54,7 +54,7 @@ public class DontFallOffPlatform : Microgame
     public override void Finish()
     {
         // Check if people are still in the center and fail them if they are
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && !player.HasLockedInResult)
             {

@@ -10,10 +10,10 @@ public partial class GarrywareGame
     private const float startGameDelay = 40.0f;
     private const float everyoneReadiedUpStartGameDelay = 5.0f;
     
-    public int NumberOfReadyPlayers => Client.All.Count(cl => cl.GetInt(Garryware.Tags.IsReady) == 1);
-    public int NumberOfReadiesNeededToStart => (int)Math.Ceiling(Client.All.Count * requiredPercentToStartCountdown);
+    public int NumberOfReadyPlayers => Game.Clients.Count(cl => cl.GetInt(Garryware.Tags.IsReady) == 1);
+    public int NumberOfReadiesNeededToStart => (int)Math.Ceiling(Game.Clients.Count * requiredPercentToStartCountdown);
     
-    public bool HasEveryPlayerReadiedUp() => NumberOfReadyPlayers >= Client.All.Count;
+    public bool HasEveryPlayerReadiedUp() => NumberOfReadyPlayers >= Game.Clients.Count;
     public bool HaveEnoughPlayersReadiedUpToStart() => NumberOfReadyPlayers >= NumberOfReadiesNeededToStart;
     
     [ConCmd.Server]

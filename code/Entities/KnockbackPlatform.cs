@@ -24,10 +24,10 @@ public class KnockbackPlatform : BiggerPlatform
             {
                 const float maxAngle = 30f;
         
-                var x = (float)Math.Sin(Rand.Float(-maxAngle, maxAngle).DegreeToRadian());
-                var y = (float)Math.Sin(Rand.Float(-maxAngle, maxAngle).DegreeToRadian());
+                var x = (float)Math.Sin(Game.Random.Float(-maxAngle, maxAngle).DegreeToRadian());
+                var y = (float)Math.Sin(Game.Random.Float(-maxAngle, maxAngle).DegreeToRadian());
                 var direction = new Vector3(x, y, 1f);
-                player.Knockback(direction * Rand.Float(650f, 800f));
+                player.Knockback(direction * Game.Random.Float(650f, 800f));
                 
                 Particles.Create("particles/microgame.confetti.burst.vpcf", player).Destroy();
                 Sound.FromEntity("garryware.sfx.confetti.pop", player);

@@ -4,14 +4,14 @@ namespace Garryware.Microgames;
 
 public class ShootTargetAtLeastNumberFunCamera : ShootTargetAtLeastNumber
 {
-    public static readonly ShuffledDeck<System.Type> AvailableCameraModes;
+    public static readonly ShuffledDeck<CameraMode> AvailableCameraModes;
 
     static ShootTargetAtLeastNumberFunCamera()
     {
         AvailableCameraModes = new();
-        AvailableCameraModes.Add(typeof(WobblyFirstPersonCamera));
-        AvailableCameraModes.Add(typeof(InvertedFirstPersonCamera));
-        AvailableCameraModes.Add(typeof(InvertedControlsFirstPersonCamera));
+        AvailableCameraModes.Add(CameraMode.FirstPersonWobbly);
+        AvailableCameraModes.Add(CameraMode.FirstPersonInverted);
+        AvailableCameraModes.Add(CameraMode.FirstPersonInvertedControls);
         AvailableCameraModes.Shuffle();
     }
     
@@ -20,11 +20,11 @@ public class ShootTargetAtLeastNumberFunCamera : ShootTargetAtLeastNumber
         base.Setup();
 
         var cameraType = AvailableCameraModes.Next();
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
-                player.OverrideCameraType(cameraType);
+                player.OverrideCameraMode(cameraType);
             }
         }
     }
@@ -33,7 +33,7 @@ public class ShootTargetAtLeastNumberFunCamera : ShootTargetAtLeastNumber
     {
         base.Finish();
         
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

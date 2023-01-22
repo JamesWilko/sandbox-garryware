@@ -25,14 +25,14 @@ public class RoundStatPopup : Panel
         textLabel = Add.Label(string.Empty, "text");
     }
     
-    public void SetDetails(RoundStat stat, Client subject)
+    public void SetDetails(RoundStat stat, IClient subject)
     {
         switch (stat)
         {
             case RoundStat.XWasTheFastestToWin:
                 emojiLabel.Text = "🏆";
                 textLabel.Text = string.Format("{0} won the round first!", subject.Name); // @localization
-                PlaySound(subject == Local.Client ? SoundEffect.Positive : SoundEffect.General);
+                PlaySound(subject == Game.LocalClient ? SoundEffect.Positive : SoundEffect.General);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

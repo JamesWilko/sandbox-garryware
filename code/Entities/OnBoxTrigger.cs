@@ -1,9 +1,8 @@
 ﻿using Sandbox;
-using SandboxEditor;
 
 namespace Garryware.Entities;
 
-[Library("gw_trigger_on_box"), HammerEntity]
+[Library("gw_trigger_on_box")]
 [Title("On Box Trigger")]
 public class OnBoxTrigger : Trigger
 {

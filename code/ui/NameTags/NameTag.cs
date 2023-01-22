@@ -6,7 +6,7 @@ namespace Garryware.UI;
 
 public class NameTag : WorldPanel
 {
-    public Client Client;
+    public IClient Client;
 
     private Label place;
     private Label result;
@@ -53,8 +53,8 @@ public class NameTag : WorldPanel
         {
             PanelBounds = new Rect(-(w / 2), -(h / 2), w, h);
 
-            Position = Client.Pawn.EyePosition + Vector3.Up * 24;
-            Rotation = Rotation.LookAt(Local.Client.Pawn.EyePosition - Transform.Position);
+            Position = Client.Pawn.AimRay.Position + Vector3.Up * 24;
+            Rotation = Rotation.LookAt(Game.LocalPawn.AimRay.Position - Transform.Position);
         }
     }
 }

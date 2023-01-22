@@ -53,11 +53,11 @@ public class KeepItUp : Microgame
     {
         const float maxAngle = 15f;
         
-        var x = (float)Math.Sin(Rand.Float(-maxAngle, maxAngle).DegreeToRadian());
-        var y = (float)Math.Sin(Rand.Float(-maxAngle, maxAngle).DegreeToRadian());
+        var x = (float)Math.Sin(Game.Random.Float(-maxAngle, maxAngle).DegreeToRadian());
+        var y = (float)Math.Sin(Game.Random.Float(-maxAngle, maxAngle).DegreeToRadian());
         var direction = new Vector3(x, y, 1f);
-        bin.ApplyAbsoluteImpulse(direction * Rand.Float(400f, 600f));
-        bin.ApplyLocalAngularImpulse(Vector3.Random.Normal * Rand.Float(300f, 600f));
+        bin.ApplyAbsoluteImpulse(direction * Game.Random.Float(400f, 600f));
+        bin.ApplyLocalAngularImpulse(Vector3.Random.Normal * Game.Random.Float(300f, 600f));
 
         if (attacker is GarrywarePlayer player)
         {

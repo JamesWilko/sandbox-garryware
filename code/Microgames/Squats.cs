@@ -19,7 +19,7 @@ public class Squats : Microgame
     
     public override void Setup()
     {
-        target = Rand.Int(4, 10);
+        target = Game.Random.Int(4, 10);
         ShowInstructions("#microgame.get-ready");
     }
 
@@ -27,7 +27,7 @@ public class Squats : Microgame
     {
         ShowInstructions(string.Format("Squat at least {0} times!", target)); // @localization
 
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {
@@ -51,7 +51,7 @@ public class Squats : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
             {

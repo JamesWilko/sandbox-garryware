@@ -6,7 +6,7 @@ namespace Garryware.UI;
 
 public partial class GameOverScoreboardEntry : Panel
 {
-    public Client Client;
+    public IClient Client;
     private GarrywarePlayer clientPlayer;
     
     private readonly Label place;
@@ -60,7 +60,7 @@ public partial class GameOverScoreboardEntry : Panel
         
         place.Text = UiUtility.GetEmojiForPlace(clientPlace);
         playerName.Text = Client.Name;
-        playerName.SetClass("me", Client == Local.Client);
+        playerName.SetClass("me", Client == Game.LocalClient);
         SetClass("won", clientPlayer?.HasWonRound ?? false);
         SetClass("lost", clientPlayer?.HasLostRound ?? false);
         

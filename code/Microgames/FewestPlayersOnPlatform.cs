@@ -29,7 +29,7 @@ public class FewestPlayersOnPlatform : Microgame
         ShowInstructions("#microgame.instructions.fewest-players-on-platform");
         GiveWeapon<RocketLauncher>(To.Everyone);
         
-        int maxPlatforms = Math.Max(Client.All.Count / 2, 1);
+        int maxPlatforms = Math.Max(Game.Clients.Count / 2, 1);
         int platforms = GetRandomAdjustedClientCount(0.3f, 0.6f, 1, maxPlatforms);
         for (int i = 0; i < platforms; ++i)
         {
@@ -45,7 +45,7 @@ public class FewestPlayersOnPlatform : Microgame
     public override void Finish()
     {
         // Count how many players on each platform
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && player.GroundEntity != null && !player.GroundEntity.IsWorld)
             {
@@ -66,7 +66,7 @@ public class FewestPlayersOnPlatform : Microgame
         Entity winningPlatform = numPlayersOnPlatforms.MinBy(kvp => kvp.Value).Key;
         
         // Award players on the platform the win
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player && player.GroundEntity == winningPlatform)
             {

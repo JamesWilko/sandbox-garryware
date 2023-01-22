@@ -26,7 +26,7 @@ public class StandOnMissingProp : Microgame
     {
         ShowInstructions("#microgame.look-carefully");
         
-        propsToSpawn = (int) Math.Ceiling(Room.OnBoxSpawns.Count * Rand.Float(0.5f, 0.7f));
+        propsToSpawn = (int) Math.Ceiling(Room.OnBoxSpawns.Count * Game.Random.Float(0.5f, 0.7f));
         propsToRemove = GetRandomAdjustedClientCount(0.25f, 0.5f, 1, (int)(propsToSpawn * 0.35f));
         
         // Spawn the props
@@ -36,7 +36,7 @@ public class StandOnMissingProp : Microgame
             var crate = new BreakableProp()
             {
                 Position = spawn.Position,
-                Rotation = new Angles(0f, Rand.Float(0f, 360f), 0f).ToRotation(),
+                Rotation = new Angles(0f, Game.Random.Float(0f, 360f), 0f).ToRotation(),
                 Model = CommonEntities.Crate,
                 Indestructible = true,
                 PhysicsEnabled = false
@@ -70,7 +70,7 @@ public class StandOnMissingProp : Microgame
 
     public override void Finish()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player
                 && winningTriggers.Contains(player.GetOnBoxTrigger()))

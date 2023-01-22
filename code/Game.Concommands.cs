@@ -54,6 +54,13 @@ public partial class GarrywareGame
                             WorldText = "69"
                         };
                         break;
+                    case "target":
+                        _ = new FloatingTarget
+                        {
+                            Transform = Current.CurrentRoom.InAirSpawnsDeck.Next().Transform,
+                            Scale = 5.0f
+                        };
+                        break;
                     default:
                         Log.Error($"Invalid weapon type {param}");
                         return;
@@ -69,9 +76,9 @@ public partial class GarrywareGame
     public static void RandomizePoints()
     {
         var pointsPlacing = new List<int>();
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
-            var points = Rand.Int(2, 50);
+            var points = Game.Random.Int(2, 50);
             client.SetInt(Garryware.Tags.Points, points);
             pointsPlacing.AddUnique(points);
         }
@@ -79,7 +86,7 @@ public partial class GarrywareGame
         // Sort points out into their points order and assign a place to each player based on their points 
         pointsPlacing.Sort();
         pointsPlacing.Reverse();
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             int place = pointsPlacing.IndexOf(client.GetInt(Garryware.Tags.Points)) + 1;
             client.SetInt(Garryware.Tags.Place, place);
@@ -90,17 +97,17 @@ public partial class GarrywareGame
     [ConCmd.Admin("gw_randomize_streak")]
     public static void RandomizeStreak()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
-            client.SetInt(Garryware.Tags.Streak, Rand.Int(2, 10));
-            client.SetInt(Garryware.Tags.MaxStreak, Rand.Int(10, 15));
+            client.SetInt(Garryware.Tags.Streak, Game.Random.Int(2, 10));
+            client.SetInt(Garryware.Tags.MaxStreak, Game.Random.Int(10, 15));
         }
     }
     
     [ConCmd.Admin("gw_force_ready")]
     public static void ForceReadyUp()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.GetInt(Garryware.Tags.IsReady) == 0)
             {
@@ -115,7 +122,7 @@ public partial class GarrywareGame
     [ConCmd.Admin("gw_force_ready_all")]
     public static void ForceReadyUpAll()
     {
-        foreach (var client in Client.All)
+        foreach (var client in Game.Clients)
         {
             if (client.GetInt(Garryware.Tags.IsReady) == 0)
             {
@@ -132,7 +139,7 @@ public partial class GarrywareGame
         Current.AvailableActions = PlayerAction.None;
         foreach (var control in Enum.GetValues<PlayerAction>())
         {
-            if(Rand.Float() > 0.5f)
+            if(Game.Random.Float() > 0.5f)
                 Current.AvailableActions |= control;
         }
     }
@@ -176,7 +183,7 @@ public partial class GarrywareGame
     [ConCmd.Admin("gw_stat_int_test")]
     public static void SendStat_IntegerTest()
     {
-        GameEvents.SendIntegerStat(RoundStat.OnlyXPeopleWon, Rand.Int(2, 5));
+        GameEvents.SendIntegerStat(RoundStat.OnlyXPeopleWon, Game.Random.Int(2, 5));
     }
     
     [ConCmd.Admin("gw_stat_client_test")]
