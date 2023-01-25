@@ -40,6 +40,8 @@ public partial class TurretNpc : AnimatedEntity
     [Net, Predicted]
     public Rotation EyeLocalRotation { get; set; }
     
+    public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
+    
     public bool CanFire { get; set; }
     public TimeUntil TeagbagTime { get; set; }
     private TimeUntil TimeUntilPickANewTarget { get; set; }
