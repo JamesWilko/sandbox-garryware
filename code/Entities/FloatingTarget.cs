@@ -70,8 +70,7 @@ public class FloatingTarget : BreakableProp
 
     public virtual void UpdateSceneObject(SceneObject obj)
     {
-        var rot = Rotation.LookAt((Position - Camera.Position).Normal) * Rotation.FromPitch(-90f);
-        so.Transform = new Transform(WorldSpaceBounds.Center, rot, Scale);
+        so.Transform = new Transform(WorldSpaceBounds.Center, Rotation, Scale);
         so.Bounds = WorldSpaceBounds;
     }
     
@@ -79,9 +78,19 @@ public class FloatingTarget : BreakableProp
     {
         Graphics.SetupLighting(obj);
         
-        float halfSpriteSize = SpriteScale * 0.5f;
-        var positionOnScreen = Position.ToScreen();
-        var rect = new Rect(positionOnScreen.x - halfSpriteSize, positionOnScreen.y - halfSpriteSize, SpriteScale, SpriteScale);
-        Graphics.DrawQuad(rect, SpriteMaterial, Color.White);
+        // Create the vertex buffer for the sprite
+        var vb = new VertexBuffer();
+
+        // Vertex buffers are in local space, so we need the camera position in local space too
+        var normal = obj.Transform.PointToLocal(Camera.Position).Normal;
+        var w = normal.Cross(Vector3.Down).Normal;
+        var h = normal.Cross(w).Normal;
+        float halfSpriteSize = SpriteScale / 2;
+
+        // Add a single quad to our vertex buffer
+        vb.AddQuad(new Ray(default, normal), w * halfSpriteSize, h * halfSpriteSize);
+
+        // Draw the sprite
+        vb.Draw(SpriteMaterial);
     }
 }

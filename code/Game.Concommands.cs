@@ -61,6 +61,13 @@ public partial class GarrywareGame
                             Scale = 5.0f
                         };
                         break;
+                    case "eye":
+                        _ = new FloatingEye()
+                        {
+                            Transform = Current.CurrentRoom.InAirSpawnsDeck.Next().Transform,
+                            Scale = 5.0f
+                        };
+                        break;
                     default:
                         Log.Error($"Invalid weapon type {param}");
                         return;
