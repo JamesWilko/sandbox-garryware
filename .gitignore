@@ -403,3 +403,4 @@ code/obj
 maps/_bakeresourcecache
 *.generated.*
 *.pkf
+*.vmat_c
