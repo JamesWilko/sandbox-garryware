@@ -1,10 +1,35 @@
-﻿using Sandbox;
-using Sandbox.UI;
+﻿@using Garryware;
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+@namespace Garryware.UI
+@attribute [StyleSheet("/ui/GameOver/GameOverScreen.scss")]
 
-namespace Garryware.UI;
+<root class="gameover-root">
+    
+    <div class="content">
+        <label @ref="MedalLabel" class="medal"></label>
+        <label @ref="ResultLabel" class="medal-text"></label>
+        <label @ref="PointsLabel" class="medal-text"></label>
+        <div @ref="RoundResults" class="all-round-results"/>
+        <div @ref="ScoreboardContainer" class="canvas"/>
+    </div>
+    
+    <div class="top-banner">
+        <label>#ui.gameover.header</label>
+        <img src="ui/logo-banner.png" class="banner-image" />
+    </div>
+    
+    <div class="bottom-banner">
+        <label @ref="ReturnToLobbyTimer"></label>
+        <div class="buttons">
+            <!--            <button onclick.console="disconnect"><label>⏏ Leave Game</label></button>-->
+        </div>
+    </div>
+    
+</root>
 
-[UseTemplate]
-public class GameOverScreen : Panel
+@code
 {
     public Panel RoundResults { get; set; }
     public Label MedalLabel { get; set; }
@@ -13,9 +38,9 @@ public class GameOverScreen : Panel
     public Panel ScoreboardContainer { get; set; }
     public Label ReturnToLobbyTimer { get; set; }
     
-    public GameOverScreen()
+    protected override void OnAfterTreeRender(bool firstTime)
     {
-        StyleSheet.Load("/ui/GameOver/GameOverScreen.scss");
+        base.OnAfterTreeRender(firstTime);
         
         var place = Game.LocalClient.GetInt(Tags.Place, 99);
         var points = Game.LocalClient.GetInt(Tags.Points, 0);
@@ -31,6 +56,8 @@ public class GameOverScreen : Panel
 
     private async void Show()
     {
+        
+        
         await GameTask.Yield();
         SetClass("open", true);
     }
@@ -84,5 +111,5 @@ public class GameOverScreen : Panel
         }
         
     }
-    
+
 }

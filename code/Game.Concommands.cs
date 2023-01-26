@@ -199,4 +199,10 @@ public partial class GarrywareGame
         GameEvents.SendClientStat(RoundStat.XWasTheFastestToWin, ConsoleSystem.Caller);
     }
     
+    [ConCmd.Admin("gw_fake_gameover")]
+    public static void FakeGameOver()
+    {
+        GameEvents.TriggerGameOver();
+    }
+    
 }

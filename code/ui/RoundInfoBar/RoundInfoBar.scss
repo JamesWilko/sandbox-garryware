@@ -1,4 +1,11 @@
 
+RoundInfoBar
+{
+  position: absolute;
+  width: 100%;
+  height: 90px;
+}
+
 .round-info-bar
 {
   position: absolute;
@@ -149,6 +156,7 @@
       height: 50px;
       right: 60px;
       text-align: right;
+      justify-content: flex-end;
     }
 
     > .icon

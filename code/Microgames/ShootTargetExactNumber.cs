@@ -10,8 +10,6 @@ public class ShootTargetExactNumber : Microgame
     private readonly Dictionary<GarrywarePlayer, int> playerHits = new();
     private ShuffledDeck<float> scalesDeck;
     
-    private const float statDisplayTime = 2.0f;
-
     public ShootTargetExactNumber()
     {
         Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.DontShowEndOfRoundStats;

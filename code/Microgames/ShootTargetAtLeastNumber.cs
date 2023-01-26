@@ -10,8 +10,6 @@ public class ShootTargetAtLeastNumber : Microgame
     private int targetHits;
     private readonly Dictionary<GarrywarePlayer, int> playerHits = new();
     private ShuffledDeck<float> scalesDeck;
-
-    private const float statDisplayTime = 2.0f;
     
     public ShootTargetAtLeastNumber()
     {

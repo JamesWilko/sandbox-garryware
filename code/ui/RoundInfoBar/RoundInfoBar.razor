@@ -1,12 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using Sandbox;
-using Sandbox.UI;
+﻿@using System
+@using System.Collections.Generic
+@using Garryware;
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+@namespace Garryware.UI
+@attribute [StyleSheet("/ui/RoundInfoBar/RoundInfoBar.scss")]
 
-namespace Garryware.UI;
 
-[UseTemplate]
-public class RoundInfoBar : Panel
+<div class="round-info-bar">
+
+    <div class="container">
+    
+        <div class="center-container">
+            <label @ref="CountdownLabel" class="countdown"></label>
+            <label @ref="SubCountdownLabel" class="sub-countdown"></label>
+        </div>
+    
+        <div class="left-container">
+            <label class="icon">✔</label>
+            <label class="name">Winners</label>
+            <label @ref="WinnersCountLabel" class="count"></label>
+        </div>
+    
+        <div class="right-container">
+            <label class="icon">❌</label>
+            <label class="name">Losers</label>
+            <label @ref="LosersCountLabel" class="count"></label>
+        </div>
+    
+        <div class="under-container">
+            <label @ref="RoundLabel" class="round"></label>
+        </div>
+    
+    </div>
+    
+    <div @ref="WinnersFeed" class="killfeed-winners"></div>
+    <div @ref="LosersFeed" class="killfeed-losers"></div>
+    
+</div>
+
+@code
 {
     public Label CountdownLabel { get; set; }
     public Label SubCountdownLabel { get; set; }
@@ -25,10 +59,10 @@ public class RoundInfoBar : Panel
 
     private int lastSeconds;
     private bool useDoubleTimeCountdown;
-    
-    public RoundInfoBar()
+
+    protected override void OnAfterTreeRender(bool firstTime)
     {
-        StyleSheet.Load("/ui/RoundInfoBar/RoundInfoBar.scss");
+        base.OnAfterTreeRender(firstTime);
         
         GameEvents.OnPlayerLockedInResult += OnPlayerLockedInResult;
         GameEvents.CountdownSet += OnCountdownSet;
