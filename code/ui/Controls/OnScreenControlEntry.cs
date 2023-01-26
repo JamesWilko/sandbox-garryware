@@ -13,7 +13,7 @@ public class OnScreenControlEntry : Panel
         
     public OnScreenControlEntry()
     {
-        image = Add.Image("input-img");
+        image = Add.Image();
         text = Add.Label();
     }
 
