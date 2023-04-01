@@ -13,6 +13,7 @@
   ],
   "HasCode": true,
   "CodePath": "/code/",
+  "PackageReferences": [],
   "Metadata": {
     "MaxPlayers": 64,
     "MinPlayers": 1,
@@ -44,6 +45,15 @@
     "ParentPackage": "",
     "GeneralExtensions": false,
     "TargettedExtensions": true,
-    "ExtensionApiVersion": 1001
+    "ExtensionApiVersion": 1001,
+    "Summary": "Multiplayer microgames! Work with or against other players in a series of rapid-fire games. ",
+    "Description": "Play a series of rapid-fire minigames with and against the other players in your game. Simply follow the on-screen instructions before each game!\n\n\uD83D\uDC68\u200D\uD83D\uDCBB Source\nGarryware is open source! You can find how we made this on GitHub at\nhttps://github.com/JamesWilko/sandbox-garryware\nhttps://github.com/JamesWilko/sandbox-garryware-map\n\nAddons and maps should use the support game/addon identifier \u0027dhi.garryware\u0027\n\n\uD83D\uDC1B Bugs\nFound something that doesn\u0027t work? Report it to us on our GitHub page linked above!\n\n\uD83E\uDD70 Credits\nCredit to Hurricaaane for his original gamemode, some sound effects, and the music that we shamelessly reused.",
+    "Public": true,
+    "CsProjName": "garryware",
+    "Compiler": {
+      "RootNamespace": "Sandbox",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;"
+    }
   }
 }

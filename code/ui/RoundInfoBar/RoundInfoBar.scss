@@ -15,12 +15,10 @@ RoundInfoBar
 
 .container
 {
-  position: absolute;
-  top: 0;
-  left: 50%;
   width: 800px;
   height: 90px;
-  transform: translateX(-50%);
+  margin-left: auto;
+  margin-right: auto;
   z-index: 50;
 
   background-color: rgba(black, 0.8);
