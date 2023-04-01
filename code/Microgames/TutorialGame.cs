@@ -5,6 +5,8 @@ namespace Garryware.Microgames;
 
 public class TutorialGame
 {
+    private TaskSource TaskSource => GarrywareGame.Current.Task;
+    
     public async Task Play()
     {
         const float tutorialRoundTimer = 5;
@@ -30,7 +32,7 @@ public class TutorialGame
         
         GameEvents.NewInstructions("#tutorial.get-on-a-box", 3);
         GarrywareGame.Current.SetCountdownTimer(tutorialRoundTimer);
-        await GameTask.DelaySeconds(tutorialRoundTimer);
+        await TaskSource.DelaySeconds(tutorialRoundTimer);
         GarrywareGame.Current.ClearCountdownTimer();
         GarrywareGame.Current.AvailableActions = PlayerAction.None;
         
@@ -48,7 +50,7 @@ public class TutorialGame
                 }
             }
         }
-        await GameTask.DelaySeconds(0.5f);
+        await TaskSource.DelaySeconds(0.5f);
         foreach (var client in Game.Clients)
         {
             if (client.Pawn is GarrywarePlayer player)
@@ -56,7 +58,7 @@ public class TutorialGame
                 GameEvents.NewInstructions(To.Single(client), player.HasWonRound ? "#tutorial.get-on-a-box.success" : "#tutorial.get-on-a-box.failure", 3f);
             }
         }
-        await GameTask.DelaySeconds(3);
+        await TaskSource.DelaySeconds(3);
         
         await ShowInstructions("#tutorial.outro.1");
         await ShowInstructions("#tutorial.outro.2");
@@ -65,7 +67,7 @@ public class TutorialGame
     private async Task ShowInstructions(string text, float displayTime = 3f)
     {
         GameEvents.NewInstructions(text, displayTime);
-        await GameTask.DelaySeconds(displayTime); 
+        await TaskSource.DelaySeconds(displayTime); 
     }
     
 }

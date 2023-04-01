@@ -56,9 +56,7 @@
 
     private async void Show()
     {
-        
-        
-        await GameTask.Yield();
+        await GarrywareGame.Current.Task.Yield();
         SetClass("open", true);
     }
 

@@ -94,7 +94,7 @@ public class SimonSays : Microgame
     
     private async void BeepTargets()
     {
-        await GameTask.DelaySeconds(BeforeBeepTime);
+        await TaskSource.DelaySeconds(BeforeBeepTime);
 
         for (int i = 0; i < numberOfTargets; ++i)
         {
@@ -103,7 +103,7 @@ public class SimonSays : Microgame
             crate.GameColor = (GameColor)(i + 1);
             Sound.FromEntity(soundEvents[i], crate);
             
-            await GameTask.DelaySeconds(beepTime);
+            await TaskSource.DelaySeconds(beepTime);
             crate.GameColor = GameColor.White;
         }
     }

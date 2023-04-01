@@ -59,6 +59,7 @@ public abstract class Microgame
     public MicrogameRoom[] AcceptableRooms { get; protected set; } = { MicrogameRoom.Boxes };
     
     protected GarrywareRoom Room => GarrywareGame.Current.CurrentRoom;
+    protected TaskSource TaskSource => GarrywareGame.Current.Task;
     
     private static readonly List<Entity> TemporaryEntities = new();
     
@@ -94,7 +95,7 @@ public abstract class Microgame
         // If we change area then wait a second or two extra so that players can get their bearings
         if (GarrywareGame.Current.ChangeRoom(AcceptableRooms))
         {
-            await GameTask.DelayRealtimeSeconds(1.0f);
+            await TaskSource.DelayRealtimeSeconds(1.0f);
         }
         
         // If we're in the platform room and players have already fallen off the edge then put them back so they don't immediately lose the next round
@@ -123,7 +124,7 @@ public abstract class Microgame
         {
             GarrywareGame.Current.AvailableActions = ActionsUsedInGame;
         }
-        await GameTask.DelayRealtimeSeconds(WarmupLength);
+        await TaskSource.DelayRealtimeSeconds(WarmupLength);
         
         Log.Info($"[{microgameName}] Starting");
         Start();
@@ -138,7 +139,7 @@ public abstract class Microgame
         while (!IsGameFinished())
         {
             Tick();
-            await GameTask.Yield();
+            await TaskSource.Yield();
         }
         
         Log.Info($"[{microgameName}] Finished");
@@ -149,7 +150,7 @@ public abstract class Microgame
         UpdateScores();
         AttemptToSendEndOfRoundStat();
         GarrywareGame.Current.AvailableActions = PlayerAction.None;
-        await GameTask.DelayRealtimeSeconds(CooldownLength);
+        await TaskSource.DelayRealtimeSeconds(CooldownLength);
         
         Log.Info($"[{microgameName}] Cleaning up");
         Cleanup();

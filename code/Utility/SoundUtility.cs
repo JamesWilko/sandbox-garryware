@@ -61,7 +61,7 @@ public static partial class SoundUtility
 
         // Operate on a local copy in case this function is called again before the delay finishes
         localBgmLoopSound.SetVolume(0.01f);
-        await GameTask.DelayRealtimeSeconds(newRoundTime * 0.8f);
+        await GarrywareGame.Current.Task.DelayRealtimeSeconds(newRoundTime * 0.8f);
         localBgmLoopSound.SetVolume(1.0f);
 	}
 

@@ -33,7 +33,7 @@ public class MusicalChairs : Microgame
     private async void RunGamePhases()
     {
         dontStopSprinting = true;
-        await GameTask.DelaySeconds(3f);
+        await TaskSource.DelaySeconds(3f);
         dontStopSprinting = false;
         
         int chairsToSpawn = GetRandomAdjustedClientCount(0.25f, 0.75f, 1, Room.OnFloorSpawns.Count);

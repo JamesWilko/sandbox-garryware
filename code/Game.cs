@@ -193,7 +193,7 @@ public partial class GarrywareGame : GameManager
         GameEvents.TriggerGameOver();
         
         SetCountdownTimer(returnToLobbySeconds);
-        await GameTask.DelayRealtimeSeconds(returnToLobbySeconds);
+        await Task.DelayRealtimeSeconds(returnToLobbySeconds);
         
         // Kick everybody out of the game
         Game.Clients.ToList().ForEach(cl => cl.Kick());
