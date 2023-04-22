@@ -21,7 +21,7 @@ public class OnScreenControlEntry : Panel
     {
         base.Tick();
 
-        image.Texture = Input.GetGlyph(Action.AsInputButton(), InputGlyphSize.Small, GlyphStyle.Light);
+        image.Texture = Input.GetGlyph(Action.AsInputAction(), InputGlyphSize.Small, GlyphStyle.Light);
         text.Text = Action.AsFriendlyName();
     }
 }

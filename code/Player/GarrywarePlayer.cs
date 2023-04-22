@@ -165,7 +165,7 @@ public partial class GarrywarePlayer : Player
         }
         
         // Drop the currently held weapon
-        if (Input.Pressed(InputButton.Drop))
+        if (Input.Pressed("Drop"))
         {
             var dropped = Inventory.DropActive();
             if (dropped != null)

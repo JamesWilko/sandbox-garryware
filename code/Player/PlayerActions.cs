@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Garryware;
 
@@ -35,23 +36,23 @@ public static class PlayerActionsExtension
         PlayerAction.ReadyUp => "#action.ready-up",
         PlayerAction.Reload => "#action.reload",
         PlayerAction.Punt => "#action.punt",
-        _ => "Unknown Action"
+        _ => throw new ArgumentOutOfRangeException()
     };
 
-    public static InputButton AsInputButton(this PlayerAction action) => action switch
+    public static string AsInputAction(this PlayerAction action) => action switch
     {
-        PlayerAction.None => 0,
-        PlayerAction.PrimaryAttack => InputButton.PrimaryAttack,
-        PlayerAction.SecondaryAttack => InputButton.SecondaryAttack,
-        PlayerAction.DropWeapon => InputButton.Drop,
-        PlayerAction.PlayerUse => InputButton.Use,
-        PlayerAction.Jump => InputButton.Jump,
-        PlayerAction.Sprint => InputButton.Run,
-        PlayerAction.Crouch => InputButton.Duck,
-        PlayerAction.ReadyUp => InputButton.Flashlight,
-        PlayerAction.Reload => InputButton.Reload,
-        PlayerAction.Punt => InputButton.PrimaryAttack,
-        _ => 0
+        PlayerAction.None => "",
+        PlayerAction.PrimaryAttack => "attack1",
+        PlayerAction.SecondaryAttack => "attack2",
+        PlayerAction.DropWeapon => "Drop",
+        PlayerAction.PlayerUse => "use",
+        PlayerAction.Jump => "Jump",
+        PlayerAction.Sprint => "Run",
+        PlayerAction.Crouch => "Duck",
+        PlayerAction.ReadyUp => "Flashlight",
+        PlayerAction.Reload => "Reload",
+        PlayerAction.Punt => "attack1",
+        _ => throw new ArgumentOutOfRangeException()
     };
     
 }

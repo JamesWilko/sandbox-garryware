@@ -26,7 +26,7 @@ public partial class GarrywareWalkController : WalkController
         }
 
         // Set player's ready up state
-        if (Input.Pressed(InputButton.Flashlight))
+        if (Input.Pressed("Flashlight"))
         {
             GarrywareGame.TogglePlayerReadyState();
         }

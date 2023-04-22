@@ -10,11 +10,6 @@ public class ProjectileWeapon<T> : AmmoWeapon where T : Entity, new()
     
     protected List<Entity> OwnedProjectiles { get; private set; } = new();
     
-    public override bool CanPrimaryAttack()
-    {
-        return base.CanPrimaryAttack() && Input.Pressed(InputButton.PrimaryAttack);
-    }
-    
     public override void AttackPrimary()
     {
         (Owner as AnimatedEntity)?.SetAnimParameter("b_attack", true);

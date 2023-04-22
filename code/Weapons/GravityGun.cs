@@ -60,7 +60,7 @@ public partial class GravityGun : Carriable
         if (Owner is not Player owner)
             return;
         
-        if (Input.Down(InputButton.SecondaryAttack) && !IsAttemptingToPullEntity)
+        if (Input.Down("attack2") && !IsAttemptingToPullEntity)
         {
             IsAttemptingToPullEntity = true;
             if (!HasValidGrab)
@@ -68,7 +68,7 @@ public partial class GravityGun : Carriable
                 PlayWeaponSound("weapon.gravgun.pull.start");
             }
         }
-        else if(!Input.Down(InputButton.SecondaryAttack) && IsAttemptingToPullEntity)
+        else if(!Input.Down("attack2") && IsAttemptingToPullEntity)
         {
             IsAttemptingToPullEntity = false;
         }
@@ -86,11 +86,11 @@ public partial class GravityGun : Carriable
             HasValidGrab = HeldBody.IsValid() && HeldBody.PhysicsGroup != null;
             if (HeldBody.IsValid() && HeldBody.PhysicsGroup != null)
             {
-                if (Input.Pressed(InputButton.PrimaryAttack))
+                if (Input.Pressed("attack1"))
                 {
                     PuntGrabbedEntity();
                 }
-                else if (Input.Pressed(InputButton.SecondaryAttack))
+                else if (Input.Pressed("attack2"))
                 {
                     GrabEnd();
                 }
@@ -116,14 +116,14 @@ public partial class GravityGun : Carriable
             if (body.BodyType != PhysicsBodyType.Dynamic)
                 return;
 
-            if (Input.Pressed(InputButton.PrimaryAttack))
+            if (Input.Pressed("attack1"))
             {
                 if (tr.Distance < MaxPushDistance)
                 {
                     PuntTracedEntity(tr);
                 }
             }
-            else if (Input.Down(InputButton.SecondaryAttack))
+            else if (Input.Down("attack2"))
             {
                 var physicsGroup = tr.Entity.PhysicsGroup;
                 if (physicsGroup.BodyCount > 1)

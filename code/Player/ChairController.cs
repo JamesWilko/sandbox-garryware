@@ -14,7 +14,7 @@ public partial class ChairController : BasePlayerController
         var player = Pawn as GarrywarePlayer;
         if (Game.IsServer && player.Parent is Entities.Chair chair)
         {
-            if (Input.Pressed(InputButton.Use))
+            if (Input.Pressed("use"))
             {
                 chair.RemoveSitter();
                 return;

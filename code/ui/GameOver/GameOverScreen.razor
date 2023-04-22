@@ -63,12 +63,7 @@
     public override void Tick()
     {
         base.Tick();
-
-        if (Input.Pressed(InputButton.Menu))
-        {
-            SetClass("open", !HasClass("open"));
-        }
-
+        
         if(!IsVisible)
             return;
 

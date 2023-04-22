@@ -62,7 +62,7 @@ public partial class FullScoreboard : Panel
 
     public virtual bool ShouldBeOpen()
     {
-        return Input.Down(InputButton.Score);
+        return Input.Down("Score");
     }
 
     protected virtual void AddHeader()

@@ -15,6 +15,8 @@ public partial class AmmoWeapon : Weapon
     [Net, Predicted] public int AmmoInMagazine { get; set; }
     [Net, Predicted] public int AmmoInReserve { get; set; }
 
+    public virtual bool IsSemiAuto => true;
+    
     public delegate void MagazineEmptyDelegate(AmmoWeapon self);
     public event MagazineEmptyDelegate MagazineEmpty;
 
@@ -31,7 +33,7 @@ public partial class AmmoWeapon : Weapon
             || AmmoInReserve <= 0
             || AmmoInMagazine >= MagazineCapacity)
             return false;
-
+        
         return true;
     }
 
@@ -42,7 +44,7 @@ public partial class AmmoWeapon : Weapon
             return false;
         }
 
-        return base.CanPrimaryAttack();
+        return base.CanPrimaryAttack() && (!IsSemiAuto || Input.Pressed("attack1"));
     }
 
     public bool TakeAmmo(int amount)
