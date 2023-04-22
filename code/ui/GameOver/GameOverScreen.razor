@@ -1,4 +1,5 @@
-﻿@using Garryware;
+﻿@using System
+@using Garryware;
 @using Sandbox;
 @using Sandbox.UI;
 @inherits Panel
@@ -70,7 +71,8 @@
         // Tick the countdown timer down
         if (GarrywareGame.Current.IsCountdownTimerEnabled)
         {
-            ReturnToLobbyTimer.Text = $"Returning to lobby in {GarrywareGame.Current.TimeUntilCountdownExpires.Relative:N0} seconds..."; // @localization
+            var countdown = MathF.Max(GarrywareGame.Current.TimeUntilCountdownExpires.Relative, 0);
+            ReturnToLobbyTimer.Text = $"Returning to lobby in {countdown:N0} seconds..."; // @localization
         }
         else
         {
