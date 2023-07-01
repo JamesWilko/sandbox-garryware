@@ -7,16 +7,14 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "ResourcePaths": [
-    "/fonts/*",
-    "/ui/*"
-  ],
+  "Resources": "\nui/*\nfonts/*",
+  "MenuResources": null,
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [],
   "EditorReferences": null,
   "Metadata": {
-    "MaxPlayers": 64,
+    "MaxPlayers": 32,
     "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
     "MapSelect": "Official",
@@ -127,77 +125,6 @@
           "GroupName": "Actions"
         },
         {
-          "Name": "Slot1",
-          "KeyboardCode": "1",
-          "GamepadCode": "DpadWest",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot2",
-          "KeyboardCode": "2",
-          "GamepadCode": "DpadEast",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot3",
-          "KeyboardCode": "3",
-          "GamepadCode": "DpadSouth",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot4",
-          "KeyboardCode": "4",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot5",
-          "KeyboardCode": "5",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot6",
-          "KeyboardCode": "6",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot7",
-          "KeyboardCode": "7",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot8",
-          "KeyboardCode": "8",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot9",
-          "KeyboardCode": "9",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "Slot0",
-          "KeyboardCode": "0",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "SlotPrev",
-          "KeyboardCode": "mouse4",
-          "GamepadCode": "SwitchLeftBumper",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "SlotNext",
-          "KeyboardCode": "mouse5",
-          "GamepadCode": "SwitchRightBumper",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "View",
-          "KeyboardCode": "C",
-          "GamepadCode": "RightJoystickButton",
-          "GroupName": "Other"
-        },
-        {
           "Name": "Voice",
           "KeyboardCode": "v",
           "GamepadCode": "RightJoystickButton",
@@ -233,6 +160,29 @@
           "GroupName": "Other"
         }
       ]
-    }
+    },
+    "PackageSettings": [
+      {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "gw_max_rounds",
+        "DisplayName": "Rounds",
+        "DefaultValue": "40",
+        "Description": "The number of minigames to play before the game ends.",
+        "Group": "",
+        "Minimum": 10,
+        "Maximum": 100
+      },
+      {
+        "DisplayType": "Boolean",
+        "Choices": [],
+        "ConVarName": "gw_skip_tutorial",
+        "DisplayName": "Skip Tutorial",
+        "DefaultValue": "false",
+        "Description": "Should the tutorial be skipped so the game begins quicker?",
+        "Group": ""
+      }
+    ],
+    "HttpAllowList": null
   }
 }

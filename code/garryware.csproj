@@ -9,19 +9,21 @@
 		<NoWarn>1701;1702;1591;</NoWarn>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DefineConstants>SANDBOX;ADDON;DEBUG</DefineConstants>
+		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Update="**\*.scss" DependentUpon="%(Filename).cs" />
-		<None Update="**\*.css" DependentUpon="%(Filename).cs" />
-		<None Update="**\*.sass" DependentUpon="%(Filename).cs" />
-		<None Update="**\*.html" DependentUpon="%(Filename).cs" />
-		<None Update="**\*.htm" DependentUpon="%(Filename).cs" />
+		
+		<None Update="**\*.cs.scss" DependentUpon="%(Filename)" />
+		<Compile Update="**\*.razor.cs" DependentUpon="%(Filename)" />
+		<None Update="**\*.razor.scss" DependentUpon="%(Filename)" />
+
 	</ItemGroup>
 
 	<ItemGroup>
 	  <AdditionalFiles Include="**/*.razor" />
 	</ItemGroup>
+
 
 	<ItemGroup>
 		<Using Include="Sandbox.Internal.GlobalGameNamespace" Static="true" />
@@ -35,7 +37,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll" />
+		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll"/>
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.System.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Engine.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Game.dll" />
@@ -45,7 +47,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-		<ProjectReference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\base\code\base.csproj" />
+		<ProjectReference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\base\code\Base Library.csproj" />
 
   </ItemGroup>
 
