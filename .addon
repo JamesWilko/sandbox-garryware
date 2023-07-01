@@ -8,7 +8,7 @@
   "HasAssets": true,
   "AssetsPath": "",
   "Resources": "\nui/*\nfonts/*",
-  "MenuResources": null,
+  "MenuResources": "GameMenu/*\nui/bg-garry.png\nui/github-mark-white.svg\nui/logo-banner.png",
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [],
@@ -17,9 +17,9 @@
     "MaxPlayers": 32,
     "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
-    "MapSelect": "Official",
+    "MapSelect": "Hidden",
     "MapList": [
-      "dhi.garryware_map"
+      "dhi.garryware_lifelime"
     ],
     "RankType": "None",
     "PerMapRanking": false,
