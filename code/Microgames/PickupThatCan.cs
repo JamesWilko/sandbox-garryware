@@ -6,8 +6,8 @@ namespace Garryware.Microgames;
 
 public class PickupThatCan : Microgame
 {
-    private static readonly Model BinModel = Model.Load("models/sbox_props/park_bin/park_bin.vmdl");
-    private static readonly Model CanModel = Model.Load("models/citizen_props/sodacan01.vmdl");
+    private static readonly Model BinModel = Cloud.Model("facepunch.park_bin");
+    private static readonly Model CanModel = Cloud.Model("facepunch.soda_can");
 
     public PickupThatCan()
     {

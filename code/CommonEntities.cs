@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Garryware.Entities;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Garryware;
 
@@ -41,7 +38,7 @@ public static class CommonEntities
 
         RubbishDeck = new ShuffledDeck<Model>();
         RubbishDeck.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
-        RubbishDeck.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"), 5);
+        RubbishDeck.Add(Cloud.Model("facepunch.wet_floor_sign"), 5);
         RubbishDeck.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
         RubbishDeck.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
         RubbishDeck.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);

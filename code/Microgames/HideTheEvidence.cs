@@ -21,8 +21,8 @@ public class HideTheEvidence : Microgame
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 4;
         
-        binModels.Add(Model.Load("models/sbox_props/park_bin/park_bin.vmdl"));
-        binModels.Add(Model.Load("models/sbox_props/bin/street_bin.vmdl"));
+        binModels.Add(Cloud.Model("facepunch.park_bin"));
+        binModels.Add(Cloud.Model("facepunch.street_bin"));
         binModels.Shuffle();
     }
     

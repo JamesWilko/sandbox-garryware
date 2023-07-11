@@ -7,7 +7,7 @@ namespace Garryware.Microgames;
 
 public class TidyUp : Microgame
 {
-    private static readonly Model BinModel = Model.Load("models/sbox_props/park_bin/park_bin.vmdl");
+    private static readonly Model BinModel = Cloud.Model("facepunch.park_bin");
 
     private Dictionary<GarrywarePlayer, int> rubbishClearedPerPlayer = new();
     private int targetToClear;

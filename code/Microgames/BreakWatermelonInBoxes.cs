@@ -22,10 +22,10 @@ public class BreakWatermelonInBoxes : Microgame
         GameLength = 5;
         
         decoyModels.Add(CommonEntities.BeachBall);
-        decoyModels.Add(Model.Load("models/sbox_props/fire_extinguisher/fire_extinguisher.vmdl"));
-        decoyModels.Add(Model.Load("models/sbox_props/traffic_cone/traffic_cone.vmdl"));
-        decoyModels.Add(Model.Load("models/sbox_props/gas_cylinder_fat/gas_cylinder_fat.vmdl"));
-        decoyModels.Add(Model.Load("models/sbox_props/pizza_box/pizza_box.vmdl"));
+        decoyModels.Add(Cloud.Model("facepunch.fireextinguisher"));
+        decoyModels.Add(Cloud.Model("facepunch.traffic_cone"));
+        decoyModels.Add(Cloud.Model("facepunch.beer_cask"));
+        decoyModels.Add(Cloud.Model("facepunch.wet_floor_sign"));
         decoyModels.Shuffle();
     }
     

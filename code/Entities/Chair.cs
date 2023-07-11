@@ -8,7 +8,7 @@ public partial class Chair : BreakableProp, IUse
 
     public override void Spawn()
     {
-        Model = Model.Load("models/rust_props/wooden_furniture/chair_b.vmdl");
+        Model = Cloud.Model("rust.chair_b");
         Indestructible = true;
         Static = true;
         PhysicsEnabled = false;
