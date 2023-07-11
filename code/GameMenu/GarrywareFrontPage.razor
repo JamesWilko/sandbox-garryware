@@ -11,7 +11,7 @@
 
     <div class="game-title">
     </div>
-
+    
     <div class="controls">
 
         @if ( Game.InGame )
@@ -27,7 +27,7 @@
         }
         else
         {
-            <a class="button" onclick=@CreateNewLobby>Create Game</a>
+            <a class="button" href="/create">Create Game</a>
         }
 
         <a class="button" href="/servers">Find a Game</a>

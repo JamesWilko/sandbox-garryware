@@ -23,16 +23,16 @@
         DefaultUrl = "/";
 
         AddDestination("/", typeof(GarrywareFrontPage));
-	    AddDestination("/lobby", typeof(LobbyPage));
-	    AddDestination("/lobby/addons", typeof(LobbyAddonPage));
-        AddDestination("/active", typeof(ActivePage));
+	    AddDestination("/load", typeof(LoadGamePage));
+	    AddDestination("/create", typeof(CreateGamePage));
+	    AddDestination("/active", typeof(ActivePage));
 	    AddDestination("/servers", typeof(ServerListPage));
-        AddDestination("/settings", typeof(SettingsPage));
+	    AddDestination("/settings", typeof(SettingsPage));
 
-        if (Game.InGame) Navigate("/active");
+	    if (Game.InGame) Navigate("/active");
 
-        BindClass( "ingame", () => Game.InGame );
-        BindClass("inlobby", () => Game.Menu.Lobby != null);
+	    BindClass( "ingame", () => Game.InGame );
+	    BindClass( "inlobby", () => Game.Menu?.Lobby != null);
     }
 
 	protected override void OnEvent( PanelEvent e )
