@@ -492,6 +492,10 @@ public partial class GravityGun : Carriable
 
     private void SetGrabParticlesVisible(bool visible)
     {
+        // @todo: need to look into the server networking the particles to the owner client, but for now just disable grab particles on the server side and keep them owner client only
+        if (Game.IsServer)
+            return;
+        
         if (visible && pullEntityParticles == null)
         {
             pullEntityParticles = Particles.Create("particles/gravgun/weapon.gravgun.pull.vpcf", EffectEntity, EffectAttachmentPoint);
