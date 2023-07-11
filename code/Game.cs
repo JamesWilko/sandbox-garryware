@@ -105,7 +105,7 @@ public partial class GarrywareGame : GameManager
         AvailableActions = PlayerAction.None;
     }
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     private void StartGameTick()
     {
         if (!IsInState(GameState.StartingSoon))

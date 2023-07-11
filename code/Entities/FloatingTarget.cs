@@ -59,7 +59,7 @@ public class FloatingTarget : BreakableProp
         };
     }
 
-    [Event.Client.Frame]
+    [GameEvent.Client.Frame]
     protected virtual void Think()
     {
         if (so != null)

@@ -120,7 +120,7 @@ public partial class TurretNpc : AnimatedEntity
         TimeUntilPickANewTarget = Math.Max(TeagbagTime, TimeUntilPickANewTarget);
     }
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     protected virtual void Tick()
     {
         if (currentTarget == null || TimeUntilPickANewTarget <= 0)

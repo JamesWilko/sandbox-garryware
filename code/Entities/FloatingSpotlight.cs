@@ -29,7 +29,7 @@ public partial class FloatingSpotlight : SpotLightEntity
         Color = Color.Yellow;
     }
 
-    [Event.Physics.PostStep]
+    [GameEvent.Physics.PostStep]
     protected void KeepRotationAndHeight()
     {
         if (!this.IsValid() || Game.IsClient)

@@ -25,7 +25,7 @@ public partial class Balloon : BreakableProp
         PlaySound("balloon_pop_cute");
     }
 
-    [Event.Physics.PostStep]
+    [GameEvent.Physics.PostStep]
     protected void UpdateGravity()
     {
         if (!this.IsValid())
@@ -38,7 +38,7 @@ public partial class Balloon : BreakableProp
         body.GravityScale = GravityScale;
     }
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     protected void UpdateLifetime()
     {
         if (AutoPop && TimeUntilPop <= 0.0f)

@@ -57,7 +57,7 @@ public class Fireball : BasePhysics
         currentTarget = TargetingUtility.GetRandomPlayerStillInPlay();
     }
     
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     private void Tick()
     {
         if(currentTarget == null)
@@ -73,7 +73,7 @@ public class Fireball : BasePhysics
         
         // Check if we came into contact with a player
         var results = Trace.Sphere(Size * 1.1f, Position, nextLocation)
-            .EntitiesOnly()
+            .DynamicOnly()
             .WithTag("player")
             .RunAll();
 

@@ -162,7 +162,7 @@ public partial class GravityGun : Carriable
                 .UseHitboxes()
                 .WithAnyTags("solid")
                 .Ignore(this)
-                .EntitiesOnly()
+                .DynamicOnly()
                 .Radius(2.0f)
                 .Run();
 
@@ -179,7 +179,7 @@ public partial class GravityGun : Carriable
             .UseHitboxes()
             .WithAnyTags("solid")
             .Ignore(this)
-            .EntitiesOnly()
+            .DynamicOnly()
             .Radius(PullRadius)
             .RunAll();
 
@@ -293,7 +293,7 @@ public partial class GravityGun : Carriable
     {
     }
 
-    [Event.Physics.PreStep]
+    [GameEvent.Physics.PreStep]
     public void OnPrePhysicsStep()
     {
         if (!Game.IsServer)

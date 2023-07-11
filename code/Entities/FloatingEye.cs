@@ -17,7 +17,7 @@ public class FloatingEye : FloatingTarget
         so.Bounds = WorldSpaceBounds;
     }
     
-    [Event.Tick.Client]
+    [GameEvent.Tick.Client]
     private void TickCheckIfClientLookedAt()
     {
         if(!IsValid)

@@ -28,7 +28,7 @@ public class BuildProp : BreakableProp
         IsGrabbed = false;
     }
 
-    [Event.Physics.PostStep]
+    [GameEvent.Physics.PostStep]
     protected void StayLevel()
     {
         if (Game.IsServer && IsGrabbed)

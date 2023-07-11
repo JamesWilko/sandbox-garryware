@@ -54,7 +54,7 @@ public partial class ColorRouletteProp : BreakableProp
         canRotateColors = false;
     }
     
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     private void Update()
     {
         if(!IsValid || !canRotateColors) return;

@@ -131,7 +131,7 @@ public partial class GarrywareGame : IObservableStateMachine<GameState>
         });
     }
 
-    [Event.Tick.Server, Event.Tick.Client]
+    [GameEvent.Tick.Server, GameEvent.Tick.Client]
     public void Update()
     {
         if (delayedTransitionRequest.HasValue)

@@ -6,12 +6,12 @@ namespace Garryware.Entities;
 public class KnockbackPlatform : BiggerPlatform
 {
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     protected void TickBouncePlayersAboveThisPlatform()
     {
         var bounds = CollisionBounds * Scale;
         var results = Trace.Box(bounds, Position, Position + Vector3.Up * 50f)
-            .EntitiesOnly()
+            .DynamicOnly()
             .WithTag("player")
             .RunAll();
         

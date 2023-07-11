@@ -16,7 +16,7 @@ public partial class KnockbackBall : BreakableProp
         timeSinceSpawn = 0;
     }
     
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     private void LifetimeTick()
     {
         if(timeSinceSpawn > 3f)

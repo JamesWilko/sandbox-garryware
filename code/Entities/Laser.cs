@@ -49,7 +49,7 @@ public partial class Laser : ModelEntity
         LaserParticles?.Destroy(true);
     }
 
-    [Event.Tick.Server]
+    [GameEvent.Tick.Server]
     protected void UpdateRotation()
     {
         // Rotate and move about
@@ -67,7 +67,7 @@ public partial class Laser : ModelEntity
         ZapPlayerIfPossible(tr2);
     }
 
-    [Event.Tick.Client]
+    [GameEvent.Tick.Client]
     protected void UpdateParticles()
     {
         if (LaserParticles == null)
@@ -89,14 +89,12 @@ public partial class Laser : ModelEntity
         
         var tr1 = Trace.Ray(Position, Position + Rotation.Right * maxRange)
             .UseHitboxes()
-            .WorldAndEntities()
             .Ignore(this)
             .Size(radius)
             .Run();
         
         var tr2 = Trace.Ray(Position, Position + Rotation.Left * maxRange)
             .UseHitboxes()
-            .WorldAndEntities()
             .Ignore(this)
             .Size(radius)
             .Run();
