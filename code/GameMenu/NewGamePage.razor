@@ -11,11 +11,11 @@
     <span style="margin-bottom: auto"></span>
     
     <div class="control-cards">
-        <MenuCard onclick="@CreateShortGame">
+        <MenuCard Disabled="@true" onclick="@CreateShortGame">
             <Icon><svg class="icon" Src="ui/spedometer-low.svg" Color=@Color.White.Hex></svg></Icon>
             <Title>Short</Title>
-            <Desc1>20 rounds</Desc1>
-            <Desc2>~5 minutes</Desc2>
+            <Desc1>Coming Soon</Desc1>
+            <Desc2></Desc2>
         </MenuCard>
         <MenuCard onclick="@CreateMediumGame">
             <Icon><svg class="icon" Src="ui/spedometer-middle.svg" Color=@Color.White.Hex></svg></Icon>
@@ -23,17 +23,17 @@
             <Desc1>40 rounds</Desc1>
             <Desc2>~10 minutes</Desc2>
         </MenuCard>
-        <MenuCard onclick="@CreateLongGame">
+        <MenuCard Disabled="@true" onclick="@CreateLongGame">
             <Icon><svg class="icon" Src="ui/spedometer-max.svg" Color=@Color.White.Hex></svg></Icon>
             <Title>Long</Title>
-            <Desc1>60 rounds</Desc1>
-            <Desc2>~15 minutes</Desc2>
+            <Desc1>Coming Soon</Desc1>
+            <Desc2></Desc2>
         </MenuCard>
-        <MenuCard onclick="@CreateVeryLongGame">
+        <MenuCard Disabled="@true" onclick="@CreateVeryLongGame">
             <Icon><svg class="icon" Src="ui/bottle.svg" Color=@Color.White.Hex></svg></Icon>
             <Title>Marathon</Title>
-            <Desc1>100 rounds</Desc1>
-            <Desc2>~25 minutes</Desc2>
+            <Desc1>Coming Soon</Desc1>
+            <Desc2></Desc2>
         </MenuCard>
     </div>
 
@@ -48,22 +48,22 @@
 {
     private void CreateShortGame()
     {
-        CreateNewGame(20, "Short, 20 rounds");
+        // CreateNewGame(20, "Short");
     }
     
     private void CreateMediumGame()
     {
-        CreateNewGame(40, "Normal, 40 rounds");
+        CreateNewGame(40, "Normal");
     }
     
     private void CreateLongGame()
     {
-        CreateNewGame(60, "Long, 60 rounds");
+        // CreateNewGame(60, "Long");
     }
     
     private void CreateVeryLongGame()
     {
-        CreateNewGame(100, "Marathon, 100 rounds");
+        // CreateNewGame(100, "Marathon");
     }
 
     private void CreateNewGame(int numRounds, string serverNameSuffix)
@@ -79,7 +79,7 @@
 
         options.OnStartGame = (setup) =>
         {
-            Game.Menu.StartServerAsync(setup.MaxPlayers, setup.GameTitle, "dhi.garryware_lifelime");
+            Game.Menu.StartServerAsync(setup.MaxPlayers, setup.GameTitle, setup.Map);
         };
 
         Game.Overlay.ShowCreateGame(options);

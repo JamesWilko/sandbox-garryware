@@ -63,3 +63,13 @@
     font-weight: normal;
   }
 }
+
+.disabled
+{
+  border: 1px solid crimson;
+  
+  &:hover
+  {
+    border: 1px solid red;
+  }
+}
