@@ -7,7 +7,7 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
-  "Resources": "\nui/*\nfonts/*",
+  "Resources": "\nui/*\nfonts/*\nGameMenu/*\nsound/menu/*",
   "MenuResources": "GameMenu/*\nui/bg-garry.png\nui/github-mark-white.svg\nui/logo-banner.png",
   "HasCode": true,
   "CodePath": "/code/",
