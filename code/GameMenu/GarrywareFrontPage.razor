@@ -15,36 +15,39 @@
     <span style="margin-bottom: auto"></span>
     
     <div class="control-cards">
-        <MenuCard onclick="@ShowNewGameOptions">
-            <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>New Game</Title>
-        </MenuCard>
-        <MenuCard onclick="@OpenServerList">
-            <Icon><svg class="icon" Src="ui/server.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Find Game</Title>
-        </MenuCard>
-        <MenuCard onclick="@OpenSettings">
-            <Icon><svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Settings</Title>
-        </MenuCard>
+        
+        @if (Game.InGame)
+        {
+            <MenuCard onclick="@ReturnToLobby">
+                <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
+                <Title>Keep Playing</Title>
+            </MenuCard>
+            <MenuCard onclick="@LeaveGame">
+                <Icon><svg class="icon" Src="ui/exit.svg" Color=@Color.White.Hex></svg></Icon>
+                <Title>Leave Game</Title>
+            </MenuCard>
+        }
+        else
+        {
+            <MenuCard onclick="@ShowNewGameOptions">
+                <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
+                <Title>New Game</Title>
+            </MenuCard>
+            <MenuCard onclick="@OpenServerList">
+                <Icon><svg class="icon" Src="ui/server.svg" Color=@Color.White.Hex></svg></Icon>
+                <Title>Find Game</Title>
+            </MenuCard>
+            <MenuCard onclick="@OpenSettings">
+                <Icon><svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg></Icon>
+                <Title>Settings</Title>
+            </MenuCard>
+        }
     </div>
             
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@Game.Menu.Close">Quit</a>
     </div>
-    
-    @* <span style="height: 20px"></span> *@
-    @* <div class="controls"> *@
-    @*      *@
-    @*     @if ( Game.InGame ) *@
-    @*     { *@
-    @*         <a class="button" href="/active">Current Game</a> *@
-    @*         <a class="button" onclick=@LeaveGame>Leave Game</a> *@
-    @*     } *@
-    @*     <span style="height: 20px;"></span> *@
-    @*     <a class="button" @onclick=@Game.Menu.Close>Quit</a> *@
-    @* </div> *@
     
     @* <div class="links"> *@
     @*     <a class="button" onclick=@CopyGithubLink> *@
@@ -62,6 +65,11 @@
     private void ShowNewGameOptions()
     {
         this.Navigate("/new");
+    }
+    
+    private void ReturnToLobby()
+    {
+        this.Navigate("/active");
     }
     
     private void CreateNewGame()
