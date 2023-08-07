@@ -1,0 +1,64 @@
+﻿
+.card
+{
+  cursor: pointer;
+  width: 200px;
+  height: 300px;
+  border: 1px solid white;
+
+  background-color: rgba(black, 0.5);
+  backdrop-filter: blur(10px);
+
+  > .card-icon
+  {
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    transform: translateY(-20%);
+
+    transition: all 0.3s ease-out;
+  }
+    
+  &:hover
+  {
+    border: 1px solid lime;
+
+    > .card-icon
+    {
+      width: 60%;
+      height: 60%;
+    }
+  }
+  &:active
+  {
+    top: 3px;
+  }
+}
+
+.card-text
+{
+  position: absolute;
+  width: 100%;
+  bottom: 10px;
+  flex-direction: column;
+
+  font-size: 28px;
+  font-family: Poppins;
+  font-weight: bold;
+  flex-shrink: 0;
+  color: white;
+  text-align: center;
+
+  > Label
+  {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+  }
+
+  > .desc
+  {
+    font-size: 18px;
+    font-weight: normal;
+  }
+}

@@ -1,6 +1,5 @@
 ﻿@using System
 @using Sandbox;
-@using Sandbox.MenuSystem;
 @using Sandbox.UI;
 @using Sandbox.UI.GameMenu
 @attribute [StyleSheet]
@@ -23,28 +22,26 @@
         DefaultUrl = "/";
 
         AddDestination("/", typeof(GarrywareFrontPage));
-	    AddDestination("/load", typeof(LoadGamePage));
-	    AddDestination("/create", typeof(CreateGamePage));
-	    AddDestination("/active", typeof(ActivePage));
-	    AddDestination("/servers", typeof(ServerListPage));
-	    AddDestination("/settings", typeof(SettingsPage));
+        AddDestination("/new", typeof(NewGamePage));
+        AddDestination("/active", typeof(ActivePage));
+        AddDestination("/settings", typeof(SettingsPage));
 
-	    if (Game.InGame) Navigate("/active");
+        if (Game.InGame) Navigate("/active");
 
-	    BindClass( "ingame", () => Game.InGame );
-	    BindClass( "inlobby", () => Game.Menu?.Lobby != null);
+        BindClass( "ingame", () => Game.InGame );
+        BindClass( "inlobby", () => Game.Menu?.Lobby != null);
     }
 
-	protected override void OnEvent( PanelEvent e )
-	{
-		if ( e.Name == "package.changed" )
-		{
-			StateHasChanged();
-			return;
-		}
+    protected override void OnEvent( PanelEvent e )
+    {
+        if ( e.Name == "package.changed" )
+        {
+            StateHasChanged();
+            return;
+        }
 
-		base.OnEvent( e );
-	}
+        base.OnEvent( e );
+    }
 
     [GameEvent.Menu.ServerJoined]
     public void OnServerJoined() => Navigate("/active");

@@ -54,7 +54,7 @@
 {
   padding: 4px 16px;
 
-  opacity: 0.8;
+  opacity: 1;
 
   font-size: 28px;
   font-family: Poppins;
@@ -64,7 +64,7 @@
 
 .button
 {
-  background-color: #000a;
+  background-color: rgba(black, 0.5);
   cursor: pointer;
 
   &:hover
@@ -74,7 +74,6 @@
 
   &:active
   {
-    left: 2px;
     top: 3px;
   }
 }

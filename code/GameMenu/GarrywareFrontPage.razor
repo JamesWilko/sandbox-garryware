@@ -12,32 +12,39 @@
     <div class="game-title">
     </div>
     
-    <div class="controls">
-
-        @if ( Game.InGame )
-        {
-            <a class="button" href="/active">Current Game</a>
-            <a class="button" onclick=@LeaveGame>Leave Game</a>
-            <span style="height: 20px;"></span>
-        }
-        else if (Game.Menu.Lobby != null)
-        {
-            <a class="button" href="/lobby">Return To Lobby</a>
-            <span style="height: 20px;"></span>
-        }
-        else
-        {
-            <a class="button" href="/create">Create Game</a>
-        }
-
-        <a class="button" href="/servers">Find a Game</a>
-        <a class="button" href="/settings">Settings</a>
-
-        <span style="height: 20px;"></span>
-
-        <a class="button" @onclick=@Game.Menu.Close>Quit</a>
-
+    <span style="margin-bottom: auto"></span>
+    
+    <div class="control-cards">
+        <MenuCard onclick="@ShowNewGameOptions">
+            <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
+            <Title>New Game</Title>
+        </MenuCard>
+        <MenuCard onclick="@OpenServerList">
+            <Icon><svg class="icon" Src="ui/server.svg" Color=@Color.White.Hex></svg></Icon>
+            <Title>Find Game</Title>
+        </MenuCard>
+        <MenuCard onclick="@OpenSettings">
+            <Icon><svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg></Icon>
+            <Title>Settings</Title>
+        </MenuCard>
     </div>
+            
+    <span style="height: 20px"></span>
+    <div class="controls">
+        <a class="button" @onclick="@Game.Menu.Close">Quit</a>
+    </div>
+    
+    @* <span style="height: 20px"></span> *@
+    @* <div class="controls"> *@
+    @*      *@
+    @*     @if ( Game.InGame ) *@
+    @*     { *@
+    @*         <a class="button" href="/active">Current Game</a> *@
+    @*         <a class="button" onclick=@LeaveGame>Leave Game</a> *@
+    @*     } *@
+    @*     <span style="height: 20px;"></span> *@
+    @*     <a class="button" @onclick=@Game.Menu.Close>Quit</a> *@
+    @* </div> *@
     
     @* <div class="links"> *@
     @*     <a class="button" onclick=@CopyGithubLink> *@
@@ -51,19 +58,54 @@
 @code
 {
     private Label ClipboardCopyLabel { get; set; }
-    
-    async Task CreateNewLobby()
+
+    private void ShowNewGameOptions()
     {
-        await Game.Menu.CreateLobbyAsync( 64, "game", true );
-        // we will navigate to lobby when it's ready
+        this.Navigate("/new");
+    }
+    
+    private void CreateNewGame()
+    {
+        var options = new Sandbox.Modals.GameCreateModalOptions();
+        options.Cookie = $"{Game.Menu.Package.FullIdent}.serverconfig";
+
+        options.ModalTitle = "Create Game";
+        options.MapFilter = "type:map sort:trending";
+        options.Default.Map = "dhi.garryware_lifelime";
+        options.Default.GameTitle = $"{Game.Menu.Package.Title} Server";
+        options.MapSelection = false;
+
+        options.OnStartGame = (setup) =>
+        {
+            Game.Menu.StartServerAsync(setup.MaxPlayers, setup.GameTitle, "dhi.garryware_lifelime");
+        };
+
+        Game.Overlay.ShowCreateGame(options);
+    }
+    
+    private void OpenServerList()
+    {
+        var options = new Sandbox.Modals.ServerListModalOptions();
+        options.TargetGame = Game.Menu.Package.FullIdent;
+        options.OnSelected = (server) =>
+        {
+            Game.Menu.ConnectToServer(server.SteamId);
+        };
+
+        Game.Overlay.ShowServerList(options);
     }
 
-    void LeaveGame()
+    private void OpenSettings()
+    {
+        this.Navigate("/settings");
+    }
+
+    private void LeaveGame()
     {
         Game.Menu.LeaveServer("Leaving");
     }
 
-    void CopyGithubLink()
+    private void CopyGithubLink()
     {
         Clipboard.SetText("https://github.com/JamesWilko/sandbox-garryware");
         // @todo: tell people it's copied to the clipboard
