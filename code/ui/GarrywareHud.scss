@@ -69,17 +69,20 @@ InstructionsPopup
 		}
 	}
 
+	transform: translateY(0%);
+	opacity: 1;
+	
 	transition: all 0.3s ease-out;
 	&:intro
 	{
-		transform: translate( 0% +100% );
+		transform: translateY(+100%);
 		opacity: 0;
 	}
 	
 	&:outro
 	{
 		transition: all 0.3s ease-in;
-		transform: translate( 0% -100% );
+		transform: translateY(-100%);
 		opacity: 0;
 	}
 }

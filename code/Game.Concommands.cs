@@ -205,4 +205,10 @@ public partial class GarrywareGame
         GameEvents.TriggerGameOver();
     }
     
+    [ConCmd.Admin("gw_test_instruction")]
+    public static void TestInstruction()
+    {
+        GameEvents.NewInstructions("test instruction", 2.0f);
+    }
+    
 }
