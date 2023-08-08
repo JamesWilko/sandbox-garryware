@@ -10,6 +10,7 @@ public enum GameState
     [State] Instructions = 1 << 1,
     [State] Playing = 1 << 2,
     [State] GameOver = 1 << 3,
+    [State] WrongMap = 1 << 5,
     
     [State] Dev = 1 << 4,
     

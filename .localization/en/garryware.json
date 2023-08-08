@@ -8,6 +8,7 @@
   "ui.round.win": "You won!",
   "ui.round.lost": "You failed!",
   "ui.joined-in-progress": "You joined after the round started! You'll participate from the next round!",
+  "ui.wrong-map": "This map doesn't support Garryware! Try switching one that does, like Garryware Lifelime!",
 
   "ui.bar.round": "Round {0}",
   "ui.bar.final-round": "Final Round",

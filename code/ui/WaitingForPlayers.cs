@@ -44,6 +44,11 @@ public class WaitingForPlayers : Panel
                     Style.Display = DisplayMode.None;
                 }
                 break;
+            case GameState.WrongMap:
+                Style.Display = DisplayMode.Flex;
+                waiting.SetText("#ui.wrong-map");
+                playersConnected.SetText(string.Empty);
+                break;
             default:
                 Style.Display = DisplayMode.None;
                 break;

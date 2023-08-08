@@ -184,6 +184,28 @@
       }
     ],
     "HttpAllowList": null,
-    "TickRate": 50
+    "TickRate": 50,
+    "LaunchConfigs": [
+      {
+        "Name": "Garryware",
+        "GameIdent": "dhi.garryware#local",
+        "MapName": "garryware_map.vmap",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      },
+      {
+        "Name": "Garryware - Wrong Map",
+        "GameIdent": "dhi.garryware#local",
+        "MapName": "facepunch.flatgrass",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }

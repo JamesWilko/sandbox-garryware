@@ -55,6 +55,7 @@ public partial class GarrywareGame : GameManager
         AddEnterStateObserver(GameState.GameOver, OnEnterGameOverState);
         
         AddExitStateController(GameState.Dev, args => TransitionResponse.Block);
+        AddExitStateController(GameState.WrongMap, args => TransitionResponse.Block);
         
         AvailableActions = PlayerAction.ReadyUp;
         Enable();
@@ -82,13 +83,27 @@ public partial class GarrywareGame : GameManager
     public override void PostLevelLoaded()
     {
         base.PostLevelLoaded();
+
+        // If the server loads an unsupported map then prevent going any further and tell the players it's not supported
+        // We don't want to continue on a map that's just going to cause a load of errors
+        var rooms = Entity.All.OfType<GarrywareRoom>().ToArray();
+        if (!rooms.Any())
+        {
+            RequestTransition(GameState.WrongMap);
+            AvailableActions = PlayerAction.None;
+            return;
+        }
         
-        CurrentRoom = Entity.All.OfType<GarrywareRoom>().FirstOrDefault(room => room.Contents == MicrogameRoom.Boxes && room.Size == RoomSize.Large);
+        CurrentRoom = rooms.FirstOrDefault(room => room.Contents == MicrogameRoom.Boxes && room.Size == RoomSize.Large);
     }
     
-    // Only start the game once we've got enough players readied up to start
     private TransitionResponse HaveEnoughPlayersReadiedUp(TransitionArgs<GameState> args)
     {
+        // Someone's loaded this up with the wrong map, allow switching to the dead state
+        if (args.To == GameState.WrongMap)
+            return TransitionResponse.Allow;
+        
+        // Only start the game once we've got enough players readied up to start
         return HaveEnoughPlayersReadiedUpToStart() ? TransitionResponse.Allow : TransitionResponse.Block;
     }
     
