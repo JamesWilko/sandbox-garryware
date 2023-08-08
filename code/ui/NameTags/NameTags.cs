@@ -7,40 +7,45 @@ namespace Garryware.UI;
 
 public class NameTags<T> : Panel where T : NameTag, new()
 {
-    private readonly Dictionary<IClient, T> rows = new();
+    private readonly Dictionary<IClient, T> nameTagsLookup = new();
     
-    public NameTags()
-    {
-    }
-
     public override void Tick()
     {
         base.Tick();
         
         // Add name tags for clients that joined
-        foreach (var client in Game.Clients.Except(rows.Keys))
+        foreach (var client in Game.Clients.Except(nameTagsLookup.Keys))
         {
-            if (!client.IsOwnedByLocalClient)
+            if (ShowTagForClient(client))
             {
                 var entry = AddClient(client);
-                rows[client] = entry;
+                nameTagsLookup[client] = entry;
             }
         }
 
-        // Remove name tags for clients that left
-        foreach (var client in rows.Keys.Except(Game.Clients))
+        // Remove name tags for clients that left or aren't valid anymore for some reason
+        foreach (var client in nameTagsLookup.Keys.Except(Game.Clients))
         {
-            if (rows.TryGetValue(client, out var row))
+            RemoveClientTag(client);
+        }
+        foreach (var client in Game.Clients)
+        {
+            if (!ShowTagForClient(client))
             {
-                row?.Delete();
-                rows.Remove(client);
+                RemoveClientTag(client);
             }
         }
-        
+
         // Order by place, if place hasn't been determined yet then stick them at the end
-        foreach (var pair in rows)
+        foreach (var pair in nameTagsLookup)
         {
             pair.Value.Style.Order = pair.Key.GetInt(Tags.Place, 99);
+        }
+
+        // Manually update the name tags after we've deleted any players who shouldn't be shown anymore
+        foreach (var tag in nameTagsLookup.Values)
+        {
+            tag.Update();
         }
     }
     
@@ -51,5 +56,21 @@ public class NameTags<T> : Panel where T : NameTag, new()
         nameTagPanel.Transform = entry.Pawn.Transform;
         return nameTagPanel;
     }
-    
+
+    private bool ShowTagForClient(IClient client)
+    {
+        return client.IsValid
+               && !client.IsOwnedByLocalClient // is not our local player
+               && client.Pawn != null && client.Pawn.IsValid; // they have a pawn in the game
+    }
+
+    private void RemoveClientTag(IClient client)
+    {
+        if (nameTagsLookup.TryGetValue(client, out var tag))
+        {
+            tag?.Delete();
+            nameTagsLookup.Remove(client);
+        }
+    }
+
 }

@@ -33,13 +33,8 @@ public class NameTag : WorldPanel
         }
     }
 
-    public override void Tick()
+    public void Update()
     {
-        base.Tick();
-
-        if (Client == null)
-            return;
-        
         var clientPlace = Client.GetInt(Tags.Place);
         place.Text = clientPlace > 0 && clientPlace < PlaceEmojis.Length ? PlaceEmojis[clientPlace - 1] : string.Empty;
         name.Text = "" + Client.Name;
@@ -48,13 +43,9 @@ public class NameTag : WorldPanel
         {
             result.Text = clientPlayer.HasLockedInResult ? (clientPlayer.HasWonRound ? "✔" : "❌") : string.Empty;
         }
-
-        if (Client.Pawn.IsValid)
-        {
-            PanelBounds = new Rect(-(w / 2), -(h / 2), w, h);
-
-            Position = Client.Pawn.AimRay.Position + Vector3.Up * 24;
-            Rotation = Rotation.LookAt(Game.LocalPawn.AimRay.Position - Transform.Position);
-        }
+        
+        PanelBounds = new Rect(-(w / 2), -(h / 2), w, h);
+        Position = Client.Pawn.AimRay.Position + Vector3.Up * 24;
+        Rotation = Rotation.LookAt(Game.LocalPawn.AimRay.Position - Transform.Position);
     }
 }
