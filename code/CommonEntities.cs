@@ -38,10 +38,10 @@ public static class CommonEntities
 
         RubbishDeck = new ShuffledDeck<Model>();
         RubbishDeck.Add(Model.Load("models/citizen_props/bathroomsink01.vmdl"), 2);
-        RubbishDeck.Add(Cloud.Model("facepunch.wet_floor_sign"), 5);
-        RubbishDeck.Add(Model.Load("models/sbox_props/bin/rubbish_bag.vmdl"), 3);
-        RubbishDeck.Add(Model.Load("models/sbox_props/burger_box/burger_box.vmdl"), 3);
-        RubbishDeck.Add(Model.Load("models/citizen_props/trashbag02.vmdl"), 5);
+        RubbishDeck.Add(Cloud.Model("facepunch.plasticbucketa1"), 5);
+        RubbishDeck.Add(Cloud.Model("facepunch.rubbish_food_box"), 3);
+        RubbishDeck.Add(Cloud.Model("facepunch.pizza_box_gib"), 3);
+        RubbishDeck.Add(Cloud.Model("facepunch.binbag_a1"), 5);
         RubbishDeck.Shuffle();
     }
     
