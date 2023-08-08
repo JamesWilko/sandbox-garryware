@@ -62,7 +62,8 @@ public abstract class Microgame
     protected TaskSource TaskSource => GarrywareGame.Current.Task;
     
     private static readonly List<Entity> TemporaryEntities = new();
-    
+
+    private bool inProgress;
     private TimeSince timeSinceGameStarted;
     private bool hasGameFinishedEarly;
     private TimeSince timeSinceEarlyFinish;
@@ -114,6 +115,7 @@ public abstract class Microgame
         var microgameName = GetType().Name;
         
         Log.Info($"[{microgameName}] Setting up");
+        inProgress = true;
         Setup();
         SoundUtility.PlayNewRound(WarmupLength + GameLength); // @note: play sound after setup as we might modify the WarmupLength during setup
         if (!string.IsNullOrEmpty(UiClass))
@@ -164,10 +166,16 @@ public abstract class Microgame
         CleanupTemporaryEntities();
         ResetColorsInUse();
         hasGameFinishedEarly = false;
+        inProgress = false;
 
         // Reset the decks after the game so we don't have to do it manually per game
         Room.ShuffleDecks();
         CommonEntities.ShuffleDecks();
+    }
+
+    protected bool IsGameInProgress()
+    {
+        return inProgress;
     }
     
     protected virtual bool IsGameFinished()

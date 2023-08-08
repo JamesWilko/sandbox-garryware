@@ -36,7 +36,7 @@ public class MusicalChairs : Microgame
         await TaskSource.DelaySeconds(3f);
         dontStopSprinting = false;
 
-        if (HasGameFinishedEarly() || HasGameTimedOut())
+        if (!IsGameInProgress())
             return;
         
         int chairsToSpawn = GetRandomAdjustedClientCount(0.25f, 0.75f, 1, Room.OnFloorSpawns.Count);
