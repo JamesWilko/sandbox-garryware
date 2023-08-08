@@ -4,12 +4,13 @@
   background-color: #091429;
   padding: 0 170px;
   opacity: 1;
-  flex-direction: column;
-  font-size: 25px;
   width: 100%;
   height: 100%;
   position: absolute;
   transition: all 0.3s ease-out;
+
+  font-family: Poppins;
+  font-size: 25px;
   color: white;
     
   &:intro
