@@ -8,7 +8,7 @@
   "HasAssets": true,
   "AssetsPath": "",
   "Resources": "\nui/*\nfonts/*\nGameMenu/*\nsound/menu/*",
-  "MenuResources": "GameMenu/*\nui/bg-garry.png\nui/github-mark-white.svg\nui/logo-banner.png",
+  "MenuResources": "GameMenu/*\nui/bg-garry.png\nui/logo-banner.png\nsound/menu/*\nui/*.svg",
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [],
