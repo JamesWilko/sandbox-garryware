@@ -213,22 +213,27 @@ public partial class GarrywareGame : GameManager
     {
         SpawnPoint spawnPoint = null;
         bool hasValidRoom = CurrentRoom != null && CurrentRoom.IsValid;
-        if (hasValidRoom)
+        if (!hasValidRoom)
         {
-            spawnPoint = CurrentRoom.SpawnPointsDeck.Next();
-        }
-        else
-        {
-            Log.Error("There was no active game room set! Falling back to picking a completely random spawn point!");
-            spawnPoint = Entity.All.OfType<SpawnPoint>().MinBy(x => System.Guid.NewGuid());
+            // Check if the player is in a map that supports garryware
+            // If they're not then don't throw an exception, just pop an error saying the map isn't supported.
+            int numRooms = Entity.All.OfType<GarrywareRoom>().Count();
+            if (numRooms > 0)
+            {
+                throw new Exception($"Attempted to move player to a null spawn point, when no game room was set! (map: {Game.Server.MapIdent}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
+            }
+            else
+            {
+                Log.Error("This map is not supported by Garryware! Try switching the map to Garryware Lifelime.");
+                return;
+            }
         }
         
+        // Pick a random spawn point in the room
+        spawnPoint = CurrentRoom.SpawnPointsDeck.Next();
         if (spawnPoint == null)
         {
-            if (hasValidRoom)
-                throw new Exception($"Attempted to move player to a null spawn point, but had a game room set! (map: {Game.Server.MapIdent}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
-            else
-                throw new Exception($"Attempted to move player to a null spawn point when no game room was set! (map: {Game.Server.MapIdent}, state: {CurrentState}, round: {CurrentRound})");
+            throw new Exception($"Attempted to move player to a null spawn point, but had a game room set! (map: {Game.Server.MapIdent}, state: {CurrentState}, room: {CurrentRoom.Name}, round: {CurrentRound})");
         }
         
         pawn.Transform = spawnPoint.Transform;
