@@ -14,6 +14,7 @@ public partial class GameOverScoreboardEntry : Panel
     private readonly Label points;
     private readonly Label streakFire;
     private readonly Label currentStreak;
+    private readonly Panel streakPanel;
     
     public bool ShowLongestStreak { get; set; }
     
@@ -26,8 +27,10 @@ public partial class GameOverScoreboardEntry : Panel
         place = Add.Label("", "place medal");
         playerName = Add.Label("PlayerName", "name");
         points = Add.Label("", "points");
-        streakFire = Add.Label("🔥", "fire");
-        currentStreak = streakFire.Add.Label("", "streak");
+
+        streakPanel = AddChild<Panel>("streak");
+        streakFire = streakPanel.Add.Label("🔥", "fire");
+        currentStreak = streakPanel.AddChild<Label>("value");
     }
 
     public override void Tick()
@@ -61,13 +64,10 @@ public partial class GameOverScoreboardEntry : Panel
         place.Text = UiUtility.GetEmojiForPlace(clientPlace);
         playerName.Text = Client.Name;
         playerName.SetClass("me", Client == Game.LocalClient);
-        SetClass("won", clientPlayer?.HasWonRound ?? false);
-        SetClass("lost", clientPlayer?.HasLostRound ?? false);
         
-        this.points.Text = clientPoints.ToString();
-        
+        points.Text = clientPoints.ToString();
         currentStreak.Text = clientStreak.ToString();
-        streakFire.Style.Display = clientStreak > 2 ? DisplayMode.Flex : DisplayMode.None;
+        streakPanel.Style.Display = clientStreak > 2 ? DisplayMode.Flex : DisplayMode.None;
         
         SetClass("gold", clientPlace == 1);
         SetClass("silver", clientPlace == 2);
