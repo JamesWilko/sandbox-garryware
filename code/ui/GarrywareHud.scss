@@ -108,7 +108,9 @@ WinLoseRoundPopup
 	backdrop-filter: blur(20px);
 	border-radius: 20px;
 	padding: 10px 20px 10px 20px;
-		
+	
+	opacity: 1;
+	
 	transition: all 0.3s ease-out;
 	&:intro
 	{
@@ -186,7 +188,9 @@ OnScreenControls
 	font-size: 24px;
 	color: white;
 	text-shadow: 2px 2px #000;
-		
+
+	opacity: 1;
+	
 	.canvas
 	{
 		background-color: rgba(black, 0.8);
