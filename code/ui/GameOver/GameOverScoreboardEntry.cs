@@ -59,7 +59,7 @@ public partial class GameOverScoreboardEntry : Panel
         
         var clientPoints = Client.GetInt(Tags.Points);
         var clientStreak = Client.GetInt(ShowLongestStreak ? Tags.MaxStreak : Tags.Streak);
-        var clientPlace = Client.GetInt(Tags.Place);
+        var clientPlace = Client.GetInt(Tags.Place, 99);
         
         place.Text = UiUtility.GetEmojiForPlace(clientPlace);
         playerName.Text = Client.Name;

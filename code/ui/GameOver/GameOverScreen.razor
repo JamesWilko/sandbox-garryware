@@ -43,12 +43,12 @@
     {
         base.OnAfterTreeRender(firstTime);
         
-        var place = Game.LocalClient.GetInt(Tags.Place, 99);
-        var points = Game.LocalClient.GetInt(Tags.Points, 0);
+        var place = Game.LocalClient.GetInt(Tags.Place);
+        var points = Game.LocalClient.GetInt(Tags.Points);
         
         // Update player place and results
         MedalLabel.Text = UiUtility.GetEmojiForPlace(place);
-        ResultLabel.Text = $"You came {UiUtility.GetPlaceQualifier(place)}!"; // @localization
+        ResultLabel.Text = $"You came {(place == 0 ? "last" : UiUtility.GetPlaceQualifier(place))}!"; // @localization
         PointsLabel.Text = $"{points} Points"; // @localization
         BuildRoundResults();
         BuildEndOfGameScoreboard();
