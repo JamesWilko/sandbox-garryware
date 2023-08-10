@@ -1,78 +1,75 @@
-﻿@using System
-@using System.Linq
-@using System.Threading.Tasks
-@using Sandbox;
-@using Sandbox.MenuSystem;
+﻿@using Sandbox;
 @using Sandbox.UI;
 @namespace Garryware.UI.GameMenu
 @attribute [StyleSheet]
 
-<root style="flex-direction: row;">
+<root style="flex-direction: column;">
 
-    <div class="left-panel">
-        
-        <div class="game-title" onclick="@OpenGameInfo">
-        </div>
+    <div style="flex-direction: row; height: 100%;">
+        <div class="left-panel">
+            
+            <div class="game-title" onclick="@OpenGameInfo">
+            </div>
 
-        <span style="margin-bottom: auto"></span>
+            <span style="margin-bottom: auto"></span>
 
-        <div class="control-cards">
-
-            @if (Game.InGame)
-            {
-                <MenuCard onclick="@ReturnToLobby">
-                    <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
-                    <Title>Keep Playing</Title>
-                </MenuCard>
-                <MenuCard onclick="@LeaveGame">
-                    <Icon><svg class="icon" Src="ui/exit.svg" Color=@Color.White.Hex></svg></Icon>
-                    <Title>Leave Game</Title>
-                </MenuCard>
-            }
-            else
-            {
-                <MenuCard onclick="@ShowNewGameOptions">
-                    <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
-                    <Title>New Game</Title>
-                </MenuCard>
-                <MenuCard onclick="@OpenServerList">
-                    <Icon><svg class="icon" Src="ui/server.svg" Color=@Color.White.Hex></svg></Icon>
-                    <Title>Find Game</Title>
-                </MenuCard>
-                <MenuCard onclick="@OpenSettings">
-                    <Icon><svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg></Icon>
-                    <Title>Settings</Title>
-                </MenuCard>
-            }
-        </div>
-
-        <span style="height: 20px"></span>
-        <div class="controls">
-            <a class="button" @onclick="@Game.Menu.Close">Quit</a>
+            <div class="control-cards">
+                @if (Game.InGame)
+                {
+                    <MenuCard onclick="@ReturnToLobby">
+                        <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
+                        <Title>Keep Playing</Title>
+                    </MenuCard>
+                    <MenuCard onclick="@LeaveGame">
+                        <Icon><svg class="icon" Src="ui/exit.svg" Color=@Color.White.Hex></svg></Icon>
+                        <Title>Leave Game</Title>
+                    </MenuCard>
+                }
+                else
+                {
+                    <MenuCard onclick="@ShowNewGameOptions">
+                        <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
+                        <Title>New Game</Title>
+                    </MenuCard>
+                    <MenuCard onclick="@OpenServerList">
+                        <Icon><svg class="icon" Src="ui/server.svg" Color=@Color.White.Hex></svg></Icon>
+                        <Title>Find Game</Title>
+                    </MenuCard>
+                    <MenuCard onclick="@OpenSettings">
+                        <Icon><svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg></Icon>
+                        <Title>Settings</Title>
+                    </MenuCard>
+                }
+            </div>
+            
         </div>
         
+        <div class="right-panel">
+            
+            <span style="margin-bottom: 50px"></span>
+            <div class="info-box">
+                <svg class="icon" Src="ui/info-circle.svg" Color=@Color.White.Hex></svg>
+                Just like s&box, GarryWare is a work in progress! Occasionally you might run into an issue, please report them to us on the s&box discord or our GitHub.
+            </div>
+            
+            <span style="margin-bottom: auto"></span>
+            
+            <div class="lobbies">
+                <div class="header">
+                    <svg class="icon" Src="ui/user-heart.svg" Color=@Color.White.Hex></svg>
+                    Lobbies
+                </div>
+                <div class="content">
+                    Coming Soon
+                </div>
+            </div>
+            
+        </div>
     </div>
     
-    <div class="right-panel">
-        
-        <span style="margin-bottom: 50px"></span>
-        <div class="info-box">
-            <svg class="icon" Src="ui/info-circle.svg" Color=@Color.White.Hex></svg>
-            Just like s&box, GarryWare is a work in progress! Occasionally you might run into an issue, please report them to us on the s&box discord or our GitHub.
-        </div>
-        
-        <span style="margin-bottom: auto"></span>
-        
-        <div class="lobbies">
-            <div class="header">
-                <svg class="icon" Src="ui/user-heart.svg" Color=@Color.White.Hex></svg>
-                Lobbies
-            </div>
-            <div class="content">
-                Coming Soon
-            </div>
-        </div>
-        
+    <span style="height: 20px"></span>
+    <div class="controls">
+        <a class="button" @onclick="@Game.Menu.Close">Quit</a>
     </div>
     
 </root>

@@ -1,18 +1,22 @@
 ﻿
 .gamemainmenu
 {
-  background-color: #091429;
-  padding: 0 170px;
-  opacity: 1;
+  position: absolute;
   width: 100%;
   height: 100%;
-  position: absolute;
-  transition: all 0.3s ease-out;
-
+  flex-direction: column;
+  
+  background-image: url("menu/lifelime.mp4");
+  background-position: center;
+  background-size: cover;
+    
+  color: white;
   font-family: Poppins;
   font-size: 25px;
-  color: white;
-    
+
+  opacity: 1;
+  transition: all 0.3s ease-out;
+  
   &:intro
   {
     opacity: 0;
@@ -22,32 +26,24 @@
   &.ingame
   {
     background-color: #151313ee;
+    background-image: none;
   }
 }
 
-.bg-overlay
+.gamemainmenu .navigator-canvas
 {
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  background-image: url("ui/bg-garry.png");
-  background-repeat: repeat;
-  opacity: 0.007;
-  
-  animation-name: background;
-  animation-duration: 10s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
+  height: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  backdrop-filter: blur( 10px );
+  padding: 0 100px;
 
-@keyframes background
-{
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-128px, 256px);
+  .navigator-body
+  {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    padding: 100px 0;
   }
 }
 
@@ -65,27 +61,20 @@
 
 .button
 {
-  background-color: rgba(black, 0.5);
+  background-color: rgba(black, 0.7);
   cursor: pointer;
 
   &:hover
   {
     opacity: 1;
-    sound-in: "garryware.menu.hover";
+    background-color: rgba(forestgreen, 0.7);
   }
 
   &:active
   {
+    left: 2px;
     top: 3px;
   }
-}
-
-
-.gamemainmenu .navigator-canvas
-{
-  height: 100%;
-  flex-grow: 1;
-  flex-shrink: 0;
 }
 
 section
@@ -117,7 +106,7 @@ h2
 {
   font-family: poppins;
   font-weight: 400;
-  opacity: 0.2;
+  opacity: 1;
   margin-bottom: 16px;
   flex-shrink: 0;
 }
@@ -127,17 +116,6 @@ h2
   overflow-x: scroll;
   padding: 20px;
   gap: 8px;
-}
-
-.navigator-body
-{
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  flex-direction: column;
-  padding: 100px 0px;
 }
 
 .hidden
@@ -170,8 +148,8 @@ h2
       flex-direction: row;
       flex-grow: 1;
       flex-shrink: 1;
-      margin: 0px 50px;
-      justify-content: space-between;
+      justify-content: space-around;
+      align-items: center;
 
       > .left
       {
@@ -217,23 +195,18 @@ $form-row-height: 48px;
   flex-shrink: 0;
   flex-grow: 0;
   gap: 2px;
-  padding-left: 64px;
   margin-bottom: 50px;
 
   > .form-group
   {
-    flex-direction: row;
+    flex-direction: column;
     flex-shrink: 0;
-    gap: 16px;
-    min-height: $form-row-height;
+    margin-bottom: 20px;
 
     > .form-label
     {
-      width: 280px;
-      opacity: 0.5;
+      opacity: 1;
       height: $form-row-height;
-      align-items: center;
-      justify-content: flex-end;
       font-size: 20px;
       white-space: nowrap;
     }
@@ -272,45 +245,15 @@ $form-row-height: 48px;
       color: #fff;
     }
   }
+  
+  > keybind
+  {
+    color: white;
+    background-color: rgba(black, 0.7);
+  }
 
   SliderControl
   {
-    gap: 2px;
 
-    > .inner
-    {
-      > .values
-      {
-        position: absolute;
-        padding: 16px;
-        color: #fffa;
-      }
-
-      > .track
-      {
-        height: 100%;
-        margin: 2px 0px;
-        border-radius: 0;
-        background-color: #ffffff05;
-
-        >.track-active
-        {
-          background-color: #ffffff11;
-          border-radius: 0;
-        }
-
-        > .thumb
-        {
-          width: 4px;
-          height: 100%;
-          background-color: #fff8;
-        }
-      }
-    }
   }
-}
-
-.game-title
-{
-  
 }

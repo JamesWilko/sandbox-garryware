@@ -5,38 +5,44 @@
 
 <root style="flex-direction: column;">
 
-    <div class="game-title">
-    </div>
-    
-    <span style="margin-bottom: auto"></span>
-    
-    <div class="control-cards">
-        <MenuCard Disabled="@true" onclick="@CreateShortGame">
-            <Icon><svg class="icon" Src="ui/spedometer-low.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Short</Title>
-            <Desc1>Coming Soon</Desc1>
-            <Desc2></Desc2>
-        </MenuCard>
-        <MenuCard onclick="@CreateMediumGame">
-            <Icon><svg class="icon" Src="ui/spedometer-middle.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Medium</Title>
-            <Desc1>40 rounds</Desc1>
-            <Desc2>~10 minutes</Desc2>
-        </MenuCard>
-        <MenuCard Disabled="@true" onclick="@CreateLongGame">
-            <Icon><svg class="icon" Src="ui/spedometer-max.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Long</Title>
-            <Desc1>Coming Soon</Desc1>
-            <Desc2></Desc2>
-        </MenuCard>
-        <MenuCard Disabled="@true" onclick="@CreateVeryLongGame">
-            <Icon><svg class="icon" Src="ui/bottle.svg" Color=@Color.White.Hex></svg></Icon>
-            <Title>Marathon</Title>
-            <Desc1>Coming Soon</Desc1>
-            <Desc2></Desc2>
-        </MenuCard>
-    </div>
+    <div style="flex-direction: row; height: 100%;">
+        <div class="left-panel">
+            
+            <div class="game-title" onclick="@OpenGameInfo">
+            </div>
 
+            <span style="margin-bottom: auto"></span>
+
+            <div class="control-cards">
+                <MenuCard Disabled="@true" onclick="@CreateShortGame">
+                    <Icon><svg class="icon" Src="ui/spedometer-low.svg" Color=@Color.White.Hex></svg></Icon>
+                    <Title>Short</Title>
+                    <Desc1>Coming Soon</Desc1>
+                    <Desc2></Desc2>
+                </MenuCard>
+                <MenuCard onclick="@CreateMediumGame">
+                    <Icon><svg class="icon" Src="ui/spedometer-middle.svg" Color=@Color.White.Hex></svg></Icon>
+                    <Title>Medium</Title>
+                    <Desc1>40 rounds</Desc1>
+                    <Desc2>~10 minutes</Desc2>
+                </MenuCard>
+                <MenuCard Disabled="@true" onclick="@CreateLongGame">
+                    <Icon><svg class="icon" Src="ui/spedometer-max.svg" Color=@Color.White.Hex></svg></Icon>
+                    <Title>Long</Title>
+                    <Desc1>Coming Soon</Desc1>
+                    <Desc2></Desc2>
+                </MenuCard>
+                <MenuCard Disabled="@true" onclick="@CreateVeryLongGame">
+                    <Icon><svg class="icon" Src="ui/bottle.svg" Color=@Color.White.Hex></svg></Icon>
+                    <Title>Marathon</Title>
+                    <Desc1>Coming Soon</Desc1>
+                    <Desc2></Desc2>
+                </MenuCard>
+            </div>
+            
+        </div>
+    </div>
+    
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@Back">Back</a>
@@ -83,6 +89,11 @@
         };
 
         Game.Overlay.ShowCreateGame(options);
+    }
+    
+    private void OpenGameInfo()
+    {
+        Game.Overlay.ShowPackageModal(Game.Menu.Package.FullIdent);
     }
     
     private void Back()

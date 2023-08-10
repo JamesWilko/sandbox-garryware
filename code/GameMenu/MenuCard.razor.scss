@@ -6,8 +6,8 @@
   height: 300px;
   border: 1px solid white;
 
-  background-color: rgba(black, 0.5);
-  backdrop-filter: blur(10px);
+  background-color: rgba(black, 0.7);
+  backdrop-filter: blur(1px);
 
   > .card-icon
   {
@@ -21,9 +21,10 @@
     
   &:hover
   {
-    border: 1px solid lime;
     sound-in: "garryware.menu.hover";
 
+    background-color: rgba(forestgreen, 0.7);
+    
     > .card-icon
     {
       width: 60%;
@@ -66,10 +67,11 @@
 
 .disabled
 {
-  border: 1px solid crimson;
+  background-color: rgba(darkred, 0.7);
   
   &:hover
   {
-    border: 1px solid red;
+    border: 1px solid crimson;
+    background-color: rgba(darkred, 0.7);
   }
 }
