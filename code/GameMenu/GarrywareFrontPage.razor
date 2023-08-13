@@ -121,7 +121,7 @@
         isCreatingLobby = true;
         ShowLoadingSpinner();
         
-        var lobby = await Game.Menu.CreateLobbyAsync(16);
+        var lobby = await Game.Menu.CreateLobbyAsync(16, "garryware", true);
         lobby.Title = $"{Game.UserName}'s Lobby";
 
         isCreatingLobby = false;
@@ -133,25 +133,6 @@
     private void ReturnToLobby()
     {
         this.Navigate("/active");
-    }
-    
-    private void CreateNewGame()
-    {
-        var options = new Sandbox.Modals.GameCreateModalOptions();
-        options.Cookie = $"{Game.Menu.Package.FullIdent}.serverconfig";
-
-        options.ModalTitle = "Create Game";
-        options.MapFilter = "type:map sort:trending";
-        options.Default.Map = "dhi.garryware_lifelime";
-        options.Default.GameTitle = $"{Game.Menu.Package.Title} Server";
-        options.MapSelection = false;
-
-        options.OnStartGame = (setup) =>
-        {
-            Game.Menu.StartServerAsync(setup.MaxPlayers, setup.GameTitle, "dhi.garryware_lifelime");
-        };
-
-        Game.Overlay.ShowCreateGame(options);
     }
     
     private void OpenServerList()

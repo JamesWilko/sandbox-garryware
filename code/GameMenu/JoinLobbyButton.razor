@@ -15,9 +15,10 @@
 {
     public ILobby Lobby { get; set; }
 
-    private void JoinLobby()
+    private async void JoinLobby()
     {
-        Log.Info("attempt to join lobby!");
+        
+        await Lobby.JoinAsync();
     }
     
 }

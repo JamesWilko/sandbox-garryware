@@ -16,31 +16,46 @@
                     <svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg>
                     Game Settings
                 </div>
-                <div class="content background expand">
-                    <div class="option">
-                        Lobby Name
-                        <TextEntry @ref="LobbyNameTextEntry" Text="@Game.Menu.Lobby.Title" @onsubmit=@OnSubmitNewLobbyName/>
+                
+                @if (Game.Menu.Lobby == null)
+                {
+                    <div class="content background expand">
+                        No lobby found!
+                        <span style="margin-bottom: auto"></span>
                     </div>
-                    <div class="option">
-                        Max Players
-                        <SliderControl @ref="MaxPlayersSlider" Value:bind="@MaxPlayers" ShowRange="@true" Step="@(1)" Min="@(1)" Max="@(32)"></SliderControl>
-                    </div>
-                    <div class="option">
-                        Public Lobby?
-                        <ButtonGroup Options=@lobbyPublicOptions Value:bind=@Game.Menu.Lobby.Public></ButtonGroup>
-                    </div>
-                    <div class="option">
-                        Rounds
-                        <div class="vertical">
-                            <SliderControl @ref="RoundsSlider" Value:bind="@RoundCount" ShowRange="@true" Step="@(5)" Min="@(5)" Max="@(100)"></SliderControl>
-                            <label @ref="GameLengthLabel"></label>
+                }
+                else
+                {
+                    <div class="content background expand">
+                        <div class="option">
+                            Lobby Name
+                            <TextEntry @ref="LobbyNameTextEntry" Text="@Game.Menu.Lobby.Title" @onsubmit="@OnSubmitNewLobbyName"/>
+                        </div>
+                        <div class="option">
+                            Max Players
+                            <SliderControl @ref="MaxPlayersSlider" Value:bind="@MaxPlayers" ShowRange="@true" Step="@(1)" Min="@(1)" Max="@(32)"></SliderControl>
+                        </div>
+                        <div class="option">
+                            Public Lobby?
+                            <ButtonGroup Options=@lobbyPublicOptions Value:bind=@Game.Menu.Lobby.Public></ButtonGroup>
+                        </div>
+                        <div class="option">
+                            Rounds
+                            <div class="vertical">
+                                <SliderControl @ref="RoundsSlider" Value:bind="@RoundCount" ShowRange="@true" Step="@(5)" Min="@(5)" Max="@(100)"></SliderControl>
+                                <label @ref="GameLengthLabel"></label>
+                            </div>
+                        </div>
+                        <div class="option">
+                            Play Tutorial?
+                            <ButtonGroup Options=@playTutorialOptions Value:bind=@PlayTutorial></ButtonGroup>
                         </div>
                     </div>
-                    <div class="option">
-                        Play Tutorial?
-                        <ButtonGroup Options=@playTutorialOptions Value:bind=@PlayTutorial></ButtonGroup>
+                    <div class="start-button" @onclick="@StartGame">
+                        <svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg>
+                        Start Game
                     </div>
-                </div>
+                }
             </div>
         </div>
     
@@ -70,19 +85,12 @@
                     <a class="button small" @onclick="@InviteFriends">Invite Friends</a>
                 </div>
             </div>
-            
-            <div class="start-button" @onclick="@StartGame">
-                <svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg>
-                Start Game
-            </div>
-            
         </div>
     </div>
     
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@LeaveLobby">Leave Lobby</a>
-        <a class="button" @onclick="@Back_DELETE">Back</a>
     </div>
     
 </root>
@@ -155,11 +163,16 @@
         Game.Overlay.ShowFriendsList();
     }
     
-    private void StartGame()
+    private async void StartGame()
     {
-        Log.Info("START THE GAME");
-        Log.Info($"rounds: {RoundCount}");
-        Log.Info($"play tutorial: {PlayTutorial}");
+        var lobby = Game.Menu.Lobby;
+        lobby.SetData("convar.gw_max_rounds", RoundCount.ToString());
+        lobby.SetData("convar.gw_skip_tutorial", PlayTutorial ? "0" : "1");
+        lobby.Map = "dhi.garryware_lifelime";
+
+        // @todo: loading spinner
+        await Task.Delay(200); // required for lobby settings to take effect for some reason
+        await lobby.LaunchGameAsync();
     }
 
     private void UpdateGameLengthLabel()
@@ -170,11 +183,5 @@
             GameLengthLabel.Text = $"about {approxMinutes:N0} minutes";
         }
     }
-
-    private void Back_DELETE()
-    {
-        this.Navigate("/");
-    }
     
 }
-

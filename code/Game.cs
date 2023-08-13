@@ -32,7 +32,7 @@ public partial class GarrywareGame : GameManager
     [Net] public GarrywareRoom CurrentRoom { get; set; }
     private int playerCountWhenRoomLastChanged;
     
-    [ConVar.Server("gw_skip_tutorial")]
+    [ConVar.Replicated("gw_skip_tutorial")]
     public static bool SkipTutorial { get; set; }
     
     public GarrywareGame()
