@@ -1,36 +1,5 @@
 ﻿
-.left-panel
-{
-  width: 65%;
-  height: 100%;
-  flex-direction: column;
-}
-
-.right-panel
-{
-  width: 35%;
-  height: 100%;
-  flex-direction: column;
-}
-
-.game-title
-{
-  cursor: pointer;
-  
-  height: 200px;
-  background-image: url("ui/logo-banner.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-
-  &:hover
-  {
-    sound-in: "garryware.menu.hover";
-  }
-  &:active
-  {
-    top: 3px;
-  }
-}
+@import "_vars.scss";
 
 .controls
 {
@@ -58,7 +27,7 @@
   padding: 10px;
   
   font-size: 18px;
-  background-color: rgba(black, 0.7);
+  background-color: rgba(black, 0.9);
   
   .icon
   {
@@ -102,8 +71,7 @@
     width: 100%;
     padding: 10px;
     flex-direction: column;
-
-    background-color: rgba(black, 0.2);
+    
     font-size: 18px;
   }
   
@@ -113,3 +81,54 @@
 {
   opacity: 0;
 }
+
+// @todo: put this in its own razor element
+.loading-overlay
+{
+  position: absolute;
+  z-index: 1000;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50% -50%);
+
+  opacity: 0; // hide by default, shown via code
+}
+
+.loading
+{
+  width: 100%;
+  height: 100%;
+  
+  background-color: rgba(black, 0.7);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.spinner
+{
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  
+  transform-origin: -50% -50%;
+
+  animation-name: spin;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+}
+
+@keyframes spin
+{
+  0%
+  {
+    transform: rotate(0);
+  }
+
+  100%
+  {
+    transform: rotate(360deg);
+  }
+}
+

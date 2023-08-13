@@ -1,0 +1,21 @@
+﻿
+.lobby-button
+{
+  width: 100%;
+  padding: 10px;
+  
+  border: 1px solid white;
+  background-color: rgba(black, 0.5);
+  
+  font-size: 18px;
+
+  &:hover
+  {
+    sound-in: "garryware.menu.hover";
+    background-color: rgba(forestgreen, 0.5);
+  }
+  &:active
+  {
+    top: 3px;
+  }
+}

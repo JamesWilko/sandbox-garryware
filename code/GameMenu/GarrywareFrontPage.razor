@@ -1,4 +1,6 @@
-﻿@using Sandbox;
+﻿@using System
+@using System.Threading.Tasks
+@using Sandbox;
 @using Sandbox.UI;
 @namespace Garryware.UI.GameMenu
 @attribute [StyleSheet]
@@ -27,7 +29,7 @@
                 }
                 else
                 {
-                    <MenuCard onclick="@ShowNewGameOptions">
+                    <MenuCard onclick="@CreateLobby">
                         <Icon><svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg></Icon>
                         <Title>New Game</Title>
                     </MenuCard>
@@ -54,13 +56,14 @@
             
             <span style="margin-bottom: auto"></span>
             
-            <div class="lobbies">
+            <div class="menu-section">
                 <div class="header">
                     <svg class="icon" Src="ui/user-heart.svg" Color=@Color.White.Hex></svg>
                     Lobbies
                 </div>
-                <div class="content">
-                    Coming Soon
+                <div class="content background">
+                    <label>There's no-one here right now. Why not start the party?</label>
+                    @* <JoinLobbyButton></JoinLobbyButton> *@
                 </div>
             </div>
             
@@ -72,13 +75,39 @@
         <a class="button" @onclick="@Game.Menu.Close">Quit</a>
     </div>
     
+    <div class="loading-overlay" @ref="loadingOverlay">
+        <div class="loading">
+            <svg class="spinner" Src="ui/star-rings.svg" Color=@Color.White.Hex></svg>
+        </div>
+    </div>
+    
 </root>
 
 @code
 {
+    private Panel loadingOverlay;
+    private bool isCreatingLobby;
+    
     private void ShowNewGameOptions()
     {
         this.Navigate("/new");
+    }
+
+    private async void CreateLobby()
+    {
+        if(isCreatingLobby)
+            return;
+
+        isCreatingLobby = true;
+        ShowLoadingSpinner();
+        
+        var lobby = await Game.Menu.CreateLobbyAsync(16);
+        lobby.Title = $"{Game.UserName}'s Lobby";
+
+        isCreatingLobby = false;
+        HideLoadingSpinner();
+        
+        this.Navigate("/lobby");
     }
     
     private void ReturnToLobby()
@@ -137,4 +166,14 @@
         Game.Menu.LeaveServer("Leaving");
     }
 
+    private void ShowLoadingSpinner()
+    {
+        loadingOverlay.Style.Opacity = 1f;
+    }
+
+    private void HideLoadingSpinner()
+    {
+        loadingOverlay.Style.Opacity = 0f;
+    }
+    
 }

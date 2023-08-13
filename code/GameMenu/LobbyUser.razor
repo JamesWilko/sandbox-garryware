@@ -1,0 +1,25 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Garryware.UI.GameMenu
+@attribute [StyleSheet]
+
+@inherits Panel
+
+<root>
+    <div class="background" />
+    @if (User.Id != 0)
+    {
+        <img src="avatar:@User.Id"/>
+        <label class="name">@User.Name</label>
+    }
+    else
+    {
+        <label class="name">This shouldn't be here what the fuck</label>
+    }
+</root>
+
+@code
+{
+    public Friend User { get; set; }
+}

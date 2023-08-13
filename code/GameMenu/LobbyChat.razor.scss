@@ -1,0 +1,29 @@
+﻿
+LobbyChat
+{
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+
+  > .entries
+  {
+    min-height: 260px;
+    max-height: 260px;
+    overflow: scroll;
+    flex-direction: column;
+
+    mask: linear-gradient(to top, white 0%, white 80%, black);
+  }
+
+  .textentry
+  {
+    font-size: 18px;
+    background-color: rgba(black, 0.5);
+    border: 1px solid white;
+    
+    .placeholder
+    {
+      opacity: 1;
+    }
+  }
+}

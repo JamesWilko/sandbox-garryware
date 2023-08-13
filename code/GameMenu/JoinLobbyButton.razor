@@ -1,0 +1,16 @@
+﻿@using Sandbox.Razor
+@using Sandbox.UI
+@namespace Garryware.UI.GameMenu
+@attribute [StyleSheet]
+
+<root class="lobby-button">
+    <label @ref="lobbyName">Wilko's Lobby</label>
+    <span style="margin-left: auto"></span>
+    <label @ref="playerCount">1/16</label>
+</root>
+
+@code
+{
+    private Panel lobbyName;
+    private Panel playerCount;
+}

@@ -1,0 +1,165 @@
+﻿@using System
+@using System.Collections.Generic
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Garryware.UI.GameMenu
+@attribute [StyleSheet]
+@inherits Panel
+
+<root style="flex-direction: column;">
+
+    <div style="flex-direction: row; height: 100%;">
+        <div class="left-panel">
+            <div class="menu-section">
+                <div class="header">
+                    <svg class="icon" Src="ui/settings.svg" Color=@Color.White.Hex></svg>
+                    Game Settings
+                </div>
+                <div class="content background expand">
+                    <div class="option">
+                        Lobby Name
+                        <TextEntry @ref="LobbyNameTextEntry" Text="@Game.Menu.Lobby.Title" @onsubmit=@OnSubmitNewLobbyName/>
+                    </div>
+                    <div class="option">
+                        Max Players
+                        <SliderControl @ref="MaxPlayersSlider" Value:bind="@MaxPlayers" ShowRange="@true" Step="@(1)" Min="@(1)" Max="@(32)"></SliderControl>
+                    </div>
+                    <div class="option">
+                        Public Lobby?
+                        <ButtonGroup Options=@lobbyPublicOptions Value:bind=@Game.Menu.Lobby.Public></ButtonGroup>
+                    </div>
+                    <div class="option">
+                        Rounds
+                        <div class="vertical">
+                            <SliderControl @ref="RoundsSlider" Value:bind="@RoundCount" ShowRange="@true" Step="@(5)" Min="@(5)" Max="@(100)"></SliderControl>
+                            <label @ref="GameLengthLabel"></label>
+                        </div>
+                    </div>
+                    <div class="option">
+                        Play Tutorial?
+                        <ButtonGroup Options=@playTutorialOptions Value:bind=@PlayTutorial></ButtonGroup>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="right-panel">
+
+            <span style="margin-bottom: auto"></span>
+            
+            <div class="menu-section">
+                <div class="header">
+                    <svg class="icon" Src="ui/chat-round-dots.svg" Color=@Color.White.Hex></svg>
+                    Chat
+                </div>
+                <div class="content background">
+                    <LobbyChat></LobbyChat>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="header">
+                    <svg class="icon" Src="ui/user-id.svg" Color=@Color.White.Hex></svg>
+                    Players
+                    <Label class="player-count">@Game.Menu.Lobby?.MemberCount/@Game.Menu.Lobby?.MaxMembers</Label>
+                </div>
+                <div class="content background">
+                    <LobbyUsersList></LobbyUsersList>
+                    <span style="height: 10px"></span>
+                    <a class="button small" @onclick="@InviteFriends">Invite Friends</a>
+                </div>
+            </div>
+            
+            <div class="start-button" @onclick="@StartGame">
+                <svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg>
+                Start Game
+            </div>
+            
+        </div>
+    </div>
+    
+    <span style="height: 20px"></span>
+    <div class="controls">
+        <a class="button" @onclick="@LeaveLobby">Leave Lobby</a>
+    </div>
+    
+</root>
+
+@code
+{
+    private int MaxPlayers { get; set; } = 16;
+    private int RoundCount { get; set; } = 40;
+    private bool PlayTutorial { get; set; } = true;
+
+    private TextEntry LobbyNameTextEntry { get; set; }
+    private SliderControl MaxPlayersSlider { get; set; }
+    private SliderControl RoundsSlider { get; set; }
+    private Label GameLengthLabel { get; set; }
+    
+    private List<Option> lobbyPublicOptions = new List<Option>()
+    {
+        new Option("Public", true),
+        new Option("Private", false),
+    };
+
+    
+    private List<Option> playTutorialOptions = new List<Option>()
+    {
+        new Option("Yes", true),
+        new Option("No", false),
+    };
+
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        base.OnAfterTreeRender(firstTime);
+
+        if (firstTime)
+        {
+            UpdateLengthLabel();
+            MaxPlayersSlider.OnValueChanged += OnMaxPlayersChanged;
+            RoundsSlider.OnValueChanged += OnRoundsChanged;
+        }
+    }
+
+    private void OnMaxPlayersChanged(float _)
+    {
+        Game.Menu.Lobby.MaxMembers = MaxPlayers;
+    }
+
+    private void OnRoundsChanged(float _)
+    {
+        UpdateLengthLabel();
+    }
+
+    private void OnSubmitNewLobbyName(PanelEvent e)
+    {
+        Log.Info($"LobbyNameTextEntry: {LobbyNameTextEntry.Text}");
+        Game.Menu.Lobby.Title = LobbyNameTextEntry.Text;
+    }
+    
+    private void LeaveLobby()
+    {
+        Game.Menu.Lobby?.Leave();
+    }
+
+    private void InviteFriends()
+    {
+        Game.Overlay.ShowFriendsList();
+    }
+    
+    private void StartGame()
+    {
+        Log.Info("START THE GAME");
+        Log.Info($"rounds: {RoundCount}");
+        Log.Info($"play tutorial: {PlayTutorial}");
+    }
+
+    private void UpdateLengthLabel()
+    {
+        var approxMinutes = MathF.Ceiling(RoundCount / 4f);
+        GameLengthLabel.Text = $"about {approxMinutes:N0} minutes";
+    }
+
+}
+

@@ -1,14 +1,16 @@
 ﻿
+@import "_vars.scss";
+
 .card
 {
   cursor: pointer;
   width: 200px;
   height: 300px;
-  border: 1px solid white;
-
-  background-color: rgba(black, 0.7);
+  
+  background-color: $button-background-color;
+  border: $button-border;
   backdrop-filter: blur(1px);
-
+  
   > .card-icon
   {
     width: 50%;
@@ -23,7 +25,8 @@
   {
     sound-in: "garryware.menu.hover";
 
-    background-color: rgba(forestgreen, 0.7);
+    background-color: $button-background-color-hover;
+    border: $button-border-hover;
     
     > .card-icon
     {

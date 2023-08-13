@@ -1,0 +1,55 @@
+﻿@using System.Collections.Generic
+@using Sandbox;
+@using Sandbox.Menu
+@using Sandbox.UI;
+
+@namespace Garryware.UI.GameMenu
+@attribute [StyleSheet]
+@inherits Panel
+
+<root>
+    <div class="entries" @ref=UsersPanel>
+    </div>
+</root>
+
+@code
+{
+    private ILobby Lobby => Game.Menu.Lobby;
+    private Panel UsersPanel { get; set; }
+
+    private Dictionary<long, LobbyUser> usersLookup = new();
+
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        base.OnAfterTreeRender(firstTime);
+
+        Lobby.OnMemberEnter = OnMemberEnter;
+        Lobby.OnMemberLeave = OnMemberLeave;
+        
+        if (firstTime)
+        {
+            foreach (var player in Game.Menu.Lobby.Members)
+            {
+                OnMemberEnter(player);
+            }
+        }
+    }
+    
+    private void OnMemberEnter(Friend player)
+    {
+        var userPanel = UsersPanel.AddChild<LobbyUser>();
+        userPanel.User = player;
+        
+        usersLookup.Add(player.Id, userPanel);
+    }
+    
+    private void OnMemberLeave(Friend player)
+    {
+        if (usersLookup.TryGetValue(player.Id, out LobbyUser panel))
+        {
+            panel.Delete();
+            usersLookup.Remove(player.Id);
+        }
+    }
+
+}
