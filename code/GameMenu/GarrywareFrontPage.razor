@@ -79,17 +79,10 @@
         <a class="button" @onclick="@RefreshLobbiesList">Refresh Lobbies</a>
     </div>
     
-    <div class="loading-overlay" @ref="loadingOverlay">
-        <div class="loading">
-            <svg class="spinner" Src="ui/star-rings.svg" Color=@Color.White.Hex></svg>
-        </div>
-    </div>
-    
 </root>
 
 @code
 {
-    private Panel loadingOverlay;
     private bool isCreatingLobby;
 
     private Panel LobbiesListPanel { get; set; }
@@ -119,14 +112,14 @@
             return;
 
         isCreatingLobby = true;
-        ShowLoadingSpinner();
-        
+        LoadingOverlay.Show();
+
         var lobby = await Game.Menu.CreateLobbyAsync(16, "garryware", true);
         lobby.SetData("rounds", "40"); // lazy way to set defaults but idc
         lobby.SetData("play-tutorial", "1");
 
         isCreatingLobby = false;
-        HideLoadingSpinner();
+        LoadingOverlay.Hide();
         
         this.Navigate("/lobby");
     }
@@ -167,17 +160,7 @@
     {
         Game.Menu.LeaveServer("Leaving");
     }
-
-    private void ShowLoadingSpinner()
-    {
-        loadingOverlay.Style.Opacity = 1f;
-    }
-
-    private void HideLoadingSpinner()
-    {
-        loadingOverlay.Style.Opacity = 0f;
-    }
-
+    
     private async void RefreshLobbiesList()
     {
         if (LobbiesListPanel == null)

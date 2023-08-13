@@ -239,9 +239,10 @@
         Lobby.SetData("convar.gw_skip_tutorial", PlayTutorial ? "0" : "1");
         Lobby.Map = "dhi.garryware_lifelime";
 
-        // @todo: loading spinner
+        LoadingOverlay.Show();
         await Task.Delay(200); // required for lobby settings to take effect for some reason
         await Lobby.LaunchGameAsync();
+        LoadingOverlay.Hide();
     }
 
     private void UpdateGameLengthLabel()
