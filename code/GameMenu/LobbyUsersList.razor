@@ -17,21 +17,37 @@
     private ILobby Lobby => Game.Menu.Lobby;
     private Panel UsersPanel { get; set; }
 
-    private Dictionary<long, LobbyUser> usersLookup = new();
+    private bool hasBuiltList;
+    private List<LobbyUser> users = new();
 
     protected override void OnAfterTreeRender(bool firstTime)
     {
         base.OnAfterTreeRender(firstTime);
 
+        if (Lobby == null)
+            return;
+        
         Lobby.OnMemberEnter = OnMemberEnter;
         Lobby.OnMemberLeave = OnMemberLeave;
-        
-        if (firstTime)
+
+        if (!hasBuiltList)
         {
-            foreach (var player in Game.Menu.Lobby.Members)
-            {
-                OnMemberEnter(player);
-            }
+            RebuildList();
+            hasBuiltList = true;
+        }
+    }
+
+    private void RebuildList()
+    {
+        foreach (var user in users)
+        {
+            user.Delete();
+        }
+        users.Clear();
+        
+        foreach (var player in GarrywareGameMenu.Lobby.Members)
+        {
+            OnMemberEnter(player);
         }
     }
     
@@ -39,16 +55,19 @@
     {
         var userPanel = UsersPanel.AddChild<LobbyUser>();
         userPanel.User = player;
-        
-        usersLookup.Add(player.Id, userPanel);
+
+        users.Add(userPanel);
     }
     
     private void OnMemberLeave(Friend player)
     {
-        if (usersLookup.TryGetValue(player.Id, out LobbyUser panel))
+        for(int i = users.Count - 1; i >= 0; --i)
         {
-            panel.Delete();
-            usersLookup.Remove(player.Id);
+            if (users[i].User.Id == player.Id)
+            {
+                users[i].Delete();
+                users.RemoveAt(i);
+            }
         }
     }
 
