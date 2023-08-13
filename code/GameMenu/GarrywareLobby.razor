@@ -1,6 +1,7 @@
 ﻿@using System
 @using System.Collections.Generic
 @using Sandbox;
+@using Sandbox.Menu
 @using Sandbox.UI;
 
 @namespace Garryware.UI.GameMenu
@@ -17,19 +18,19 @@
                     Game Settings
                 </div>
                 
-                @if (Game.Menu.Lobby == null)
+                @if (Lobby == null)
                 {
                     <div class="content background expand">
                         No lobby found!
                         <span style="margin-bottom: auto"></span>
                     </div>
                 }
-                else
+                else if(Lobby.Owner.IsMe)
                 {
                     <div class="content background expand">
                         <div class="option">
                             Lobby Name
-                            <TextEntry @ref="LobbyNameTextEntry" Text="@Game.Menu.Lobby.Title" @onsubmit="@OnSubmitNewLobbyName"/>
+                            <TextEntry @ref="LobbyNameTextEntry" Text="@Lobby.Title" @onsubmit="@OnSubmitNewLobbyName"/>
                         </div>
                         <div class="option">
                             Max Players
@@ -37,7 +38,7 @@
                         </div>
                         <div class="option">
                             Public Lobby?
-                            <ButtonGroup Options=@lobbyPublicOptions Value:bind=@Game.Menu.Lobby.Public></ButtonGroup>
+                            <ButtonGroup Options=@lobbyPublicOptions Value:bind=@Lobby.Public></ButtonGroup>
                         </div>
                         <div class="option">
                             Rounds
@@ -54,6 +55,34 @@
                     <div class="start-button" @onclick="@StartGame">
                         <svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg>
                         Start Game
+                    </div>
+                }
+                else
+                {
+                    <div class="content background expand">
+                        <div class="option">
+                            Lobby
+                            <label>@Lobby.Title</label>
+                        </div>
+                        <div class="option">
+                            Public Lobby?
+                            <label>@(Lobby.Public ? "Yes" : "No")</label>
+                        </div>
+                        <div class="option">
+                            Rounds
+                            <div class="vertical">
+                                <label @ref="GameRoundsLabel">1234</label>
+                                <label @ref="GameLengthLabel">about 60 minutes</label>
+                            </div>
+                        </div>
+                        <div class="option">
+                            Play Tutorial?
+                            <label>@(PlayTutorialFromData ? "Yes" : "No")</label>
+                        </div>
+                    </div>
+                    <div class="start-button">
+                        <svg class="icon" Src="ui/play-circle.svg" Color=@Color.White.Hex></svg>
+                        Waiting for host to start...
                     </div>
                 }
             </div>
@@ -77,7 +106,7 @@
                 <div class="header">
                     <svg class="icon" Src="ui/user-id.svg" Color=@Color.White.Hex></svg>
                     Players
-                    <Label class="player-count">@Game.Menu.Lobby?.MemberCount/@Game.Menu.Lobby?.MaxMembers</Label>
+                    <Label class="player-count">@Lobby?.MemberCount/@Lobby?.MaxMembers</Label>
                 </div>
                 <div class="content background">
                     <LobbyUsersList></LobbyUsersList>
@@ -97,6 +126,9 @@
 
 @code
 {
+    private ILobby Lobby => Game.Menu.Lobby;
+    private bool IsLobbyOwner { get; set; }
+    
     private int MaxPlayers { get; set; } = 16;
     private int RoundCount { get; set; } = 40;
     private bool PlayTutorial { get; set; } = true;
@@ -104,14 +136,26 @@
     private TextEntry LobbyNameTextEntry { get; set; }
     private SliderControl MaxPlayersSlider { get; set; }
     private SliderControl RoundsSlider { get; set; }
+    private Label GameRoundsLabel { get; set; }
     private Label GameLengthLabel { get; set; }
+
+    private bool PlayTutorialFromData
+    {
+        get
+        {
+            if (Lobby.Data.TryGetKey("play-tutorial", out var tutorialString))
+            {
+                return tutorialString == "1";
+            }
+            return true;
+        }
+    }
     
     private List<Option> lobbyPublicOptions = new List<Option>()
     {
         new Option("Public", true),
         new Option("Private", false),
     };
-
     
     private List<Option> playTutorialOptions = new List<Option>()
     {
@@ -123,11 +167,36 @@
     {
         base.OnAfterTreeRender(firstTime);
 
+        if (Lobby == null)
+            return;
+        
+        IsLobbyOwner = Lobby.Owner.IsMe;
+        
+        if (!IsLobbyOwner)
+        {
+            if (Lobby.Data.TryGetKey("rounds", out var roundsStr))
+            {
+                if (int.TryParse(roundsStr, out int rounds))
+                {
+                    GameRoundsLabel.Text = rounds.ToString("N0");
+                    GameLengthLabel.Text = RoundsToMinutesString(rounds);
+                }
+            }
+            else
+            {
+                Log.Warning("Could not retrieve number of rounds from lobby data");
+            }
+        }
+
         if (firstTime)
         {
             UpdateGameLengthLabel();
-            MaxPlayersSlider.OnValueChanged += OnMaxPlayersChanged;
-            RoundsSlider.OnValueChanged += OnRoundsChanged;
+
+            if (IsLobbyOwner)
+            {
+                MaxPlayersSlider.OnValueChanged += OnMaxPlayersChanged;
+                RoundsSlider.OnValueChanged += OnRoundsChanged;
+            }
         }
     }
 
@@ -140,22 +209,23 @@
 
     private void OnMaxPlayersChanged(float _)
     {
-        Game.Menu.Lobby.MaxMembers = MaxPlayers;
+        Lobby.MaxMembers = MaxPlayers;
     }
 
     private void OnRoundsChanged(float _)
     {
         UpdateGameLengthLabel();
+        Lobby.SetData("rounds", RoundCount.ToString());
     }
 
     private void OnSubmitNewLobbyName(PanelEvent e)
     {
-        Game.Menu.Lobby.Title = LobbyNameTextEntry.Text;
+        Lobby.Title = LobbyNameTextEntry.Text;
     }
     
     private void LeaveLobby()
     {
-        Game.Menu.Lobby?.Leave();
+        Lobby?.Leave();
     }
 
     private void InviteFriends()
@@ -165,23 +235,27 @@
     
     private async void StartGame()
     {
-        var lobby = Game.Menu.Lobby;
-        lobby.SetData("convar.gw_max_rounds", RoundCount.ToString());
-        lobby.SetData("convar.gw_skip_tutorial", PlayTutorial ? "0" : "1");
-        lobby.Map = "dhi.garryware_lifelime";
+        Lobby.SetData("convar.gw_max_rounds", RoundCount.ToString());
+        Lobby.SetData("convar.gw_skip_tutorial", PlayTutorial ? "0" : "1");
+        Lobby.Map = "dhi.garryware_lifelime";
 
         // @todo: loading spinner
         await Task.Delay(200); // required for lobby settings to take effect for some reason
-        await lobby.LaunchGameAsync();
+        await Lobby.LaunchGameAsync();
     }
 
     private void UpdateGameLengthLabel()
     {
         if (GameLengthLabel != null)
         {
-            var approxMinutes = MathF.Ceiling(RoundCount / 4f);
-            GameLengthLabel.Text = $"about {approxMinutes:N0} minutes";
+            GameLengthLabel.Text = RoundsToMinutesString(RoundCount);
         }
+    }
+
+    private string RoundsToMinutesString(int rounds)
+    {
+        var approxMinutes = MathF.Ceiling(rounds / 4f);
+        return $"about {approxMinutes:N0} minutes";
     }
     
 }

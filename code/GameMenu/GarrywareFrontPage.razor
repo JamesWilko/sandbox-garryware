@@ -122,7 +122,8 @@
         ShowLoadingSpinner();
         
         var lobby = await Game.Menu.CreateLobbyAsync(16, "garryware", true);
-        lobby.Title = $"{Game.UserName}'s Lobby";
+        lobby.SetData("rounds", "40"); // lazy way to set defaults but idc
+        lobby.SetData("play-tutorial", "1");
 
         isCreatingLobby = false;
         HideLoadingSpinner();
