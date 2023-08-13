@@ -15,7 +15,7 @@ public class Blackjack : Microgame
 
     public Blackjack()
     {
-        Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn;
+        Rules = MicrogameRules.LoseOnTimeout | MicrogameRules.EndEarlyIfEverybodyLockedIn | MicrogameRules.DontClearInstructions;
         ActionsUsedInGame = PlayerAction.PrimaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 7;
@@ -120,11 +120,16 @@ public class Blackjack : Microgame
             // Let them know the hit the crate
             SoundUtility.PlayTargetHit(To.Single(player));
 
-            // Check if the player has gone bust
-            if (playerValues[player] > 21)
+            // Check if the player has won or gone bust
+            if (playerValues[player] == 21)
+            {
+                player.FlagAsRoundWinner();
+                GameEvents.NewInstructions(To.Single(player), "#microgame.instructions.blackjack.blackjack", 2.0f);
+            }
+            else if (playerValues[player] > 21)
             {
                 player.FlagAsRoundLoser();
-                GameEvents.NewInstructions(To.Single(player), "#microgame.instructions.blackjack.bust", 2.0f); // @localization
+                GameEvents.NewInstructions(To.Single(player), "#microgame.instructions.blackjack.bust", 2.0f);
             }
         }
     }
@@ -132,14 +137,6 @@ public class Blackjack : Microgame
     public override void Finish()
     {
         RemoveAllWeapons();
-
-        foreach (var pair in playerValues)
-        {
-            if (pair.Value == 21)
-            {
-                pair.Key.FlagAsRoundWinner();
-            }
-        }
     }
 
     public override void Cleanup()
