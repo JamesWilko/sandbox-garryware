@@ -28,7 +28,8 @@ public partial class NpcSmg : NpcWeapon
         (Owner as AnimatedEntity)?.SetAnimParameter("b_attack", true);
         
         ShootEffects();
-        PlaySound("rust_smg.shoot");
+        var snd = PlaySound("rust_smg.shoot");
+        snd.SetVolume(0.33f);
         ShootBullet(GetCurrentSpread(), 1.5f, 9.0f, 3.0f);
     }
     
