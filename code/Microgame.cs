@@ -145,8 +145,8 @@ public abstract class Microgame
         }
         
         Log.Info($"[{microgameName}] Finished");
-        Finish();
         ClearHud();
+        Finish();
         ApplyEndOfRoundRules();
         PlayEndOfGameSoundEvents();
         UpdateScores();

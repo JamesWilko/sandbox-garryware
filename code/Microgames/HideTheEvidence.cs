@@ -20,7 +20,7 @@ public class HideTheEvidence : Microgame
         ActionsUsedInGame = PlayerAction.DropWeapon;
         AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
         GameLength = 4;
-        
+
         binModels.Add(Cloud.Model("facepunch.park_bin"));
         binModels.Add(Cloud.Model("facepunch.street_bin"));
         binModels.Shuffle();
@@ -33,7 +33,7 @@ public class HideTheEvidence : Microgame
 
     public override void Start()
     {
-        ShowInstructions("#microgame.instructions.hide-evidence");
+        ShowInstructions("#microgame.instructions.hide-evidence", GameLength - 0.5f);
         weapons = GiveWeapon<Pistol>(To.Everyone);
 
         int hidingSpotsToSpawn = Game.Clients.Count switch
@@ -85,6 +85,7 @@ public class HideTheEvidence : Microgame
             if (owner != null)
             {
                 owner.FlagAsRoundLoser();
+                GameEvents.NewInstructions(To.Single(owner.Client), "#microgame.instructions.hide-evidence.tip", 2f);
             }
         }
         
