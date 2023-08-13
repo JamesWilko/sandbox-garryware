@@ -71,15 +71,21 @@ public class FewestPlayersOnPlatform : Microgame
         if(numPlayersOnPlatforms.Count == 0)
             return;
         
-        // Get the platform with the fewest players
-        Entity winningPlatform = numPlayersOnPlatforms.MinBy(kvp => kvp.Value).Key;
+        // Get the lowest number of players on a platform
+        int fewestAmountOfPlayers = numPlayersOnPlatforms.MinBy(kvp => kvp.Value).Value;
         
-        // Award players on the platform the win
-        foreach (var client in Game.Clients)
+        // Check all platforms and award the win to any player whose on a platform with the least amount since we might have ties
+        foreach (var platform in platforms)
         {
-            if (client.Pawn is GarrywarePlayer player && player.GroundEntity == winningPlatform)
+            if (numPlayersOnPlatforms.TryGetValue(platform, out int playersOnThisPlatform) && playersOnThisPlatform == fewestAmountOfPlayers)
             {
-                player.FlagAsRoundWinner();
+                foreach (var client in Game.Clients)
+                {
+                    if (client.Pawn is GarrywarePlayer player && player.GroundEntity == platform)
+                    {
+                        player.FlagAsRoundWinner();
+                    }
+                }
             }
         }
     }
