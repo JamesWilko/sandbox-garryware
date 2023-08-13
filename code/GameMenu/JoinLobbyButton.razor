@@ -17,11 +17,20 @@
 
     private async void JoinLobby()
     {
+        Log.Info($"Attempting to join lobby {Lobby.Id}");
+        
         LoadingOverlay.Show();
-        await Lobby.JoinAsync();
-        if (Game.Menu.Lobby != null)
+        var joinRequest = Lobby.JoinAsync();
+        await joinRequest;
+        if (joinRequest.Result)
         {
+            Log.Info($"Joined lobby {Lobby.Id}, switching to lobby view");
+            GarrywareGameMenu.Lobby = Lobby; // @note: set the lobby or it doesn't get set automatically?
             this.Navigate("/lobby");
+        }
+        else
+        {
+            Log.Warning($"Failed to join lobby {Lobby.Id}");
         }
         LoadingOverlay.Hide();
     }

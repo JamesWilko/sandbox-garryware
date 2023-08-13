@@ -1,5 +1,6 @@
 ﻿@using System
 @using Sandbox;
+@using Sandbox.Menu
 @using Sandbox.UI;
 @using Sandbox.UI.GameMenu
 @attribute [StyleSheet]
@@ -16,6 +17,20 @@
 
 @code
 {
+    private static ILobby lobbyInstance;
+    public static ILobby Lobby
+    {
+        get
+        {
+            if (lobbyInstance == null && Game.Menu.Lobby != null)
+            {
+                lobbyInstance = Game.Menu.Lobby;
+            }
+            return lobbyInstance;
+        }
+        set => lobbyInstance = value;
+    }
+    
     public GarrywareGameMenu()
     {
         DefaultUrl = "/";

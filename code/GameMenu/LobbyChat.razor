@@ -14,7 +14,7 @@
 
 @code
 {
-    private ILobby Lobby => Game.Menu.Lobby;
+    private ILobby Lobby => GarrywareGameMenu.Lobby;
     private Panel EntriesPanel { get; set; }
     private TextEntry TextEntry { get; set; }
     
@@ -22,7 +22,10 @@
 	
     protected override void OnAfterTreeRender(bool firstTime)
     {
-        Lobby.OnChatMessage = OnChatMessage;
+        if (Lobby != null)
+        {
+            Lobby.OnChatMessage = OnChatMessage;
+        }
     }
 
     private void OnChatMessage(Friend friend, string message)
@@ -41,7 +44,7 @@
     {
         if (timeSinceLastMessage < 1)
             return;
-        
+
         Lobby.SendChat(TextEntry.Text);
         TextEntry.Text = "";
         TextEntry.Focus();
