@@ -1,16 +1,23 @@
-﻿@using Sandbox.Razor
+﻿@using Sandbox.Menu
+@using Sandbox.Razor
 @using Sandbox.UI
 @namespace Garryware.UI.GameMenu
 @attribute [StyleSheet]
+@inherits Panel;
 
-<root class="lobby-button">
-    <label @ref="lobbyName">Wilko's Lobby</label>
+<root onclick="@JoinLobby">
+    <label>@(Lobby?.Title ?? "null Lobby")</label>
     <span style="margin-left: auto"></span>
-    <label @ref="playerCount">1/16</label>
+    <label>@Lobby?.MemberCount/@Lobby?.MemberCount</label>
 </root>
 
 @code
 {
-    private Panel lobbyName;
-    private Panel playerCount;
+    public ILobby Lobby { get; set; }
+
+    private void JoinLobby()
+    {
+        Log.Info("attempt to join lobby!");
+    }
+    
 }

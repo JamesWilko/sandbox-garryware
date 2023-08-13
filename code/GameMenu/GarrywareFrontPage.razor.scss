@@ -25,6 +25,7 @@
 {
   margin-bottom: 20px;
   padding: 10px;
+  flex-shrink: 0;
   
   font-size: 18px;
   background-color: rgba(black, 0.9);
@@ -39,42 +40,11 @@
   }
 }
 
-.lobbies
+.entries
 {
-  width: 100%;
+  overflow: scroll;
   flex-direction: column;
-  
-  > .header
-  {
-    width: 100%;
-    padding: 10px;
-    flex-direction: row;
-    
-    font-size: 24px;
-    font-weight: bold;
-    align-items: center;
-    
-    background-color: rgba(black, 0.7);
-    
-    > .icon
-    {
-      margin-top: auto;
-      margin-bottom: auto;
-      margin-right: 20px;
-      height: 48px;
-      width: 48px;
-    }
-  }
-  
-  > .content
-  {
-    width: 100%;
-    padding: 10px;
-    flex-direction: column;
-    
-    font-size: 18px;
-  }
-  
+  gap: 5px;
 }
 
 .hide

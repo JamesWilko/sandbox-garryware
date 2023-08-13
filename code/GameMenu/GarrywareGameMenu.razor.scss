@@ -136,13 +136,14 @@
   width: 100%;
   flex-direction: column;
   margin-top: 20px;
-
+  
   > .header
   {
     width: 100%;
     padding: 10px;
     flex-direction: row;
-
+    flex-shrink: 0;
+    
     font-size: 24px;
     font-weight: bold;
     align-items: center;

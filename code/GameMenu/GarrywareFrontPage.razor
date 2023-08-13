@@ -2,8 +2,11 @@
 @using System.Threading.Tasks
 @using Sandbox;
 @using Sandbox.UI;
+
 @namespace Garryware.UI.GameMenu
+
 @attribute [StyleSheet]
+@inherits Panel;
 
 <root style="flex-direction: column;">
 
@@ -62,8 +65,8 @@
                     Lobbies
                 </div>
                 <div class="content background">
-                    <label>There's no-one here right now. Why not start the party?</label>
-                    @* <JoinLobbyButton></JoinLobbyButton> *@
+                    <div @ref="LobbiesListPanel" class="entries">
+                    </div>
                 </div>
             </div>
             
@@ -73,6 +76,7 @@
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@Game.Menu.Close">Quit</a>
+        <a class="button" @onclick="@RefreshLobbiesList">Refresh Lobbies</a>
     </div>
     
     <div class="loading-overlay" @ref="loadingOverlay">
@@ -87,12 +91,28 @@
 {
     private Panel loadingOverlay;
     private bool isCreatingLobby;
-    
-    private void ShowNewGameOptions()
+
+    private Panel LobbiesListPanel { get; set; }
+    private Label RefreshingLobbiesLabel { get; set; }
+    private Label NoLobbiesLabel { get; set; }
+
+    protected override void OnAfterTreeRender(bool firstTime)
     {
-        this.Navigate("/new");
+        base.OnAfterTreeRender(firstTime);
+
+        if (firstTime)
+        {
+            RefreshLobbiesList();
+        }
     }
 
+    public override void OnHotloaded()
+    {
+        base.OnHotloaded();
+
+        RefreshLobbiesList();
+    }
+    
     private async void CreateLobby()
     {
         if(isCreatingLobby)
@@ -174,6 +194,42 @@
     private void HideLoadingSpinner()
     {
         loadingOverlay.Style.Opacity = 0f;
+    }
+
+    private async void RefreshLobbiesList()
+    {
+        if (LobbiesListPanel == null)
+            return;
+        
+        LobbiesListPanel.DeleteChildren(true);
+        LobbiesListPanel.AddChild(new Label()
+        {
+            Text = "Refreshing..."
+        });
+        
+        Log.Info($"Querying lobbies");
+        var lobbiesTask = Game.Menu.QueryLobbiesAsync();
+        await lobbiesTask;
+
+        LobbiesListPanel.DeleteChildren(true);
+        Log.Info($"Retrieved {lobbiesTask.Result.Length} lobbies");
+        if (lobbiesTask.Result.Length == 0)
+        {
+            LobbiesListPanel.AddChild(new Label()
+            {
+                Text = "There's no-one here right now, why not start the party?"
+            });
+        }
+        else
+        {
+            foreach (var lobby in lobbiesTask.Result)
+            {
+                LobbiesListPanel.AddChild(new JoinLobbyButton()
+                {
+                    Lobby = lobby,
+                });
+            }
+        }
     }
     
 }

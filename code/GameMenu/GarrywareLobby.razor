@@ -82,6 +82,7 @@
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@LeaveLobby">Leave Lobby</a>
+        <a class="button" @onclick="@Back_DELETE">Back</a>
     </div>
     
 </root>
@@ -116,10 +117,17 @@
 
         if (firstTime)
         {
-            UpdateLengthLabel();
+            UpdateGameLengthLabel();
             MaxPlayersSlider.OnValueChanged += OnMaxPlayersChanged;
             RoundsSlider.OnValueChanged += OnRoundsChanged;
         }
+    }
+
+    public override void OnHotloaded()
+    {
+        base.OnHotloaded();
+        
+        UpdateGameLengthLabel();
     }
 
     private void OnMaxPlayersChanged(float _)
@@ -129,12 +137,11 @@
 
     private void OnRoundsChanged(float _)
     {
-        UpdateLengthLabel();
+        UpdateGameLengthLabel();
     }
 
     private void OnSubmitNewLobbyName(PanelEvent e)
     {
-        Log.Info($"LobbyNameTextEntry: {LobbyNameTextEntry.Text}");
         Game.Menu.Lobby.Title = LobbyNameTextEntry.Text;
     }
     
@@ -155,11 +162,19 @@
         Log.Info($"play tutorial: {PlayTutorial}");
     }
 
-    private void UpdateLengthLabel()
+    private void UpdateGameLengthLabel()
     {
-        var approxMinutes = MathF.Ceiling(RoundCount / 4f);
-        GameLengthLabel.Text = $"about {approxMinutes:N0} minutes";
+        if (GameLengthLabel != null)
+        {
+            var approxMinutes = MathF.Ceiling(RoundCount / 4f);
+            GameLengthLabel.Text = $"about {approxMinutes:N0} minutes";
+        }
     }
 
+    private void Back_DELETE()
+    {
+        this.Navigate("/");
+    }
+    
 }
 

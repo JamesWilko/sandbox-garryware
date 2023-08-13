@@ -1,18 +1,22 @@
 ﻿
-.lobby-button
+@import "_vars.scss";
+
+JoinLobbyButton
 {
   width: 100%;
+  flex-shrink: 0;
   padding: 10px;
   
-  border: 1px solid white;
-  background-color: rgba(black, 0.5);
+  background-color: $button-background-color;
+  border: $button-border;
   
   font-size: 18px;
 
   &:hover
   {
     sound-in: "garryware.menu.hover";
-    background-color: rgba(forestgreen, 0.5);
+    background-color: $button-background-color-hover;
+    border: $button-border-hover;
   }
   &:active
   {
