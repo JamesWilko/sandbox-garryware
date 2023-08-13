@@ -81,7 +81,10 @@ public partial class GarrywarePlayer : Player
     {
         SetModel("models/citizen/citizen.vmdl");
 
-        Controller = new GarrywareWalkController();
+        Controller = new GarrywareWalkController()
+        {
+            AirAcceleration = 400f
+        };
 
         EnableAllCollisions = true;
         EnableDrawing = true;

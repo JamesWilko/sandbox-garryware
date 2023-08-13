@@ -35,16 +35,29 @@ public class BreakWatermelon : Microgame
         for (int i = 0; i < totalMelons; ++i)
         {
             var spawn = Room.OnBoxSpawnsDeck.Next();
-            var melon = new Watermelon()
+
+            if (i >= breakableMelonsToSpawn)
             {
-                Position = spawn.Position,
-                Rotation = spawn.Rotation,
-                CanGib = true,
-                Indestructible = i >= breakableMelonsToSpawn 
-            };
-            AutoCleanup(melon);
-            
-            melon.OnBroken += OnMelonBroken;
+                var ball = new BouncyBall
+                {
+                    Position = spawn.Position,
+                    Rotation = spawn.Rotation,
+                    RenderColor = Color.Green
+                };
+                AutoCleanup(ball);
+            }
+            else
+            {
+                var melon = new Watermelon()
+                {
+                    Position = spawn.Position,
+                    Rotation = spawn.Rotation,
+                    CanGib = true,
+                    Indestructible = i >= breakableMelonsToSpawn
+                };
+                AutoCleanup(melon);
+                melon.OnBroken += OnMelonBroken;
+            }
         }
     }
     

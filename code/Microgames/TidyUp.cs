@@ -17,7 +17,7 @@ public class TidyUp : Microgame
         Rules = MicrogameRules.LoseOnTimeout;
         ActionsUsedInGame = PlayerAction.Punt | PlayerAction.SecondaryAttack;
         AcceptableRooms = new[] { MicrogameRoom.Empty, MicrogameRoom.Boxes };
-        GameLength = 8;
+        GameLength = 9;
     }
     
     public override void Setup()
@@ -30,7 +30,7 @@ public class TidyUp : Microgame
         GiveWeapon<GravityGun>(To.Everyone);
 
         // Spawn some bins
-        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Game.Random.Float(0.15f, 0.4f), 1, 5);
+        int numBins = (int) Math.Clamp(Room.OnFloorSpawns.Count * Game.Random.Float(0.2f, 0.4f), 1, 8);
         for (int i = 0; i < numBins; ++i)
         {
             var binProp = new BreakableProp
@@ -47,7 +47,7 @@ public class TidyUp : Microgame
 
         // Spawn a load of crap
         int numPlayers = Game.Clients.Count;
-        int rubbishSpawned = (int) (numPlayers * Game.Random.Float(2.0f, 3.0f));
+        int rubbishSpawned = (int) (numPlayers * Game.Random.Float(2.5f, 3.5f));
         for (int i = 0; i < rubbishSpawned; ++i)
         {
             var rubbish = new BreakableProp

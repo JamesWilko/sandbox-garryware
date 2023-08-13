@@ -38,17 +38,18 @@ public class HideTheEvidence : Microgame
 
         int hidingSpotsToSpawn = Game.Clients.Count switch
         {
-            < 5 => 1,
-            < 10 => 2,
-            < 15 => 3,
-            _ => 4
+            < 3 => 1,
+            < 6 => 2,
+            < 10 => 3,
+            < 15 => 4,
+            _ => 5
         };
         for (int i = 0; i < hidingSpotsToSpawn; ++i)
         {
-            var spawn = Room.OnFloorSpawnsDeck.Next();
+            var spawnPos = Game.Random.Float() > 0.35f ? Room.OnFloorSpawnsDeck.Next().Position : Room.OnBoxSpawnsDeck.Next().Position;
             var binProp = new BreakableProp()
             {
-                Position = spawn.Position,
+                Position = spawnPos,
                 Rotation = Rotation.FromYaw(Game.Random.Float() * 360.0f),
                 Model = binModels.Next(),
                 Indestructible = true,

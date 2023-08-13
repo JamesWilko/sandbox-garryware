@@ -26,7 +26,7 @@ public class BuildToTheTop : Microgame
         {
             var platform = new Platform()
             {
-                Position = Room.InAirSpawnsDeck.Next().Position - Vector3.Up * 256.0f
+                Position = Room.InAirSpawnsDeck.Next().Position - Vector3.Up * 300.0f
             };
             AutoCleanup(platform);
         }

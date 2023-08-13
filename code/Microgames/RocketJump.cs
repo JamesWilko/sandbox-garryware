@@ -35,6 +35,19 @@ public class RocketJump : Microgame
         GiveWeapon<RocketLauncher>(To.Everyone);
     }
 
+    public override void Tick()
+    {
+        base.Tick();
+        
+        foreach (var client in Game.Clients)
+        {
+            if (client.Pawn is GarrywarePlayer player && IsPlayerOnPlatform(player))
+            {
+                player.FlagAsRoundWinner();
+            }
+        }
+    }
+
     public override void Finish()
     {
         foreach (var client in Game.Clients)

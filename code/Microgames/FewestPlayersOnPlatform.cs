@@ -9,7 +9,8 @@ namespace Garryware.Microgames;
 public class FewestPlayersOnPlatform : Microgame
 {
     private readonly Dictionary<Entity, int> numPlayersOnPlatforms = new();
-
+    private List<Platform> platforms = new();
+    
     public FewestPlayersOnPlatform()
     {
         Rules = MicrogameRules.LoseOnTimeout;
@@ -29,15 +30,23 @@ public class FewestPlayersOnPlatform : Microgame
         ShowInstructions("#microgame.instructions.fewest-players-on-platform");
         GiveWeapon<RocketLauncher>(To.Everyone);
         
-        int maxPlatforms = Math.Max(Game.Clients.Count / 2, 1);
-        int platforms = GetRandomAdjustedClientCount(0.3f, 0.6f, 1, maxPlatforms);
-        for (int i = 0; i < platforms; ++i)
+        int maxPlatforms = Game.Clients.Count switch
+        {
+            < 5 => 2,
+            < 8 => 3,
+            < 12 => 5,
+            < 20 => 6,
+            _ => 8
+        };
+        int numPlatforms = GetRandomAdjustedClientCount(0.3f, 0.6f, 1, maxPlatforms);
+        for (int i = 0; i < numPlatforms; ++i)
         {
             var platform = new Platform()
             {
                 Position = Room.OnFloorSpawnsDeck.Next().Position + Vector3.Up * 5f,
                 GameColor = CommonEntities.ColorsDeck.Next()
             };
+            platforms.Add(platform);
             AutoCleanup(platform);
         }
     }
@@ -78,5 +87,6 @@ public class FewestPlayersOnPlatform : Microgame
     public override void Cleanup()
     {
         numPlayersOnPlatforms.Clear();
+        platforms.Clear();
     }
 }

@@ -60,11 +60,11 @@ public class AvoidTheLight : Microgame
             
             if (avoidLight)
             {
-                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(300f, 500f));
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(150f, 350f));
             }
             else
             {
-                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(200f, 400f));
+                spotlight.ApplyAbsoluteImpulse(directions.Next() * Game.Random.Float(100f, 300f));
             }
         }
     }
