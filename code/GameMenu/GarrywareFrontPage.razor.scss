@@ -51,3 +51,47 @@
 {
   opacity: 0;
 }
+
+.refresh
+{
+  cursor: pointer;
+  margin-left: auto;
+  opacity: 0.7;
+  
+  &:hover
+  {
+    sound-in: "garryware.menu.hover";
+    opacity: 1;
+  }
+
+  &:active
+  {
+    top: 3px;
+  }
+  
+  > .icon
+  {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 48px;
+    width: 48px;
+    
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-play-state: paused;
+  }
+}
+
+@keyframes spin
+{
+  0%
+  {
+    transform: rotate(0);
+  }
+
+  100%
+  {
+    transform: rotate(-360deg);
+  }
+}

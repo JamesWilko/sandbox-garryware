@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using Sandbox;
 @using Sandbox.Menu
+@using Sandbox.Modals
 @using Sandbox.UI;
 
 @namespace Garryware.UI.GameMenu
@@ -71,8 +72,7 @@
                         <div class="option">
                             Rounds
                             <div class="vertical">
-                                <label @ref="GameRoundsLabel">1234</label>
-                                <label @ref="GameLengthLabel">about 60 minutes</label>
+                                <label @ref="GameLengthLabel">100 rounds, about 60 minutes</label>
                             </div>
                         </div>
                         <div class="option">
@@ -111,7 +111,7 @@
                 <div class="content background">
                     <LobbyUsersList></LobbyUsersList>
                     <span style="height: 10px"></span>
-                    <a class="button small" @onclick="@InviteFriends">Invite Friends</a>
+                    <div class="button small" @onclick="@InviteFriends">Invite Friends</div>
                 </div>
             </div>
         </div>
@@ -136,7 +136,6 @@
     private TextEntry LobbyNameTextEntry { get; set; }
     private SliderControl MaxPlayersSlider { get; set; }
     private SliderControl RoundsSlider { get; set; }
-    private Label GameRoundsLabel { get; set; }
     private Label GameLengthLabel { get; set; }
 
     private bool PlayTutorialFromData
@@ -178,7 +177,6 @@
             {
                 if (int.TryParse(roundsStr, out int rounds))
                 {
-                    GameRoundsLabel.Text = rounds.ToString("N0");
                     GameLengthLabel.Text = RoundsToMinutesString(rounds);
                 }
             }
@@ -256,7 +254,7 @@
     private string RoundsToMinutesString(int rounds)
     {
         var approxMinutes = MathF.Ceiling(rounds / 4f);
-        return $"about {approxMinutes:N0} minutes";
+        return $"{rounds:N0} rounds, about {approxMinutes:N0} minutes";
     }
     
 }

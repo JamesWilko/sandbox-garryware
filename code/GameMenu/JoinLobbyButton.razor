@@ -1,5 +1,5 @@
-﻿@using Sandbox.Menu
-@using Sandbox.Razor
+﻿@using Sandbox
+@using Sandbox.Menu
 @using Sandbox.UI
 @namespace Garryware.UI.GameMenu
 @attribute [StyleSheet]
@@ -8,7 +8,7 @@
 <root onclick="@JoinLobby">
     <label>@(Lobby?.Title ?? "null Lobby")</label>
     <span style="margin-left: auto"></span>
-    <label>@Lobby?.MemberCount/@Lobby?.MemberCount</label>
+    <label>@Lobby?.MemberCount/@Lobby?.MaxMembers</label>
 </root>
 
 @code
@@ -17,8 +17,13 @@
 
     private async void JoinLobby()
     {
-        
+        LoadingOverlay.Show();
         await Lobby.JoinAsync();
+        if (Game.Menu.Lobby != null)
+        {
+            this.Navigate("/lobby");
+        }
+        LoadingOverlay.Hide();
     }
     
 }

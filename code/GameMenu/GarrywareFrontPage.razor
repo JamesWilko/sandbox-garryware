@@ -63,6 +63,9 @@
                 <div class="header">
                     <svg class="icon" Src="ui/user-heart.svg" Color=@Color.White.Hex></svg>
                     Lobbies
+                    <div class="refresh" onclick="@RefreshLobbiesList">
+                        <svg @ref="RefreshLobbiesIcon" class="icon" Src="ui/refresh-circle.svg" Color=@Color.White.Hex></svg>
+                    </div>
                 </div>
                 <div class="content background">
                     <div @ref="LobbiesListPanel" class="entries">
@@ -76,7 +79,6 @@
     <span style="height: 20px"></span>
     <div class="controls">
         <a class="button" @onclick="@Game.Menu.Close">Quit</a>
-        <a class="button" @onclick="@RefreshLobbiesList">Refresh Lobbies</a>
     </div>
     
 </root>
@@ -86,8 +88,7 @@
     private bool isCreatingLobby;
 
     private Panel LobbiesListPanel { get; set; }
-    private Label RefreshingLobbiesLabel { get; set; }
-    private Label NoLobbiesLabel { get; set; }
+    private SvgPanel RefreshLobbiesIcon { get; set; }
 
     protected override void OnAfterTreeRender(bool firstTime)
     {
@@ -115,6 +116,7 @@
         LoadingOverlay.Show();
 
         var lobby = await Game.Menu.CreateLobbyAsync(16, "garryware", true);
+        lobby.Title = $"{Game.UserName}'s Lobby";
         lobby.SetData("rounds", "40"); // lazy way to set defaults but idc
         lobby.SetData("play-tutorial", "1");
 
@@ -165,18 +167,16 @@
     {
         if (LobbiesListPanel == null)
             return;
-        
-        LobbiesListPanel.DeleteChildren(true);
-        LobbiesListPanel.AddChild(new Label()
-        {
-            Text = "Refreshing..."
-        });
+
+        RefreshLobbiesIcon.Style.AnimationPlayState = "running";
         
         Log.Info($"Querying lobbies");
         var lobbiesTask = Game.Menu.QueryLobbiesAsync();
         await lobbiesTask;
-
+        
+        RefreshLobbiesIcon.Style.AnimationPlayState = "paused";
         LobbiesListPanel.DeleteChildren(true);
+        
         Log.Info($"Retrieved {lobbiesTask.Result.Length} lobbies");
         if (lobbiesTask.Result.Length == 0)
         {
