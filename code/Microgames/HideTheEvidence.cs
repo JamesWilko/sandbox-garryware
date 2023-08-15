@@ -18,7 +18,7 @@ public class HideTheEvidence : Microgame
     {
         Rules = MicrogameRules.WinOnTimeout; // Any players who have "evidence" against them will lose in finish, so everybody else should win
         ActionsUsedInGame = PlayerAction.DropWeapon;
-        AcceptableRooms = new[] { MicrogameRoom.Boxes, MicrogameRoom.Empty };
+        AcceptableRooms = new[] { MicrogameRoom.Boxes };
         GameLength = 4;
 
         binModels.Add(Cloud.Model("facepunch.park_bin"));
