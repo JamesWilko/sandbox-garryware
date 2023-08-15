@@ -42,7 +42,7 @@ public static class CommonEntities
         RubbishDeck.Add(Cloud.Model("facepunch.beer_keg_a1"), 2);
         RubbishDeck.Add(Cloud.Model("facepunch.beer_cask"), 2);
         RubbishDeck.Add(Cloud.Model("facepunch.pizza_box_gib"), 3);
-        RubbishDeck.Add(Cloud.Model("facepunch.toilet_a"), 5);
+        RubbishDeck.Add(Cloud.Model("pukes.microwave"), 5);
         RubbishDeck.Shuffle();
     }
     
