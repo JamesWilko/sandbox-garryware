@@ -222,8 +222,18 @@ public partial class GarrywareGame : GameManager
         var player = new GarrywarePlayer(client);
         player.Respawn();
         client.Pawn = player;
+
+        // Send info that someone has joined
+        string command = $"chat_addinfo \"{client.Name} joined the game!\" avatar:{client.SteamId}";
+        foreach (var cl in Game.Clients)
+        {
+            if(cl == client)
+                continue;
+            
+            cl.SendCommandToClient(command);
+        }
     }
-    
+
     public override void MoveToSpawnpoint(Entity pawn)
     {
         SpawnPoint spawnPoint = null;
@@ -254,10 +264,20 @@ public partial class GarrywareGame : GameManager
         pawn.Transform = spawnPoint.Transform;
     }
 
-    public override void ClientDisconnect(IClient cl, NetworkDisconnectionReason reason)
+    public override void ClientDisconnect(IClient client, NetworkDisconnectionReason reason)
     {
-        base.ClientDisconnect(cl, reason);
+        base.ClientDisconnect(client, reason);
         NumConnectedClients--;
+        
+        // Send info that someone has left
+        string command = $"chat_addinfo \"{client.Name} left the game! ({reason})\" avatar:{client.SteamId}";
+        foreach (var cl in Game.Clients)
+        {
+            if(cl == client)
+                continue;
+            
+            cl.SendCommandToClient(command);
+        }
     }
     
     public override void OnClientActive(IClient client)
