@@ -396,11 +396,26 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 code/obj
-*.vsnd_c
-*.sound_c
 
-# S&box stuff
-maps/_bakeresourcecache
+# Auto-generated code editor files
+.vs/*
+.vscode/*
+*.csproj
+obj
+bin
+Properties/*
+code/obj/*
+code/Properties/*
+
+# Exported / standalone games
+Exports/
+
+# Auto-generated asset related files
+.sbox/*
 *.generated.*
-*.pkf
-*.vmat_c
+*.*_c
+!*.shader_c
+*.los
+*.vpk
+*launchSettings.json
+*.sln
