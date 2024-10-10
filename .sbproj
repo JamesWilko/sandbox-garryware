@@ -3,16 +3,12 @@
   "Type": "game",
   "Org": "dhi",
   "Ident": "garryware",
-  "Tags": "",
   "Schema": 1,
-  "HasAssets": true,
-  "AssetsPath": "",
+  "IncludeSourceFiles": false,
   "Resources": "\nui/*\nfonts/*\nGameMenu/*\nsound/menu/*",
-  "MenuResources": "GameMenu/*\nui/bg-garry.png\nui/logo-banner.png\nsound/menu/*\nui/*.svg\nmenu/*",
-  "HasCode": true,
-  "CodePath": "/code/",
   "PackageReferences": [],
   "EditorReferences": null,
+  "IsWhitelistDisabled": false,
   "Metadata": {
     "MaxPlayers": 32,
     "MinPlayers": 1,
@@ -55,112 +51,6 @@
       "NoWarn": "1701;1702;1591;"
     },
     "ReplaceTags": "minigames party social",
-    "InputSettings": {
-      "Actions": [
-        {
-          "Name": "Forward",
-          "KeyboardCode": "W",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Backward",
-          "KeyboardCode": "S",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Left",
-          "KeyboardCode": "A",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Right",
-          "KeyboardCode": "D",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Jump",
-          "KeyboardCode": "space",
-          "GamepadCode": "A",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Run",
-          "KeyboardCode": "shift",
-          "GamepadCode": "LeftJoystickButton",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Walk",
-          "KeyboardCode": "alt",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Duck",
-          "KeyboardCode": "ctrl",
-          "GamepadCode": "B",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "attack1",
-          "KeyboardCode": "mouse1",
-          "GamepadCode": "RightTrigger",
-          "GroupName": "Actions"
-        },
-        {
-          "Name": "attack2",
-          "KeyboardCode": "mouse2",
-          "GamepadCode": "LeftTrigger",
-          "GroupName": "Actions"
-        },
-        {
-          "Name": "reload",
-          "KeyboardCode": "r",
-          "GamepadCode": "X",
-          "GroupName": "Actions"
-        },
-        {
-          "Name": "use",
-          "KeyboardCode": "e",
-          "GamepadCode": "Y",
-          "GroupName": "Actions"
-        },
-        {
-          "Name": "Voice",
-          "KeyboardCode": "v",
-          "GamepadCode": "RightJoystickButton",
-          "GroupName": "Other"
-        },
-        {
-          "Name": "Drop",
-          "KeyboardCode": "g",
-          "GamepadCode": "RightJoystickButton",
-          "GroupName": "Other"
-        },
-        {
-          "Name": "Flashlight",
-          "KeyboardCode": "f",
-          "GamepadCode": "DpadNorth",
-          "GroupName": "Other"
-        },
-        {
-          "Name": "Score",
-          "KeyboardCode": "tab",
-          "GamepadCode": "SwitchLeftMenu",
-          "GroupName": "Other"
-        },
-        {
-          "Name": "Menu",
-          "KeyboardCode": "Q",
-          "GamepadCode": "SwitchRightMenu",
-          "GroupName": "Other"
-        },
-        {
-          "Name": "Chat",
-          "KeyboardCode": "enter",
-          "GroupName": "Other"
-        }
-      ]
-    },
     "PackageSettings": [
       {
         "DisplayType": "Integer",
