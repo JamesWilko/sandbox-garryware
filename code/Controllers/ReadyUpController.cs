@@ -1,4 +1,6 @@
-﻿using Garryware.StateMachine;
+﻿using System;
+using System.Linq;
+using Garryware.StateMachine;
 using Garryware.Utilities;
 using Sandbox;
 
@@ -27,5 +29,13 @@ public class ReadyUpController : SingletonComponent<ReadyUpController>
 			playerState.IsReady = false;
 		}
 	}
-	
+
+	protected override void OnUpdate()
+	{
+		base.OnUpdate();
+
+		// @todo: good enough for testing, do this event based not polling
+		NumberOfReadyPlayers = PlayerState.All.Count(x => x.IsReady);
+		NumberRequiredToStart = Math.Max((int)(PlayerState.All.Count * 0.5f), 1);
+	}
 }
