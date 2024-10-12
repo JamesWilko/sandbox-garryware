@@ -8,6 +8,742 @@
     "NetworkInterpolation": false,
     "Components": [
       {
+        "__type": "Sandbox.States.StateMachineComponent",
+        "__guid": "2c435fa1-9a14-494b-8e16-5546052094a3",
+        "Serialized": {
+          "States": [
+            {
+              "Name": "Waiting For Players",
+              "OnEnterState": {
+                "__version": 8,
+                "__guid": "06a6eb9e-ea78-4960-b860-d7b73b31d626",
+                "__changeId": 8,
+                "UserData": {
+                  "Title": "Enter",
+                  "ReferencedComponentTypes": [
+                    "Garryware.ReadyUpController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.ReadyUpController"
+                    },
+                    "UserData": {
+                      "Position": "204,-24"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "call",
+                    "Properties": {
+                      "_isStatic": false,
+                      "_name": "ResetReadyUpStates",
+                      "_type": "Garryware.ReadyUpController"
+                    },
+                    "UserData": {
+                      "Position": "204,0"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 1,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 2,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 1,
+                    "SrcName": "_result",
+                    "DstId": 2,
+                    "DstName": "_target"
+                  }
+                ]
+              },
+              "UserData": {
+                "Position": "-448,-256"
+              }
+            },
+            {
+              "Id": 1,
+              "Name": "Starting Soon",
+              "OnEnterState": {
+                "__version": 8,
+                "__guid": "0e77d5cf-d72f-4d8e-8c45-a88e7f2e7c11",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Enter",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,-24"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "call",
+                    "Properties": {
+                      "_isStatic": false,
+                      "_name": "OnEnterStartingSoon",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,-0"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 1,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 2,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 1,
+                    "SrcName": "_result",
+                    "DstId": 2,
+                    "DstName": "_target"
+                  }
+                ]
+              },
+              "UserData": {
+                "Position": "-64,-256"
+              }
+            },
+            {
+              "Id": 2,
+              "Name": "Tutorial",
+              "OnEnterState": {
+                "__version": 8,
+                "__guid": "3cb58cf9-9543-4860-b2a5-d6349102acbc",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Enter",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,-24"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "call",
+                    "Properties": {
+                      "_isStatic": false,
+                      "_name": "OnEnterTutorial",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,-0"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 1,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 2,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 1,
+                    "SrcName": "_result",
+                    "DstId": 2,
+                    "DstName": "_target"
+                  }
+                ]
+              },
+              "UserData": {
+                "Position": "320,-256"
+              }
+            },
+            {
+              "Id": 3,
+              "Name": "In Progress",
+              "OnEnterState": {
+                "__version": 8,
+                "__guid": "c0192372-8bc7-4886-a2a4-9f14160064ed",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Enter",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,-24"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "call",
+                    "Properties": {
+                      "_isStatic": false,
+                      "_name": "OnEnterPlayingState",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "204,0"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 1,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 2,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 1,
+                    "SrcName": "_result",
+                    "DstId": 2,
+                    "DstName": "_target"
+                  }
+                ]
+              },
+              "UserData": {
+                "Position": "320,64"
+              }
+            },
+            {
+              "Id": 8,
+              "Name": "GameOver",
+              "OnEnterState": {
+                "__version": 8,
+                "__guid": "72cc1cb8-fbec-4df4-aed9-64c107064779",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Enter",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "180,-24"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "call",
+                    "Properties": {
+                      "_isStatic": false,
+                      "_name": "OnEnterGameOver",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "180,0"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 1,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 2,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 1,
+                    "SrcName": "_result",
+                    "DstId": 2,
+                    "DstName": "_target"
+                  }
+                ]
+              },
+              "UserData": {
+                "Position": "320,384"
+              }
+            }
+          ],
+          "Transitions": [
+            {
+              "Id": 4,
+              "TargetId": 1,
+              "Condition": {
+                "__version": 8,
+                "__guid": "97a6a58d-5008-4eae-b30f-ae2c5fdc6539",
+                "__changeId": 12,
+                "UserData": {
+                  "Title": "Is Ready to Start",
+                  "ReferencedComponentTypes": [
+                    "Garryware.ReadyUpController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "output",
+                    "UserData": {
+                      "Position": "252,0"
+                    }
+                  },
+                  {
+                    "Id": 4,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.ReadyUpController"
+                    },
+                    "UserData": {
+                      "Position": "-288,84"
+                    }
+                  },
+                  {
+                    "Id": 5,
+                    "Type": "property",
+                    "Properties": {
+                      "_name": "HaveEnoughPlayersReadiedUp",
+                      "_type": "Garryware.ReadyUpController"
+                    },
+                    "UserData": {
+                      "Position": "-288,108"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 5,
+                    "SrcName": "_result",
+                    "DstId": 1,
+                    "DstName": "_result"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 1,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 4,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 4,
+                    "SrcName": "_result",
+                    "DstId": 5,
+                    "DstName": "_target"
+                  }
+                ]
+              }
+            },
+            {
+              "Id": 5,
+              "SourceId": 1,
+              "TargetId": 2,
+              "Condition": {
+                "__version": 8,
+                "__guid": "16687f96-b1ec-4076-ba55-fd06872cf153",
+                "__changeId": 10,
+                "UserData": {
+                  "Title": "Go to Tutorial",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "output",
+                    "UserData": {
+                      "Position": "336,0"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-180,108"
+                    }
+                  },
+                  {
+                    "Id": 4,
+                    "Type": "property",
+                    "Properties": {
+                      "_name": "StartingSoonTransitionToTutorial",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-180,132"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 4,
+                    "SrcName": "_result",
+                    "DstId": 1,
+                    "DstName": "_result"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 1,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 2,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 2,
+                    "SrcName": "_result",
+                    "DstId": 4,
+                    "DstName": "_target"
+                  }
+                ]
+              }
+            },
+            {
+              "Id": 6,
+              "SourceId": 2,
+              "TargetId": 3,
+              "Condition": {
+                "__version": 8,
+                "__guid": "4702b257-879e-46b9-a67e-bc49f38c7790",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Is Tutorial Finished",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "output",
+                    "UserData": {
+                      "Position": "384,-0"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-120,84"
+                    }
+                  },
+                  {
+                    "Id": 3,
+                    "Type": "property",
+                    "Properties": {
+                      "_name": "IsTutorialComplete",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-120,108"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 3,
+                    "SrcName": "_result",
+                    "DstId": 1,
+                    "DstName": "_result"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 1,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 2,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 2,
+                    "SrcName": "_result",
+                    "DstId": 3,
+                    "DstName": "_target"
+                  }
+                ]
+              }
+            },
+            {
+              "Id": 9,
+              "SourceId": 3,
+              "TargetId": 8
+            },
+            {
+              "Id": 10,
+              "SourceId": 8,
+              "Condition": {
+                "__version": 8,
+                "__guid": "7f46f0fa-471e-406b-8023-c41e9e4c2ebb",
+                "__changeId": 6,
+                "UserData": {
+                  "Title": "Is Ready To Restart",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input"
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "output",
+                    "UserData": {
+                      "Position": "252,0"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-300,96"
+                    }
+                  },
+                  {
+                    "Id": 3,
+                    "Type": "property",
+                    "Properties": {
+                      "_name": "IsReadyToRestartFromBeginning",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-300,120"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 3,
+                    "SrcName": "_result",
+                    "DstId": 1,
+                    "DstName": "_result"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 1,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 2,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 2,
+                    "SrcName": "_result",
+                    "DstId": 3,
+                    "DstName": "_target"
+                  }
+                ]
+              }
+            },
+            {
+              "Id": 11,
+              "SourceId": 1,
+              "TargetId": 3,
+              "Condition": {
+                "__version": 8,
+                "__guid": "c7635c25-2c42-41ec-9e01-db03056136ca",
+                "__changeId": 16,
+                "UserData": {
+                  "Title": "Go to Gameplay",
+                  "ReferencedComponentTypes": [
+                    "Garryware.GarrywareGameController"
+                  ]
+                },
+                "Variables": [],
+                "Nodes": [
+                  {
+                    "Id": 0,
+                    "Type": "input",
+                    "UserData": {
+                      "Position": "-192,0"
+                    }
+                  },
+                  {
+                    "Id": 1,
+                    "Type": "output",
+                    "UserData": {
+                      "Position": "456,0"
+                    }
+                  },
+                  {
+                    "Id": 2,
+                    "Type": "scene.get",
+                    "Properties": {
+                      "T": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-192,72"
+                    }
+                  },
+                  {
+                    "Id": 5,
+                    "Type": "property",
+                    "Properties": {
+                      "_name": "StartingSoonTransitionToGameplay",
+                      "_type": "Garryware.GarrywareGameController"
+                    },
+                    "UserData": {
+                      "Position": "-192,96"
+                    }
+                  }
+                ],
+                "Links": [
+                  {
+                    "SrcId": 5,
+                    "SrcName": "_result",
+                    "DstId": 1,
+                    "DstName": "_result"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_signal",
+                    "DstId": 1,
+                    "DstName": "_signal"
+                  },
+                  {
+                    "SrcId": 0,
+                    "SrcName": "_target",
+                    "DstId": 2,
+                    "DstName": "_this"
+                  },
+                  {
+                    "SrcId": 2,
+                    "SrcName": "_result",
+                    "DstId": 5,
+                    "DstName": "_target"
+                  }
+                ]
+              }
+            }
+          ],
+          "InitialStateId": 0
+        }
+      },
+      {
         "__type": "Garryware.GarrywareNetworkController",
         "__guid": "43d436b3-edc7-40cf-a921-f725e0b76f89",
         "PlayerPawnPrefab": {
@@ -18,6 +754,18 @@
           "_type": "gameobject",
           "prefab": "prefabs/prefab_player_state.prefab"
         }
+      },
+      {
+        "__type": "Garryware.GarrywareGameController",
+        "__guid": "4fe775cb-6c87-45a6-b1a0-6dbcb8d041e8",
+        "EveryoneReadyDelay": 3,
+        "ForceReadyUpDelay": 20,
+        "GameOverRestartDelay": 30,
+        "SkipTutorial": true
+      },
+      {
+        "__type": "Garryware.ReadyUpController",
+        "__guid": "cdc82b27-98f1-4bfe-9ea2-6d7cd1bc4d4b"
       }
     ],
     "Children": [],

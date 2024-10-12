@@ -5,7 +5,7 @@ using Sandbox;
 
 namespace Garryware;
 
-public class GarrywareNetworkController : Component, Component.INetworkListener
+public class GarrywareNetworkController : SingletonComponent<GarrywareNetworkController>, Component.INetworkListener
 {
 	[Property] public GameObject PlayerStatePrefab { get; set; }
 	[Property] public GameObject PlayerPawnPrefab { get; set; }

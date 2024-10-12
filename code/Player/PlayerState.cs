@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Sandbox;
 
 namespace Garryware;
@@ -40,6 +39,13 @@ public class PlayerState : Component
 	/// </summary>
 	public string DisplayName => IsBot ? $"[Bot] {SteamName}" : SteamName;
 	
+	/// <summary>
+	/// Is this player ready to play?
+	/// </summary>
+	[HostSync, Sync, Property] public bool IsReady { get; set; }
+
+	private bool CanChangeReadyState => ReadyUpController.Instance.IsWaitingForPlayers;
+	
 	[Authority]
 	public void ClientInitRpc()
 	{
@@ -61,5 +67,15 @@ public class PlayerState : Component
 		base.OnDestroy();
 		
 		All.Remove(this);
+	}
+
+	protected override void OnUpdate()
+	{
+		base.OnUpdate();
+		
+		if (Input.Pressed(PlayerAction.ReadyUp.AsInputAction()) && CanChangeReadyState)
+		{
+			IsReady = !IsReady;
+		}
 	}
 }
