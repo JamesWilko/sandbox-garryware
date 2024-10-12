@@ -1,0 +1,26 @@
+{
+  "RootObject": {
+    "__guid": "5f3e4c87-496e-4ae8-bc15-ecd370afe2cd",
+    "Flags": 0,
+    "Name": "prefab_player_state",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "Components": [
+      {
+        "__type": "Garryware.PlayerState",
+        "__guid": "5a9582fa-3cfd-482b-b0f4-2f3cc6091635",
+        "IsBot": false,
+        "SteamId": 0
+      }
+    ],
+    "Children": [],
+    "__variables": []
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "ResourceVersion": 1,
+  "__references": [],
+  "__version": 1
+}

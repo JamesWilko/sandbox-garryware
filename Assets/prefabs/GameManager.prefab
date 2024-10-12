@@ -1,0 +1,33 @@
+{
+  "RootObject": {
+    "__guid": "f60304a5-1ce9-41a0-ac36-cbcc27a06f01",
+    "Flags": 0,
+    "Name": "gamemanager",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": false,
+    "Components": [
+      {
+        "__type": "Garryware.GarrywareNetworkController",
+        "__guid": "43d436b3-edc7-40cf-a921-f725e0b76f89",
+        "PlayerPawnPrefab": {
+          "_type": "gameobject",
+          "prefab": "prefabs/prefab_garryware_player_pawn.prefab"
+        },
+        "PlayerStatePrefab": {
+          "_type": "gameobject",
+          "prefab": "prefabs/prefab_player_state.prefab"
+        }
+      }
+    ],
+    "Children": [],
+    "__variables": []
+  },
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "ResourceVersion": 1,
+  "__references": [],
+  "__version": 1
+}

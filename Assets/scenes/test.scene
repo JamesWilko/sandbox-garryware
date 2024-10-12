@@ -53,12 +53,13 @@
       ]
     },
     {
-      "__guid": "83ea09f8-5467-420e-b9f7-1fc3e6fdcaf9",
+      "__guid": "24c2f8ba-505f-4f29-97e2-1f14d69367d5",
       "Flags": 0,
-      "Name": "prefab_garryware_player",
-      "Position": "0,0,20.89063",
+      "Name": "gamemanager",
       "Enabled": true,
-      "__Prefab": "prefabs/prefab_garryware_player.prefab",
+      "NetworkMode": 1,
+      "NetworkInterpolation": false,
+      "__Prefab": "prefabs/gamemanager.prefab",
       "__PrefabVariables": {}
     }
   ],

@@ -3,7 +3,7 @@ using Sandbox.Citizen;
 
 namespace Garryware;
 
-public sealed class GarrywarePawn : Component
+public sealed class GarrywarePawn : Pawn
 {
 	[Property, Group("Components")] public SkinnedModelRenderer ThirdPersonModel { get; set; }
 	[Property, Group("Components")] public CameraComponent FirstPersonCamera { get; set; }
@@ -15,20 +15,21 @@ public sealed class GarrywarePawn : Component
 	[Sync] public bool IsWalking { get; set; }
 	[Sync] public bool IsCrouching { get; set; }
 	[Sync] public Angles EyeAngles { get; set; }
-
-	public bool IsPossessed => true; // @todo: check if the local player is spectating
-	public bool IsLocallyControlled => IsPossessed && !IsProxy;
-
+	
 	private Vector3 desiredAnalogMove;
 	private Vector3 desiredVelocity;
-
+	
+	protected override void OnPossessed()
+	{
+		base.OnPossessed();
+		
+		ThirdPersonModel.RenderType = IsLocallyControlled ? ModelRenderer.ShadowRenderType.ShadowsOnly : ModelRenderer.ShadowRenderType.On;
+		FirstPersonCamera.Enabled = IsLocallyControlled;
+	}
+	
 	protected override void OnUpdate()
 	{
 		base.OnUpdate();
-
-		// @todo: move this to an OnPossess event 
-		ThirdPersonModel.RenderType = IsLocallyControlled ? ModelRenderer.ShadowRenderType.ShadowsOnly : ModelRenderer.ShadowRenderType.On;
-		FirstPersonCamera.Enabled = IsLocallyControlled;
 		
 		// Update the eye angles from our look input
 		if (CharacterController.IsValid() && IsPossessed)
