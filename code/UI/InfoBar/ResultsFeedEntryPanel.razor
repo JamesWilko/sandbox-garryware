@@ -1,0 +1,41 @@
+﻿@namespace Garryware.UI
+@using Sandbox
+@using Sandbox.UI;
+@inherits Panel;
+
+<root class="@DisplayClass">
+    <label class="result">@GetRandomEmoji()</label>
+    <label class="name">@Name</label>
+</root>
+
+@code
+{
+    public bool Winner { get; set; }
+    public string Name { get; set; } = "Wilko";
+
+    private string DisplayClass => Winner ? "won" : "lost";
+
+    private bool isAlive = true;
+    private readonly RealTimeSince timeSinceBorn = 0f;
+    
+    private const float Lifetime = 3.5f;
+    private static readonly string[] WinnerEmojis = { "💪", "😎", "😍", "🤩", "🥰", "😁", "🤑", "🎉", "🎊", "🏆", "🏅", "❤", "✅", "🆒", "✔", "📈" };
+    private static readonly string[] LoserEmojis = { "💔", "💤", "💢", "❌", "⛔", "📉", "😥", "😪", "😴", "😭", "😱", "😤", "😩", "😡", "🤬", "🤮" };
+
+    private string GetRandomEmoji()
+    {
+        return Game.Random.FromArray(Winner ? WinnerEmojis : LoserEmojis);
+    }
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (isAlive && timeSinceBorn >= Lifetime)
+        {
+            Delete();
+            isAlive = false;
+        }
+    }
+
+}

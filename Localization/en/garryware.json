@@ -14,8 +14,9 @@
   "ui.bar.final-round": "Final Round",
   "ui.bar.waiting-for-players": "Waiting for players",
   "ui.bar.starting-soon": "Starting soon",
-  "ui.bar.instructions": "Learn to play",
+  "ui.bar.tutorial": "Learn to play",
   "ui.bar.game-over": "Game Over",
+  "ui.bar.not-running": "Not Running",
   
   "stats.everybody-won": "Everybody won that round!",
   "stats.everybody-lost": "Everybody failed that round!",

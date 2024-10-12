@@ -1,0 +1,103 @@
+﻿@namespace Garryware.UI
+@using System
+@using System.Collections.Generic
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+    
+    <div @ref="WinnersFeed" class="feed-winners">
+    </div>
+    
+    <div class="container-left">
+        <label class="icon">✔</label>
+        <label class="name">Winners</label>
+        <div class="container-count">
+            <label @ref="WinnersCountLabel">0</label>
+        </div>
+    </div>
+    
+    <div class="container-center">
+        <InfoBarCountdown/>
+        <CurrentRoundLabel/>
+    </div>
+    
+    <div class="container-right">
+        <label class="icon">❌</label>
+        <label class="name">Losers</label>
+        <div class="container-count">
+            <label @ref="LosersCountLabel" class="count">0</label>
+        </div>
+    </div>
+    
+    <div @ref="LosersFeed" class="feed-losers">
+    </div>
+    
+</root>
+
+@code
+{
+    private Label WinnersCountLabel { get; set; }
+    private Label LosersCountLabel { get; set; }
+    private Panel WinnersFeed { get; set; }
+    private Panel LosersFeed { get; set; }
+
+    private int currentWinnersCount;
+    private int currentLosersCount;
+
+    private readonly Queue<string> winnersQueue = new(); // @todo: replace with Connection?
+    private RealTimeUntil timeUntilNextWinnerCanBeAdded;
+    private int winnersOrder = 0;
+
+    private readonly Queue<string> losersQueue = new(); // @todo: replace with Connection?
+    private RealTimeUntil timeUntilNextLoserCanBeAdded;
+    private int losersOrder = 0;
+    
+    private const float TimeBetweenFeedEntries = 0.2f;
+    
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        
+        var gc = GarrywareGameController.Instance;
+        if (!gc.IsValid())
+            return;
+
+        // Update the winner and losers overall count
+        if (currentWinnersCount != gc.NumberOfWinners)
+        {
+            currentWinnersCount = gc.NumberOfWinners;
+            WinnersCountLabel.Text = currentWinnersCount.ToString("N0");
+        }
+        if (currentLosersCount != gc.NumberOfLosers)
+        {
+            currentLosersCount = gc.NumberOfLosers;
+            LosersCountLabel.Text = currentLosersCount.ToString("N0");
+        }
+        
+        // Add the feed entries with small delays between them so that we can see everyone who won or lost
+        if (winnersQueue.Count > 0 && timeUntilNextWinnerCanBeAdded <= 0f)
+        {
+            AddFeedEntry(winnersQueue.Dequeue(), true);
+            timeUntilNextWinnerCanBeAdded = TimeBetweenFeedEntries;
+        }
+        if (losersQueue.Count > 0 && timeUntilNextLoserCanBeAdded <= 0f)
+        {
+            AddFeedEntry(losersQueue.Dequeue(), false);
+            timeUntilNextLoserCanBeAdded = TimeBetweenFeedEntries;
+        }
+    }
+
+    private void AddFeedEntry(string name, bool winner)
+    {
+        var entry = new ResultsFeedEntryPanel()
+        {
+            Name = name,
+            Winner = winner,
+            Parent = winner ? WinnersFeed : LosersFeed
+        };
+        entry.Style.Order = winner ? winnersOrder-- : losersOrder--; // @note: count backwards so that they're always shown closest to the center
+    }
+    
+}

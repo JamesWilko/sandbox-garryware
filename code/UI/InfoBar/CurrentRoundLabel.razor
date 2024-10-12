@@ -1,0 +1,43 @@
+﻿@namespace Garryware.UI
+@using System
+@using Garryware.StateMachine
+@using Sandbox
+@using Sandbox.UI;
+@inherits Panel
+
+<style>
+      label
+      {
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: normal;
+        
+        margin-bottom: 5px;
+      }
+</style>
+
+<root>
+    <label class="round">@LabelText</label>
+</root>
+
+@code
+{
+    private GameState CurrentGameState => GarrywareGameController.Instance.IsValid() ? GarrywareGameController.Instance.CurrentGameState : GameState.NotRunning;
+    private int CurrentRound => GarrywareGameController.Instance.IsValid() ? GarrywareGameController.Instance.CurrentRoundNumber : 0;
+    
+    private string LabelText => CurrentGameState switch
+    {
+        GameState.NotRunning => "#ui.bar.not-running",
+        GameState.WaitingForPlayers => "#ui.bar.waiting-for-players",
+        GameState.StartingSoon => "#ui.bar.starting-soon",
+        GameState.Tutorial => "#ui.bar.tutorial",
+        GameState.Playing => string.Format("Round {0:N0}", CurrentRound), // @localization
+        GameState.GameOver => "#ui.bar.game-over",
+        GameState.Dev => "developer mode",
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    
+    protected override int BuildHash() => System.HashCode.Combine(CurrentGameState);
+}

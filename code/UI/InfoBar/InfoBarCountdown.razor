@@ -1,0 +1,31 @@
+﻿@namespace Garryware.UI
+@using System
+@using Sandbox.UI;
+@inherits Panel
+
+<root class="@DisplayClass">
+    <label class="countdown">@DisplaySeconds</label>
+    <label class="sub-countdown">@DisplayMilliseconds</label>
+</root>
+
+@code
+{
+    private bool IsCountdownActive => GarrywareGameController.Instance.Countdown.IsEnabled;
+    private float RemainingTime => GarrywareGameController.Instance.Countdown.TimeUntilExpires;
+
+    private int RemainingSeconds => (int)Math.Max(0, Math.Ceiling(RemainingTime));
+    private bool ShouldDisplayMilliseconds => RemainingTime is < 10 and > 0;
+    private int RemainingMilliseconds => ShouldDisplayMilliseconds ?
+        (int)(100 - Math.Clamp(Math.Abs(RemainingTime - RemainingSeconds) * 100, 0, 100))
+        : 0;
+
+    private string DisplaySeconds => IsCountdownActive ? Math.Max(RemainingSeconds - 1, 0).ToString() : "--";
+    private string DisplayMilliseconds => IsCountdownActive && ShouldDisplayMilliseconds ? RemainingMilliseconds.ToString("00") : string.Empty;
+    private string DisplayClass => IsCountdownActive && RemainingSeconds < 5 ? "critical" : string.Empty;
+    
+    protected override int BuildHash() => HashCode.Combine(RemainingSeconds, RemainingMilliseconds, ShouldDisplayMilliseconds);
+
+    // @todo: play the announcer countdown sfx
+    // @todo: handle double time countdowns
+    
+}

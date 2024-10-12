@@ -63,46 +63,12 @@
       "__PrefabVariables": {}
     },
     {
-      "__guid": "f466facd-9cab-4251-ba1c-62df83c9df71",
+      "__guid": "9b92af80-f122-4b73-b368-5104fce0203a",
       "Flags": 0,
       "Name": "prefab_garryware_ui_root",
-      "Position": "15.96671,32.27536,16.98801",
       "Enabled": true,
-      "Components": [
-        {
-          "__type": "Sandbox.ScreenPanel",
-          "__guid": "312c901c-f3b7-447b-bbdf-4ddb028d75ad",
-          "AutoScreenScale": true,
-          "Opacity": 1,
-          "Scale": 1,
-          "ScaleStrategy": "ConsistentHeight",
-          "ZIndex": 100
-        },
-        {
-          "__type": "Garryware.UI.GarrywareHud",
-          "__guid": "9390b902-9bb6-4fe9-9fb9-638e8088300b"
-        },
-        {
-          "__type": "Garryware.UI.AmmoCounterPanel",
-          "__guid": "3d1542ef-9f13-4e62-8972-67dca0470590"
-        },
-        {
-          "__type": "Garryware.UI.WaitingForPlayersPanel",
-          "__guid": "c936e0cc-836a-4add-b69a-0977847dddfa"
-        },
-        {
-          "__type": "Garryware.UI.CrosshairPanel",
-          "__guid": "747ff57d-b4e9-4db0-a817-170aa1f8b6c1"
-        },
-        {
-          "__type": "Garryware.UI.OnScreenControlsPanel",
-          "__guid": "af1ba1d8-f8f4-41e0-bd2a-89f3bca306c5"
-        },
-        {
-          "__type": "Garryware.UI.GarrywareHud",
-          "__guid": "8f3a1975-398d-47f2-a7ec-3eaed1090262"
-        }
-      ]
+      "__Prefab": "prefabs/prefab_garryware_ui_root.prefab",
+      "__PrefabVariables": {}
     }
   ],
   "SceneProperties": {

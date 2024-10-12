@@ -3,7 +3,6 @@
     "__guid": "f466facd-9cab-4251-ba1c-62df83c9df71",
     "Flags": 0,
     "Name": "prefab_garryware_ui_root",
-    "Position": "15.96671,32.27536,16.98801",
     "Enabled": true,
     "Components": [
       {
@@ -17,7 +16,7 @@
       },
       {
         "__type": "Garryware.UI.GarrywareHud",
-        "__guid": "9390b902-9bb6-4fe9-9fb9-638e8088300b"
+        "__guid": "8f3a1975-398d-47f2-a7ec-3eaed1090262"
       },
       {
         "__type": "Garryware.UI.AmmoCounterPanel",
@@ -36,10 +35,12 @@
         "__guid": "af1ba1d8-f8f4-41e0-bd2a-89f3bca306c5"
       },
       {
-        "__type": "Garryware.UI.GarrywareHud",
-        "__guid": "8f3a1975-398d-47f2-a7ec-3eaed1090262"
+        "__type": "Garryware.UI.InfoBarPanel",
+        "__guid": "31f3a361-b8ab-437d-8711-bf1d291805c3"
       }
-    ]
+    ],
+    "Children": [],
+    "__variables": []
   },
   "ShowInMenu": false,
   "MenuPath": null,

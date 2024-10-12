@@ -1,0 +1,54 @@
+﻿
+ResultsFeedEntryPanel
+{
+  height: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  align-items: center;
+  text-align: center;
+
+  background-color: rgba(black, 0.8);
+  color: white;
+  opacity: 1;
+
+  flex-shrink: 0;
+  flex-grow: 0;
+
+  transition: all 0.2s ease-in;
+
+  &:intro
+  {
+    transform: scale(2);
+    opacity: 0;
+  }
+
+  &:outro
+  {
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.3s ease-in;
+  }
+
+  > .name
+  {
+    margin-left: 5px;
+    margin-right: 2px;
+    text-shadow: 2px 2px black;
+  }
+}
+
+.won
+{
+  background-color: rgba(darkgreen, 0.6);
+  border-right: 2px solid darkgreen;
+}
+
+.lost
+{
+  background-color: rgba(darkred, 0.6);
+  border-left: 2px solid darkred;
+}
