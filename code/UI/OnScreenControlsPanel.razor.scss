@@ -1,0 +1,44 @@
+﻿
+OnScreenControlsPanel
+{
+  position: absolute;
+  bottom: 120px;
+  right: 5%;
+
+  font-family: Poppins;
+  font-weight: bold;
+  font-size: 24px;
+  color: white;
+  text-shadow: 2px 2px #000;
+
+  opacity: 1;
+
+  background-color: rgba(black, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 10px 20px 10px 20px;
+
+  flex-direction: column;
+}
+
+.canvas
+{
+  flex-direction: column;
+  
+  &:intro
+  {
+    transition: all 0.5s ease-out;
+    opacity: 1;
+  }
+
+  &:outro
+  {
+    transition: all 0.5s ease-in;
+    opacity: 0;
+  }
+}
+
+.glyph
+{
+  margin-right: 10px;
+}

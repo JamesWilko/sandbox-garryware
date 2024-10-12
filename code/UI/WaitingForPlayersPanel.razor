@@ -1,0 +1,24 @@
+﻿@namespace Garryware.UI
+@using Sandbox;
+@inherits PanelComponent
+
+<root>
+    <div class="ready-indicator @ReadyClass"></div>
+    <label>Waiting for players...</label>
+    <div class="spacer"></div>
+    <label>@ReadyUpController.Instance?.NumberOfReadyPlayers/@ReadyUpController.Instance?.NumberRequiredToStart</label>
+    <div style="width: 5px"></div> @* @note: need a little space here since labels trim spaces *@
+    <label>to start</label>
+</root>
+
+@code
+{
+    private bool LocalPlayerIsReady => PlayerState.Local.IsValid() && PlayerState.Local.IsReady;
+    private string ReadyClass => LocalPlayerIsReady ? "ready" : string.Empty;
+    
+    protected override int BuildHash() => System.HashCode.Combine(
+        ReadyUpController.Instance?.NumberOfReadyPlayers,
+        ReadyUpController.Instance?.NumberRequiredToStart,
+        LocalPlayerIsReady
+    );
+}

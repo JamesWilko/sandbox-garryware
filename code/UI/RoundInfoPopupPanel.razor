@@ -1,0 +1,111 @@
+﻿@namespace Garryware.UI
+@using System
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+
+<root>
+    <label @ref=Emoji class="emoji">🎉</label>
+    <label @ref=Info>Info text here</label>
+</root>
+
+@code
+{
+    public enum Sfx
+    {
+        General,
+        Positive,
+        Negative
+    }
+    
+    private Label Emoji { get; set; }
+    private Label Info { get; set; }
+
+    private readonly RealTimeSince timeSinceCreated = 0f;
+        
+    private const float InfoPopupDuration = 4f;
+    
+    public override void Tick()
+    {
+        base.Tick();
+        
+        // Remove self after a short
+        if (timeSinceCreated > InfoPopupDuration)
+        {
+            this.Delete();
+        }
+    }
+
+    private void Set(string emoji, string text)
+    {
+        Emoji.Text = emoji;
+        Info.Text = text;
+    }
+    
+    public void SetDetails(RoundStat stat, Connection subject)
+    {
+        switch (stat)
+        {
+            case RoundStat.XWasTheFastestToWin:
+                Set("🏆", string.Format("{0} won the round first!", subject.Name)); // @localization
+                PlaySfx(subject == Connection.Local ? Sfx.Positive : Sfx.General);
+                break;
+            default:
+                Log.Error($"Couldn't display {nameof(RoundInfoPopupPanel)} as it was called with a {nameof(RoundStat)} it couldn't handle: {stat}");
+                Delete(true);
+                break;
+        }
+    }
+
+    public void SetDetails(RoundStat stat, int value)
+    {
+        switch (stat)
+        {
+            case RoundStat.EverybodyWon:
+                Set("🎉", "#stats.everybody-won");
+                PlaySfx(Sfx.Positive);
+                break;
+            case RoundStat.EverybodyLost:
+                Set("😤", "#stats.everybody-lost");
+                PlaySfx(Sfx.Positive);
+                break;
+            case RoundStat.OnlyXPeopleWon:
+                Set("😮", string.Format(value == 1 ? "Only {0} person won that round!" : "Only {0} people won that round!", value)); // @localization
+                PlaySfx(Sfx.General);
+                break;
+            case RoundStat.LowPercentPeopleWon:
+                Set("😮", string.Format("Only {0}% of the players won that round!", value)); // @localization
+                PlaySfx(Sfx.General);
+                break;
+            case RoundStat.HighPercentPeopleWon:
+                Set("😍", string.Format("{0}% of the players won that round!", value)); // @localization
+                PlaySfx(Sfx.General);
+                break;
+            case RoundStat.YouHitTheTargetXTimes:
+                Set("🎯", string.Format("You hit the target {0} times!", value)); // @localization
+                PlaySfx(Sfx.General);
+                break;
+            case RoundStat.YouHitTheTargetXTimes_Failed:
+                Set("🤔", string.Format("You hit the target {0} times!", value)); // @localization
+                PlaySfx(Sfx.Negative);
+                break;
+            case RoundStat.YouOnlyHitTheTargetXTimes:
+                Set("🤔", string.Format("You only hit the target {0} times!", value)); // @localization
+                PlaySfx(Sfx.Negative);
+                break;
+            default:
+                Log.Error($"Couldn't display {nameof(RoundInfoPopupPanel)} as it was called with a {nameof(RoundStat)} it couldn't handle: {stat}");
+                Delete(true);
+                break;
+        }
+    }
+    
+    private SoundHandle PlaySfx(Sfx sfx) => sfx switch
+    {
+        Sfx.General => Sound.Play("garryware.ui.show-stat.general"),
+        Sfx.Positive => Sound.Play("garryware.ui.show-stat.positive"),
+        Sfx.Negative => Sound.Play("garryware.ui.show-stat.negative"),
+        _ => throw new ArgumentOutOfRangeException(nameof(sfx), sfx, null)
+    };
+    
+}

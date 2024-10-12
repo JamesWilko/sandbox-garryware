@@ -1,0 +1,67 @@
+﻿
+AmmoCounterPanel
+{
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate( -50% +100% );
+
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  font-family: Poppins;
+  font-weight: bold;
+  font-size: 32px;
+  color: white;
+  text-stroke: 5px #000;
+}
+
+.low-ammo
+{
+  animation-name: low-ammo;
+  animation-duration: 1.0s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes low-ammo
+{
+  0%
+  {
+    color: orange;
+  }
+  50%
+  {
+    color: white;
+  }
+  100%
+  {
+    color: orange;
+  }
+}
+
+.out-of-ammo
+{
+  animation-name: out-of-ammo;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes out-of-ammo
+{
+  0%
+  {
+    color: red;
+  }
+  50%
+  {
+    color: white;
+  }
+  100%
+  {
+    color: red;
+  }
+}

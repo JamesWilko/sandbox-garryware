@@ -1,0 +1,49 @@
+﻿@namespace Garryware.UI
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+
+<root class="@(Type.ToString())">
+    <div class="container">
+        <label>@Text</label>
+    </div>
+</root>
+
+@code
+{
+    public enum PopupType
+    {
+        Instruction,
+        ResultSuccess,
+        ResultFail
+    }
+
+    public PopupType Type { get; set; } = PopupType.Instruction;
+    public string Text { get; set; }
+    public float Lifetime { get; set; }
+
+    private bool hasLifetime;
+    private TimeUntil timeUntilDelete;
+    
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        base.OnAfterTreeRender(firstTime);
+
+        if (firstTime && Lifetime > 0f)
+        {
+            hasLifetime = true;
+            timeUntilDelete = Lifetime;
+        }
+    }
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        if (hasLifetime && timeUntilDelete <= 0f)
+        {
+            hasLifetime = false;
+            Delete();
+        }
+    }
+}

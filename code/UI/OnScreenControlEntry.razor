@@ -1,0 +1,22 @@
+﻿@namespace Garryware.UI
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+
+<root>
+    <img @ref="Glyph" src="" class="glyph"/>
+    <label @ref="Text">Control Name</label>
+</root>
+
+@code
+{
+    public PlayerAction Action { get; set; }
+    private Image Glyph { get; set; }
+    private Label Text { get; set; }
+    
+    protected override void OnAfterTreeRender(bool firstTime)
+    {
+        Glyph.Texture = Input.GetGlyph(Action.AsInputAction(), InputGlyphSize.Small, GlyphStyle.Light);
+        Text.Text = Action.AsFriendlyName();
+    }
+}

@@ -1,0 +1,27 @@
+﻿@namespace Garryware.UI
+@using System
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+
+<root>
+    <div class="canvas">
+        @if (GarrywareGameController.Instance.IsValid())
+        {
+            var availableActions = GarrywareGameController.Instance.AvailableGameActions;
+            foreach (var action in Enum.GetValues<PlayerAction>())
+            {
+                if (action != PlayerAction.None && availableActions.HasFlag(action))
+                {
+                    <OnScreenControlEntry Action=@action/>
+                }
+            }
+        }
+    </div>
+</root>
+
+@code
+{
+    // @todo: figure out why this doesn't populate at start
+    protected override int BuildHash() => System.HashCode.Combine(GarrywareGameController.Instance?.AvailableGameActions);
+}
